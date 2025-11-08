@@ -100,6 +100,139 @@ const tools = [
         }
       });
     }
+  },
+  {
+    name: "run-backend-lint",
+    description: "Executes the linter for the Go backend.",
+    parameters: [],
+    execute: async () => {
+      return new Promise((resolve, reject) => {
+        exec('make lint', { cwd: 'backend' }, (error, stdout, stderr) => {
+          if (error) {
+            console.error(`Backend lint exec error: ${error}`);
+            return reject({ type: "text", content: `Error running backend lint: ${stderr}` });
+          }
+          if (stderr) {
+            console.warn(`stderr: ${stderr}`);
+          }
+          resolve({ type: "text", content: `Backend lint completed successfully:\n${stdout}` });
+        });
+      });
+    }
+  },
+  {
+    name: "run-frontend-lint",
+    description: "Executes the linter for the React/Next.js frontend.",
+    parameters: [],
+    execute: async () => {
+      return new Promise((resolve, reject) => {
+        exec('npm run lint', { cwd: 'frontend' }, (error, stdout, stderr) => {
+          if (error) {
+            console.error(`Frontend lint exec error: ${error}`);
+            return reject({ type: "text", content: `Error running frontend lint: ${stderr}` });
+          }
+          if (stderr) {
+            console.warn(`stderr: ${stderr}`);
+          }
+          resolve({ type: "text", content: `Frontend lint completed successfully:\n${stdout}` });
+        });
+      });
+    }
+  },
+  {
+    name: "start-dev-environment",
+    description: "Starts the complete development environment using Docker Compose.",
+    parameters: [],
+    execute: async () => {
+      return new Promise((resolve, reject) => {
+        exec('docker-compose up', (error, stdout, stderr) => {
+          if (error) {
+            console.error(`Dev environment start exec error: ${error}`);
+            return reject({ type: "text", content: `Error starting dev environment: ${stderr}` });
+          }
+          if (stderr) {
+            console.warn(`stderr: ${stderr}`);
+          }
+          resolve({ type: "text", content: `Development environment started successfully:\n${stdout}` });
+        });
+      });
+    }
+  },
+  {
+    name: "start-backend-dev",
+    description: "Starts only the backend development server.",
+    parameters: [],
+    execute: async () => {
+      return new Promise((resolve, reject) => {
+        exec('make run', { cwd: 'backend' }, (error, stdout, stderr) => {
+          if (error) {
+            console.error(`Backend dev server exec error: ${error}`);
+            return reject({ type: "text", content: `Error starting backend dev server: ${stderr}` });
+          }
+          if (stderr) {
+            console.warn(`stderr: ${stderr}`);
+          }
+          resolve({ type: "text", content: `Backend development server started successfully:\n${stdout}` });
+        });
+      });
+    }
+  },
+  {
+    name: "start-frontend-dev",
+    description: "Starts only the frontend development server.",
+    parameters: [],
+    execute: async () => {
+      return new Promise((resolve, reject) => {
+        exec('npm run dev', { cwd: 'frontend' }, (error, stdout, stderr) => {
+          if (error) {
+            console.error(`Frontend dev server exec error: ${error}`);
+            return reject({ type: "text", content: `Error starting frontend dev server: ${stderr}` });
+          }
+          if (stderr) {
+            console.warn(`stderr: ${stderr}`);
+          }
+          resolve({ type: "text", content: `Frontend development server started successfully:\n${stdout}` });
+        });
+      });
+    }
+  },
+  {
+    name: "seed-database",
+    description: "Executes scripts to populate the database with initial or test data.",
+    parameters: [],
+    execute: async () => {
+      return new Promise((resolve, reject) => {
+        exec('go run cmd/seed/main.go', { cwd: 'backend' }, (error, stdout, stderr) => {
+          if (error) {
+            console.error(`Database seed exec error: ${error}`);
+            return reject({ type: "text", content: `Error seeding database: ${stderr}` });
+          }
+          if (stderr) {
+            console.warn(`stderr: ${stderr}`);
+          }
+          resolve({ type: "text", content: `Database seeded successfully:\n${stdout}` });
+        });
+      });
+    }
+  },
+  {
+    name: "run-postman-tests",
+    description: "Executes Postman API tests using Newman.",
+    parameters: [],
+    execute: async () => {
+      return new Promise((resolve, reject) => {
+        exec('npm run test', { cwd: 'tests/postman' }, (error, stdout, stderr) => {
+          if (error) {
+            console.error(`Postman tests exec error: ${error}`);
+            return reject({ type: "text", content: `Error running Postman tests: ${stderr}` });
+          }
+          if (stderr) {
+            console.warn(`stderr: ${stderr}`);
+          }
+          resolve({ type: "text", content: `Postman tests completed successfully:\n${stdout}` });
+        });
+      });
+    }
   }
 ];
 

@@ -174,11 +174,13 @@ components:
         phone:
           type: string
         email:
-          type: string
-          nullable: true
+          anyOf:
+            - type: string
+            - type: 'null'
         notes:
-          type: string
-          nullable: true
+          anyOf:
+            - type: string
+            - type: 'null'
         tags:
           type: array
           items:
@@ -305,13 +307,15 @@ components:
           type: string
           format: uuid
         client_id:
-          type: string
-          format: uuid
-          nullable: true
+          anyOf:
+            - type: string
+              format: uuid
+            - type: 'null'
         booking_id:
-          type: string
-          format: uuid
-          nullable: true
+          anyOf:
+            - type: string
+              format: uuid
+            - type: 'null'
         status:
           type: string
           enum: [draft, confirmed, paid, canceled]
@@ -390,7 +394,7 @@ paths:
                   data:
                     $ref: '#/components/schemas/HealthStatus'
                   error:
-                    nullable: true
+                    $ref: '#/components/schemas/NullValue'
   /auth/signup:
     post:
       summary: Cria empresa e usuário admin
@@ -411,7 +415,7 @@ paths:
                   data:
                     $ref: '#/components/schemas/SignupResponse'
                   error:
-                    nullable: true
+                    $ref: '#/components/schemas/NullValue'
         '400':
           description: Erro de validação
           content:
@@ -438,7 +442,7 @@ paths:
                   data:
                     $ref: '#/components/schemas/TokenResponse'
                   error:
-                    nullable: true
+                    $ref: '#/components/schemas/NullValue'
         '401':
           description: Credenciais inválidas
           content:
@@ -469,7 +473,7 @@ paths:
                   data:
                     $ref: '#/components/schemas/TokenResponse'
                   error:
-                    nullable: true
+                    $ref: '#/components/schemas/NullValue'
   /companies/me:
     get:
       summary: Retorna dados da empresa atual
@@ -487,7 +491,7 @@ paths:
                   data:
                     $ref: '#/components/schemas/Company'
                   error:
-                    nullable: true
+                    $ref: '#/components/schemas/NullValue'
     put:
       summary: Atualiza empresa
       security:
@@ -535,7 +539,7 @@ paths:
                   meta:
                     $ref: '#/components/schemas/PaginationMeta'
                   error:
-                    nullable: true
+                    $ref: '#/components/schemas/NullValue'
     post:
       summary: Cria usuário
       requestBody:
@@ -569,7 +573,7 @@ paths:
                   data:
                     $ref: '#/components/schemas/User'
                   error:
-                    nullable: true
+                    $ref: '#/components/schemas/NullValue'
   /users/{id}:
     patch:
       summary: Atualiza parcialmente usuário
@@ -641,7 +645,7 @@ paths:
                   meta:
                     $ref: '#/components/schemas/PaginationMeta'
                   error:
-                    nullable: true
+                    $ref: '#/components/schemas/NullValue'
     post:
       summary: Cria cliente
       requestBody:
@@ -672,7 +676,7 @@ paths:
                   data:
                     $ref: '#/components/schemas/Client'
                   error:
-                    nullable: true
+                    $ref: '#/components/schemas/NullValue'
   /clients/{id}:
     get:
       summary: Detalha cliente
@@ -694,7 +698,7 @@ paths:
                   data:
                     $ref: '#/components/schemas/Client'
                   error:
-                    nullable: true
+                    $ref: '#/components/schemas/NullValue'
         '404':
           description: Cliente não encontrado
           content:
@@ -747,7 +751,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/Professional'
                   error:
-                    nullable: true
+                    $ref: '#/components/schemas/NullValue'
   /services:
     get:
       summary: Lista serviços
@@ -764,7 +768,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/Service'
                   error:
-                    nullable: true
+                    $ref: '#/components/schemas/NullValue'
     post:
       summary: Cria serviço
       requestBody:
@@ -796,7 +800,7 @@ paths:
                   data:
                     $ref: '#/components/schemas/Service'
                   error:
-                    nullable: true
+                    $ref: '#/components/schemas/NullValue'
   /services/{id}:
     put:
       summary: Atualiza serviço
@@ -844,7 +848,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/Product'
                   error:
-                    nullable: true
+                    $ref: '#/components/schemas/NullValue'
     post:
       summary: Cria produto
       requestBody:
@@ -927,7 +931,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/InventoryMovement'
                   error:
-                    nullable: true
+                    $ref: '#/components/schemas/NullValue'
     post:
       summary: Registra movimento
       requestBody:
@@ -982,7 +986,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/Booking'
                   error:
-                    nullable: true
+                    $ref: '#/components/schemas/NullValue'
     post:
       summary: Cria agendamento
       requestBody:
@@ -1078,7 +1082,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/SalesOrder'
                   error:
-                    nullable: true
+                    $ref: '#/components/schemas/NullValue'
     post:
       summary: Cria pedido
       requestBody:
@@ -1089,13 +1093,15 @@ paths:
               type: object
               properties:
                 client_id:
-                  type: string
-                  format: uuid
-                  nullable: true
+                  anyOf:
+                    - type: string
+                      format: uuid
+                    - type: 'null'
                 booking_id:
-                  type: string
-                  format: uuid
-                  nullable: true
+                  anyOf:
+                    - type: string
+                      format: uuid
+                    - type: 'null'
                 items:
                   type: array
                   items:
@@ -1116,7 +1122,7 @@ paths:
                   data:
                     $ref: '#/components/schemas/SalesOrder'
                   error:
-                    nullable: true
+                    $ref: '#/components/schemas/NullValue'
   /sales/orders/{id}:
     patch:
       summary: Atualiza pedido
@@ -1196,7 +1202,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/Payment'
                   error:
-                    nullable: true
+                    $ref: '#/components/schemas/NullValue'
   /dashboard/daily:
     get:
       summary: KPIs diários
@@ -1222,4 +1228,4 @@ paths:
                   data:
                     $ref: '#/components/schemas/DashboardDaily'
                   error:
-                    nullable: true
+                    $ref: '#/components/schemas/NullValue'

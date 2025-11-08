@@ -166,6 +166,6 @@ Documentar endpoints REST do MVP com foco em payloads, respostas e códigos de s
 - `500` erro interno.
 
 ## Próximos Passos
-1. Migrar para OpenAPI 3.1 em `docs/api.yaml` com schemas reutilizáveis.
-2. Publicar documentação interativa (Stoplight/Swagger UI) para o frontend.
-3. Automatizar testes de contrato (Dredd/Postman) no pipeline CI.
+1. Publicar documentação interativa (Stoplight/Swagger UI) para o frontend.
+2. Automatizar testes de contrato (Dredd/Postman) no pipeline CI.
+3. Distribuir o spec 3.1 versionado (artefatos/SDK) para squads e integrações externas.

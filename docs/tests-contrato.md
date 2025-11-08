@@ -13,7 +13,7 @@ Objetivo: garantir que as respostas reais do backend estejam alinhadas com o spe
    npm install -g dredd
    ```
 2. O repositório já possui `tests/dredd/dredd.yml` apontando para o spec e para `make backend-run` (que sobe o servidor Go).  
-3. Hooks ficam em `tests/dredd/hooks/`. O arquivo `basic-flow.js` executa automaticamente o fluxo `signup -> login -> refresh -> companies/me`, garantindo que o backend esteja realmente funcional. Endpoints ainda não cobertos continuam marcados com `skip` para evitar falsos negativos.
+3. Hooks ficam em `tests/dredd/hooks/`. O arquivo `basic-flow.js` valida `signup -> login -> refresh -> companies/me` e continua o fluxo cobrindo o CRUD completo de usuários e clientes usando apenas dados criados durante o teste. Operações ainda não tratadas seguem marcadas com `skip` para evitar falsos negativos.
 4. Execute localmente:
    ```bash
    make api-contract-test
@@ -33,6 +33,6 @@ Objetivo: garantir que as respostas reais do backend estejam alinhadas com o spe
 - Documente cenários não testáveis (ex.: callbacks externos) no README dos testes para evitar falsos negativos.
 
 ## Próximos Passos
-1. Expandir os hooks para cobrir CRUD de clientes e usuários reutilizando os tokens já gerados.
+1. Expandir os hooks para cobrir catálogos de serviços/profissionais e fluxos financeiros (estoque, vendas e pagamentos).
 2. Adicionar job de contrato ao pipeline principal após o backend estar disponível.
 3. Expor resultados dos testes em badges ou comentários automáticos em PRs.

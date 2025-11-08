@@ -76,3 +76,66 @@ Para executar uma ferramenta específica, use o comando `gemini tool execute` se
 ---
 
 Este documento será atualizado à medida que mais ferramentas forem adicionadas ao servidor MCP.
+
+### `gestao_updev_local_mcp/run-backend-lint`
+
+*   **Descrição:** Executa o linter para o código Go do backend.
+*   **Uso:**
+    ```bash
+    gemini tool execute gestao_updev_local_mcp/run-backend-lint
+    ```
+*   **Comando Interno:** Executa `make lint` no diretório `backend`.
+
+### `gestao_updev_local_mcp/run-frontend-lint`
+
+*   **Descrição:** Executa o linter para o código React/Next.js do frontend.
+*   **Uso:**
+    ```bash
+    gemini tool execute gestao_updev_local_mcp/run-frontend-lint
+    ```
+*   **Comando Interno:** Executa `npm run lint` no diretório `frontend`.
+
+### `gestao_updev_local_mcp/start-dev-environment`
+
+*   **Descrição:** Inicia o ambiente de desenvolvimento completo (backend, frontend e quaisquer outros serviços) usando Docker Compose.
+*   **Uso:**
+    ```bash
+    gemini tool execute gestao_updev_local_mcp/start-dev-environment
+    ```
+*   **Comando Interno:** Executa `docker-compose up` na raiz do projeto.
+
+### `gestao_updev_local_mcp/start-backend-dev`
+
+*   **Descrição:** Inicia apenas o servidor de desenvolvimento do backend Go.
+*   **Uso:**
+    ```bash
+    gemini tool execute gestao_updev_local_mcp/start-backend-dev
+    ```
+*   **Comando Interno:** Executa `make run` no diretório `backend`.
+
+### `gestao_updev_local_mcp/start-frontend-dev`
+
+*   **Descrição:** Inicia apenas o servidor de desenvolvimento do frontend React/Next.js.
+*   **Uso:**
+    ```bash
+    gemini tool execute gestao_updev_local_mcp/start-frontend-dev
+    ```
+*   **Comando Interno:** Executa `npm run dev` no diretório `frontend`.
+
+### `gestao_updev_local_mcp/seed-database`
+
+*   **Descrição:** Executa scripts para popular o banco de dados com dados iniciais ou de teste.
+*   **Uso:**
+    ```bash
+    gemini tool execute gestao_updev_local_mcp/seed-database
+    ```
+*   **Comando Interno:** Executa `go run cmd/seed/main.go` no diretório `backend`.
+
+### `gestao_updev_local_mcp/run-postman-tests`
+
+*   **Descrição:** Executa os testes de API do Postman usando Newman.
+*   **Uso:**
+    ```bash
+    gemini tool execute gestao_updev_local_mcp/run-postman-tests
+    ```
+*   **Comando Interno:** Executa `npm run test` no diretório `tests/postman`.
