@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-gestao_updev}
+      POSTGRES_USER: ${POSTGRES_USER:-gestao}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-gestao}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      APP_ENV: ${APP_ENV:-production}
+      HTTP_PORT: 8080
+      TENANT_HEADER: ${TENANT_HEADER:-X-Tenant-ID}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      DATABASE_URL: ${DATABASE_URL:-postgres://gestao:gestao@postgres:5432/gestao_updev?sslmode=disable}
+    depends_on:
+      - postgres
+    ports:
+      - "${HTTP_PORT:-8080}:8080"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://backend:8080/v1}
+    depends_on:
+      - backend
+    ports:
+      - "${FRONTEND_PORT:-4173}:80"
+
+volumes:
+  postgres_data:

@@ -1,0 +1,51 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-added-large-files
+
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.3.3
+    hooks:
+      - id: prettier
+        name: prettier (frontend/backoffice)
+        files: >-
+          ^(frontend|backoffice)/.*\.(ts|tsx|js|jsx|json|css|scss|md)$
+
+  - repo: local
+    hooks:
+      - id: backend-gofmt
+        name: gofmt (backend)
+        entry: gofmt
+        language: system
+        files: ^backend/.*\.go$
+        args: ['-w']
+
+      - id: backend-golangci-lint
+        name: golangci-lint (backend)
+        entry: bash
+        args:
+          - -c
+          - |
+            cd backend && golangci-lint run --config .golangci.yml ./...
+        language: system
+        pass_filenames: false
+        files: ^backend/
+
+      - id: frontend-eslint
+        name: eslint (frontend)
+        entry: scripts/hooks/npm-run-if-package.sh
+        args: ['frontend', 'lint']
+        language: system
+        pass_filenames: false
+        files: ^frontend/.*\.(ts|tsx|js|jsx)$
+
+      - id: backoffice-eslint
+        name: eslint (backoffice)
+        entry: scripts/hooks/npm-run-if-package.sh
+        args: ['backoffice', 'lint']
+        language: system
+        pass_filenames: false
+        files: ^backoffice/.*\.(ts|tsx|js|jsx)$

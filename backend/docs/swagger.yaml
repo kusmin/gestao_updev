@@ -1,0 +1,14 @@
+basePath: /v1
+host: localhost:8080
+info:
+  contact:
+    email: support@updev.com
+    name: API Support
+  description: API para a plataforma de gestão de comércios locais.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Gestão UpDev API
+  version: "1.0"
+paths: {}
+swagger: "2.0"

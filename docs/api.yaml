@@ -1,0 +1,1206 @@
+openapi: 3.0.3
+info:
+  title: Plataforma de Gestão Local
+  version: 0.2.0
+  description: >
+    API REST para gestão de barbearias e comércios locais.
+servers:
+  - url: https://api.gestao-local.com/v1
+    description: Produção
+  - url: https://staging.api.gestao-local.com/v1
+    description: Staging
+  - url: http://localhost:8080/v1
+    description: Desenvolvimento
+security:
+  - bearerAuth: []
+  - tenantHeader: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    tenantHeader:
+      type: apiKey
+      in: header
+      name: X-Tenant-ID
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        data:
+          nullable: true
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                  reason:
+                    type: string
+      required: [error]
+    PaginationMeta:
+      type: object
+      properties:
+        pagination:
+          type: object
+          properties:
+            page:
+              type: integer
+            per_page:
+              type: integer
+            total:
+              type: integer
+      required: [pagination]
+    SignupRequest:
+      type: object
+      properties:
+        company:
+          type: object
+          properties:
+            name:
+              type: string
+            document:
+              type: string
+          required: [name]
+        user:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+              format: email
+            password:
+              type: string
+              minLength: 8
+          required: [name, email, password]
+        phone:
+          type: string
+      required: [company, user]
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required: [email, password]
+    TokenResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+        expires_in:
+          type: integer
+      required: [access_token, refresh_token, expires_in]
+    Company:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        document:
+          type: string
+        timezone:
+          type: string
+          example: America/Sao_Paulo
+        settings:
+          type: object
+      required: [id, name]
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          enum: [admin, manager, operator]
+        phone:
+          type: string
+        active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+      required: [id, name, email, role]
+    Client:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        tags:
+          type: array
+          items:
+            type: string
+      required: [id, name]
+    Professional:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        specialties:
+          type: array
+          items:
+            type: string
+        max_parallel:
+          type: integer
+          default: 1
+      required: [id, name]
+    Service:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        duration_minutes:
+          type: integer
+        price:
+          type: number
+          format: float
+        category:
+          type: string
+        description:
+          type: string
+      required: [id, name, duration_minutes, price]
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        sku:
+          type: string
+        price:
+          type: number
+        cost:
+          type: number
+        stock_qty:
+          type: integer
+        min_stock:
+          type: integer
+      required: [id, name, sku, price]
+    InventoryMovement:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        product_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [in, out, adjustment]
+        quantity:
+          type: integer
+        reason:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+      required: [id, product_id, type, quantity]
+    Booking:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        client_id:
+          type: string
+          format: uuid
+        professional_id:
+          type: string
+          format: uuid
+        service_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [pending, confirmed, done, canceled]
+        start_at:
+          type: string
+          format: date-time
+        end_at:
+          type: string
+          format: date-time
+        notes:
+          type: string
+      required: [id, client_id, professional_id, service_id, status, start_at]
+    SalesItem:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [service, product]
+        ref_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        unit_price:
+          type: number
+      required: [type, ref_id, quantity, unit_price]
+    SalesOrder:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        client_id:
+          type: string
+          format: uuid
+          nullable: true
+        booking_id:
+          type: string
+          format: uuid
+          nullable: true
+        status:
+          type: string
+          enum: [draft, confirmed, paid, canceled]
+        discount:
+          type: number
+        total:
+          type: number
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesItem'
+        created_at:
+          type: string
+          format: date-time
+      required: [id, status, total]
+    Payment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        order_id:
+          type: string
+          format: uuid
+        method:
+          type: string
+          enum: [cash, debit, credit, pix, transfer]
+        amount:
+          type: number
+        paid_at:
+          type: string
+          format: date-time
+      required: [id, order_id, method, amount]
+    DashboardDaily:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        bookings_count:
+          type: integer
+        services_done:
+          type: integer
+        revenue:
+          type: number
+        top_services:
+          type: array
+          items:
+            type: object
+            properties:
+              service_id:
+                type: string
+              count:
+                type: integer
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+        env:
+          type: string
+      required: [status, env]
+paths:
+  /healthz:
+    get:
+      summary: Status básico da API
+      security: []
+      responses:
+        '200':
+          description: Servidor saudável
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/HealthStatus'
+                  error:
+                    nullable: true
+  /auth/signup:
+    post:
+      summary: Cria empresa e usuário admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+      responses:
+        '201':
+          description: Tenant criado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      tenant_id:
+                        type: string
+                        format: uuid
+                      user_id:
+                        type: string
+                        format: uuid
+                  error:
+                    nullable: true
+        '400':
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /auth/login:
+    post:
+      summary: Autentica usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Tokens retornados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/TokenResponse'
+                  error:
+                    nullable: true
+        '401':
+          description: Credenciais inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /auth/refresh:
+    post:
+      summary: Atualiza tokens
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+              required: [refresh_token]
+      responses:
+        '200':
+          description: Novo par de tokens
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/TokenResponse'
+                  error:
+                    nullable: true
+  /companies/me:
+    get:
+      summary: Retorna dados da empresa atual
+      responses:
+        '200':
+          description: Empresa
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Company'
+                  error:
+                    nullable: true
+    put:
+      summary: Atualiza empresa
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+      responses:
+        '200':
+          description: Empresa atualizada
+  /users:
+    get:
+      summary: Lista usuários
+      parameters:
+        - in: query
+          name: role
+          schema:
+            type: string
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Lista de usuários
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+                  error:
+                    nullable: true
+    post:
+      summary: Cria usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                role:
+                  type: string
+                  enum: [admin, manager, operator]
+                phone:
+                  type: string
+                password:
+                  type: string
+              required: [name, email, role, password]
+      responses:
+        '201':
+          description: Usuário criado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/User'
+                  error:
+                    nullable: true
+  /users/{id}:
+    patch:
+      summary: Atualiza parcialmente usuário
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role:
+                  type: string
+                active:
+                  type: boolean
+                phone:
+                  type: string
+      responses:
+        '200':
+          description: Usuário atualizado
+    delete:
+      summary: Remove usuário
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Removido
+  /clients:
+    get:
+      summary: Lista clientes
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Lista de clientes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Client'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+                  error:
+                    nullable: true
+    post:
+      summary: Cria cliente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                phone:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                notes:
+                  type: string
+              required: [name]
+      responses:
+        '201':
+          description: Cliente criado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Client'
+                  error:
+                    nullable: true
+  /clients/{id}:
+    get:
+      summary: Detalha cliente
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Cliente encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Client'
+                  error:
+                    nullable: true
+        '404':
+          description: Cliente não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      summary: Atualiza cliente
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+      responses:
+        '200':
+          description: Cliente atualizado
+    delete:
+      summary: Remove cliente
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Removido
+  /professionals:
+    get:
+      summary: Lista profissionais
+      responses:
+        '200':
+          description: Lista
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Professional'
+                  error:
+                    nullable: true
+  /services:
+    get:
+      summary: Lista serviços
+      responses:
+        '200':
+          description: Lista de serviços
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Service'
+                  error:
+                    nullable: true
+    post:
+      summary: Cria serviço
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                duration_minutes:
+                  type: integer
+                price:
+                  type: number
+                category:
+                  type: string
+                description:
+                  type: string
+              required: [name, duration_minutes, price]
+      responses:
+        '201':
+          description: Serviço criado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Service'
+                  error:
+                    nullable: true
+  /services/{id}:
+    put:
+      summary: Atualiza serviço
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Service'
+      responses:
+        '200':
+          description: Serviço atualizado
+    delete:
+      summary: Remove serviço
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Removido
+  /products:
+    get:
+      summary: Lista produtos
+      responses:
+        '200':
+          description: Lista de produtos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+                  error:
+                    nullable: true
+    post:
+      summary: Cria produto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                sku:
+                  type: string
+                price:
+                  type: number
+                cost:
+                  type: number
+                stock_qty:
+                  type: integer
+                min_stock:
+                  type: integer
+              required: [name, sku, price]
+      responses:
+        '201':
+          description: Produto criado
+  /products/{id}:
+    put:
+      summary: Atualiza produto
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Produto atualizado
+    delete:
+      summary: Remove produto
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Removido
+  /inventory/movements:
+    get:
+      summary: Lista movimentos de estoque
+      parameters:
+        - in: query
+          name: product_id
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: type
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InventoryMovement'
+                  error:
+                    nullable: true
+    post:
+      summary: Registra movimento
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: string
+                  format: uuid
+                type:
+                  type: string
+                  enum: [in, out, adjustment]
+                quantity:
+                  type: integer
+                reason:
+                  type: string
+              required: [product_id, type, quantity]
+      responses:
+        '201':
+          description: Movimento registrado
+  /bookings:
+    get:
+      summary: Lista agendamentos
+      parameters:
+        - in: query
+          name: date
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: professional_id
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: status
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de bookings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Booking'
+                  error:
+                    nullable: true
+    post:
+      summary: Cria agendamento
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Booking'
+      responses:
+        '201':
+          description: Booking criado
+  /bookings/{id}:
+    patch:
+      summary: Atualiza agendamento
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                start_at:
+                  type: string
+                  format: date-time
+                end_at:
+                  type: string
+                  format: date-time
+                notes:
+                  type: string
+      responses:
+        '200':
+          description: Booking atualizado
+    post:
+      summary: Cancela agendamento
+      operationId: cancelBooking
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+              required: [reason]
+      responses:
+        '200':
+          description: Booking cancelado
+  /sales/orders:
+    get:
+      summary: Lista pedidos/vendas
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+        - in: query
+          name: date
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: client_id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Lista de pedidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SalesOrder'
+                  error:
+                    nullable: true
+    post:
+      summary: Cria pedido
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                  format: uuid
+                  nullable: true
+                booking_id:
+                  type: string
+                  format: uuid
+                  nullable: true
+                items:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/SalesItem'
+                discount:
+                  type: number
+                notes:
+                  type: string
+              required: [items]
+      responses:
+        '201':
+          description: Pedido criado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/SalesOrder'
+                  error:
+                    nullable: true
+  /sales/orders/{id}:
+    patch:
+      summary: Atualiza pedido
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                notes:
+                  type: string
+      responses:
+        '200':
+          description: Pedido atualizado
+  /sales/orders/{id}/payments:
+    post:
+      summary: Registra pagamento
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                method:
+                  type: string
+                  enum: [cash, debit, credit, pix, transfer]
+                amount:
+                  type: number
+                paid_at:
+                  type: string
+                  format: date-time
+              required: [method, amount, paid_at]
+      responses:
+        '201':
+          description: Pagamento registrado
+  /payments:
+    get:
+      summary: Lista pagamentos
+      parameters:
+        - in: query
+          name: method
+          schema:
+            type: string
+        - in: query
+          name: date_range
+          schema:
+            type: string
+            example: 2024-01-01,2024-01-31
+      responses:
+        '200':
+          description: Lista
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Payment'
+                  error:
+                    nullable: true
+  /dashboard/daily:
+    get:
+      summary: KPIs diários
+      parameters:
+        - in: query
+          name: date
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: professional_id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Indicadores
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/DashboardDaily'
+                  error:
+                    nullable: true

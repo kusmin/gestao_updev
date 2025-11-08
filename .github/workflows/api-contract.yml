@@ -1,0 +1,41 @@
+name: API Contract Tests
+
+on:
+  push:
+    paths:
+      - backend/**
+      - docs/api.yaml
+      - tests/dredd/**
+      - Makefile
+      - .github/workflows/api-contract.yml
+  pull_request:
+    paths:
+      - backend/**
+      - docs/api.yaml
+      - tests/dredd/**
+      - Makefile
+      - .github/workflows/api-contract.yml
+
+jobs:
+  dredd:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Download Go dependencies
+        run: go mod download
+        working-directory: backend
+
+      - name: Run Dredd contract tests
+        run: make api-contract-test
