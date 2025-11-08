@@ -1,0 +1,41 @@
+name: API Spec Sync Check
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+      - 'docs/api.yaml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+      - 'docs/api.yaml'
+
+jobs:
+  check-sync:
+    name: Check API Spec Sync
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.22
+
+      - name: Install Swag CLI
+        run: go install github.com/swaggo/swag/cmd/swag@latest
+
+      - name: Generate Swagger from code
+        run: make -C backend swagger
+
+      - name: Check for differences
+        run: |
+          if ! diff -q docs/api.yaml backend/docs/swagger.yaml; then
+            echo "API specification in docs/api.yaml is out of sync with the implementation."
+            echo "Please update the Go code annotations and regenerate the swagger spec, or update docs/api.yaml."
+            diff docs/api.yaml backend/docs/swagger.yaml
+            exit 1
+          fi

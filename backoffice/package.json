@@ -4,10 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 5174",
+    "predev": "npm run generate:api-types",
     "build": "tsc -b && vite build",
+    "prebuild": "npm run generate:api-types",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate:api-types": "node scripts/generate-types.mjs"
   },
   "dependencies": {
     "ra-data-json-server": "^5.12.3",
@@ -25,6 +28,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
+    "openapi-typescript": "^7.10.1",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.45.0",
     "vite": "^7.1.7"

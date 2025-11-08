@@ -1,0 +1,12 @@
+{
+  "name": "postman-tests",
+  "version": "1.0.0",
+  "description": "Postman tests for Gestao UpDev API",
+  "main": "index.js",
+  "scripts": {
+    "test": "newman run collection.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

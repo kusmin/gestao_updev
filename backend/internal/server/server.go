@@ -3,19 +3,23 @@ package server
 import (
 	"context"
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 
+	_ "github.com/kusmin/gestao_updev/backend/docs"
+	"github.com/kusmin/gestao_updev/backend/internal/auth"
 	"github.com/kusmin/gestao_updev/backend/internal/config"
+	"github.com/kusmin/gestao_updev/backend/internal/http/handler"
 	"github.com/kusmin/gestao_updev/backend/internal/http/response"
 	"github.com/kusmin/gestao_updev/backend/internal/middleware"
+	"github.com/kusmin/gestao_updev/backend/internal/repository"
+	"github.com/kusmin/gestao_updev/backend/internal/service"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	_ "github.com/kusmin/gestao_updev/backend/docs"
 )
 
 // Server representa a API HTTP.
@@ -23,10 +27,11 @@ type Server struct {
 	cfg    *config.Config
 	logger *zap.Logger
 	engine *gin.Engine
+	db     *gorm.DB
 }
 
 // New cria uma instância do servidor HTTP.
-func New(cfg *config.Config, logger *zap.Logger) *Server {
+func New(cfg *config.Config, logger *zap.Logger, db *gorm.DB) *Server {
 	if cfg.AppEnv == "production" {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -36,9 +41,14 @@ func New(cfg *config.Config, logger *zap.Logger) *Server {
 	engine.Use(middleware.RequestID())
 	engine.Use(gin.Logger())
 
+	repo := repository.New(db)
+	jwtManager := auth.NewJWTManager(cfg.JWTAccessSecret, cfg.JWTRefreshSecret, cfg.JWTAccessTTL, cfg.JWTRefreshTTL)
+	svc := service.New(cfg, repo, jwtManager, logger)
+	apiHandler := handler.New(svc, logger)
+
 	api := engine.Group("/v1")
 	api.Use(middleware.TenantEnforcer(cfg.TenantHeader))
-	registerRoutes(api)
+	registerRoutes(api, cfg, apiHandler, jwtManager)
 
 	engine.GET("/v1/healthz", func(c *gin.Context) {
 		response.Success(c, http.StatusOK, gin.H{
@@ -53,6 +63,7 @@ func New(cfg *config.Config, logger *zap.Logger) *Server {
 		cfg:    cfg,
 		logger: logger,
 		engine: engine,
+		db:     db,
 	}
 }
 
@@ -83,70 +94,54 @@ func (s *Server) Run(ctx context.Context) error {
 	}
 }
 
-func registerRoutes(api *gin.RouterGroup) {
-	placeholderRoutes := []struct {
-		Method string
-		Path   string
-		Name   string
-	}{
-		{"POST", "/auth/signup", "auth.signup"},
-		{"POST", "/auth/login", "auth.login"},
-		{"POST", "/auth/refresh", "auth.refresh"},
-		{"GET", "/companies/me", "companies.current.get"},
-		{"PUT", "/companies/me", "companies.current.update"},
-		{"GET", "/users", "users.list"},
-		{"POST", "/users", "users.create"},
-		{"PATCH", "/users/:id", "users.update"},
-		{"DELETE", "/users/:id", "users.delete"},
-		{"GET", "/clients", "clients.list"},
-		{"POST", "/clients", "clients.create"},
-		{"GET", "/clients/:id", "clients.get"},
-		{"PUT", "/clients/:id", "clients.update"},
-		{"DELETE", "/clients/:id", "clients.delete"},
-		{"GET", "/professionals", "professionals.list"},
-		{"GET", "/services", "services.list"},
-		{"POST", "/services", "services.create"},
-		{"PUT", "/services/:id", "services.update"},
-		{"DELETE", "/services/:id", "services.delete"},
-		{"GET", "/products", "products.list"},
-		{"POST", "/products", "products.create"},
-		{"PUT", "/products/:id", "products.update"},
-		{"DELETE", "/products/:id", "products.delete"},
-		{"GET", "/inventory/movements", "inventory.list"},
-		{"POST", "/inventory/movements", "inventory.create"},
-		{"GET", "/bookings", "bookings.list"},
-		{"POST", "/bookings", "bookings.create"},
-		{"PATCH", "/bookings/:id", "bookings.update"},
-		{"POST", "/bookings/:id/cancel", "bookings.cancel"},
-		{"GET", "/sales/orders", "sales.list"},
-		{"POST", "/sales/orders", "sales.create"},
-		{"PATCH", "/sales/orders/:id", "sales.update"},
-		{"POST", "/sales/orders/:id/payments", "sales.payments.create"},
-		{"GET", "/payments", "payments.list"},
-		{"GET", "/dashboard/daily", "dashboard.daily"},
-	}
+func registerRoutes(api *gin.RouterGroup, cfg *config.Config, h *handler.API, jwtManager *auth.JWTManager) {
+	authGroup := api.Group("/auth")
+	authGroup.POST("/signup", h.Signup)
+	authGroup.POST("/login", h.Login)
+	authGroup.POST("/refresh", h.RefreshToken)
 
-	for _, route := range placeholderRoutes {
-		handler := placeholder(route.Name)
-		switch route.Method {
-		case http.MethodGet:
-			api.GET(route.Path, handler)
-		case http.MethodPost:
-			api.POST(route.Path, handler)
-		case http.MethodPatch:
-			api.PATCH(route.Path, handler)
-		case http.MethodPut:
-			api.PUT(route.Path, handler)
-		case http.MethodDelete:
-			api.DELETE(route.Path, handler)
-		default:
-			panic(fmt.Sprintf("unsupported method %s for %s", route.Method, route.Path))
-		}
-	}
-}
+	protected := api.Group("/")
+	protected.Use(middleware.Auth(jwtManager, cfg.TenantHeader))
 
-func placeholder(name string) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		response.Error(c, http.StatusNotImplemented, "NOT_IMPLEMENTED", fmt.Sprintf("Endpoint %s em desenvolvimento", name), nil)
-	}
+	protected.GET("/companies/me", h.GetCompany)
+	protected.PUT("/companies/me", h.UpdateCompany)
+
+	protected.GET("/users", h.ListUsers)
+	protected.POST("/users", h.CreateUser)
+	protected.PATCH("/users/:id", h.UpdateUser)
+	protected.DELETE("/users/:id", h.DeleteUser)
+
+	protected.GET("/clients", h.ListClients)
+	protected.POST("/clients", h.CreateClient)
+	protected.GET("/clients/:id", h.GetClient)
+	protected.PUT("/clients/:id", h.UpdateClient)
+	protected.DELETE("/clients/:id", h.DeleteClient)
+
+	protected.GET("/professionals", h.ListProfessionals)
+
+	protected.GET("/services", h.ListServices)
+	protected.POST("/services", h.CreateService)
+	protected.PUT("/services/:id", h.UpdateService)
+	protected.DELETE("/services/:id", h.DeleteService)
+
+	protected.GET("/products", h.ListProducts)
+	protected.POST("/products", h.CreateProduct)
+	protected.PUT("/products/:id", h.UpdateProduct)
+	protected.DELETE("/products/:id", h.DeleteProduct)
+
+	protected.GET("/inventory/movements", h.ListInventoryMovements)
+	protected.POST("/inventory/movements", h.CreateInventoryMovement)
+
+	protected.GET("/bookings", h.ListBookings)
+	protected.POST("/bookings", h.CreateBooking)
+	protected.PATCH("/bookings/:id", h.UpdateBooking)
+	protected.POST("/bookings/:id/cancel", h.CancelBooking)
+
+	protected.GET("/sales/orders", h.ListSalesOrders)
+	protected.POST("/sales/orders", h.CreateSalesOrder)
+	protected.PATCH("/sales/orders/:id", h.UpdateSalesOrder)
+	protected.POST("/sales/orders/:id/payments", h.CreatePayment)
+	protected.GET("/payments", h.ListPayments)
+
+	protected.GET("/dashboard/daily", h.DashboardDaily)
 }

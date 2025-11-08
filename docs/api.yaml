@@ -1,4 +1,5 @@
-openapi: 3.0.3
+openapi: 3.1.0
+jsonSchemaDialect: https://spec.openapis.org/oas/3.1/dialect/base
 info:
   title: Plataforma de Gestão Local
   version: 0.2.0
@@ -29,7 +30,7 @@ components:
       type: object
       properties:
         data:
-          nullable: true
+          $ref: '#/components/schemas/NullValue'
         error:
           type: object
           properties:
@@ -47,6 +48,9 @@ components:
                   reason:
                     type: string
       required: [error]
+    NullValue:
+      type: 'null'
+      description: Valor reservado para campos que permanecem nulos nas respostas.
     PaginationMeta:
       type: object
       properties:
@@ -105,6 +109,22 @@ components:
         expires_in:
           type: integer
       required: [access_token, refresh_token, expires_in]
+    SignupResponse:
+      type: object
+      properties:
+        tenant_id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+        expires_in:
+          type: integer
+      required: [tenant_id, user_id, access_token, refresh_token, expires_in]
     Company:
       type: object
       properties:
@@ -389,14 +409,7 @@ paths:
                 type: object
                 properties:
                   data:
-                    type: object
-                    properties:
-                      tenant_id:
-                        type: string
-                        format: uuid
-                      user_id:
-                        type: string
-                        format: uuid
+                    $ref: '#/components/schemas/SignupResponse'
                   error:
                     nullable: true
         '400':
@@ -460,6 +473,9 @@ paths:
   /companies/me:
     get:
       summary: Retorna dados da empresa atual
+      security:
+        - bearerAuth: []
+        - tenantHeader: []
       responses:
         '200':
           description: Empresa
@@ -474,6 +490,9 @@ paths:
                     nullable: true
     put:
       summary: Atualiza empresa
+      security:
+        - bearerAuth: []
+        - tenantHeader: []
       requestBody:
         required: true
         content:

@@ -8,9 +8,11 @@ import (
 	"syscall"
 
 	"go.uber.org/zap"
+	gormLogger "gorm.io/gorm/logger"
 
 	"github.com/kusmin/gestao_updev/backend/internal/config"
 	"github.com/kusmin/gestao_updev/backend/internal/server"
+	"github.com/kusmin/gestao_updev/backend/pkg/database"
 	"github.com/kusmin/gestao_updev/backend/pkg/logger"
 )
 
@@ -23,6 +25,13 @@ import (
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 // @host localhost:8080
 // @BasePath /v1
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description Token JWT no formato `Bearer <token>`
+// @securityDefinitions.apikey TenantHeader
+// @in header
+// @name X-Tenant-ID
 func main() {
 	cfg, err := config.Load()
 	if err != nil {
@@ -38,9 +47,38 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
-	srv := server.New(cfg, zapLogger)
+	db, err := database.New(database.Config{
+		URL:             cfg.DatabaseURL,
+		MaxIdleConns:    cfg.DBMaxIdleConns,
+		MaxOpenConns:    cfg.DBMaxOpenConns,
+		ConnMaxLifetime: cfg.DBConnMaxLifetime,
+		LogMode:         mapGormLogLevel(cfg.LogLevel),
+	})
+	if err != nil {
+		zapLogger.Fatal("failed to initialize database", zap.Error(err))
+	}
+	sqlDB, err := db.DB()
+	if err != nil {
+		zapLogger.Fatal("failed to expose database handle", zap.Error(err))
+	}
+	defer sqlDB.Close()
+
+	srv := server.New(cfg, zapLogger, db)
 
 	if err := srv.Run(ctx); err != nil {
 		zapLogger.Fatal("server stopped with error", zap.Any("error", err))
+	}
+}
+
+func mapGormLogLevel(level string) gormLogger.LogLevel {
+	switch level {
+	case "debug":
+		return gormLogger.Info
+	case "warn":
+		return gormLogger.Warn
+	case "error":
+		return gormLogger.Error
+	default:
+		return gormLogger.Silent
 	}
 }

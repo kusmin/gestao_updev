@@ -14,6 +14,7 @@ var publicPrefixes = []string{
 	"/v1/auth/signup",
 	"/v1/auth/login",
 	"/v1/auth/refresh",
+	"/swagger",
 }
 
 // TenantEnforcer garante que requisições autenticadas contenham o cabeçalho do tenant.
@@ -38,7 +39,7 @@ func TenantEnforcer(headerName string) gin.HandlerFunc {
 			return
 		}
 
-		c.Set("tenant_id", tenantID)
+		c.Set(ContextTenantIDKey, tenantID)
 		c.Next()
 	}
 }

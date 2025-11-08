@@ -1,0 +1,11 @@
+{
+  "mcpServers": [
+    {
+      "name": "gestao_updev_local_mcp",
+      "command": ["node", "scripts/mcp-server.js"],
+      "environment": {
+        "PORT": "8081"
+      }
+    }
+  ]
+}

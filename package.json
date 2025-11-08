@@ -1,0 +1,14 @@
+{
+  "name": "gestao_updev-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend",
+    "backoffice",
+    "tests/e2e"
+  ],
+  "scripts": {
+    "test:e2e": "npm test --prefix tests/e2e"
+  }
+}

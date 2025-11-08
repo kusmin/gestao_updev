@@ -13,7 +13,7 @@ Objetivo: garantir que as respostas reais do backend estejam alinhadas com o spe
    npm install -g dredd
    ```
 2. O repositório já possui `tests/dredd/dredd.yml` apontando para o spec e para `make backend-run` (que sobe o servidor Go).  
-3. Hooks ficam em `tests/dredd/hooks/`. Por padrão só o `GET /healthz` roda; demais endpoints são marcados como `skip` até serem implementados.
+3. Hooks ficam em `tests/dredd/hooks/`. O arquivo `basic-flow.js` executa automaticamente o fluxo `signup -> login -> refresh -> companies/me`, garantindo que o backend esteja realmente funcional. Endpoints ainda não cobertos continuam marcados com `skip` para evitar falsos negativos.
 4. Execute localmente:
    ```bash
    make api-contract-test
@@ -27,11 +27,12 @@ Objetivo: garantir que as respostas reais do backend estejam alinhadas com o spe
 - Fails gate: PR só pode ser mergeado se todos os cenários estiverem verdes.
 
 ## Convenções
-- Endpoints que dependem de autenticação devem usar tokens válidos gerados durante os hooks.
-- Para rotas com efeitos colaterais (ex.: criação de venda), limpe ou isole os dados ao fim do teste.
-- Documente cenários não testáveis (ex.: callbacks externos) em `README` dos testes para evitar falsos negativos.
+- Antes de rodar o contrato, execute `DATABASE_URL=postgres://gestao:gestao@localhost:5432/gestao_updev?sslmode=disable make -C backend migrate` para aplicar as migrations e, se necessário, `make -C backend seed` para garantir dados mínimos em ambientes de desenvolvimento compartilhados (o fluxo padrão do hook já cria uma empresa própria).
+- Endpoints autenticados devem depender apenas de dados criados pelos próprios testes (hooks) ou pelo seed oficial (`cmd/seed`); evite dependências externas.
+- Para rotas com efeitos colaterais (ex.: vendas, estoque), prefira criar registros específicos e, quando necessário, limpá-los ao fim do teste.
+- Documente cenários não testáveis (ex.: callbacks externos) no README dos testes para evitar falsos negativos.
 
 ## Próximos Passos
-1. Configurar `tests/` com fixtures e hooks básicos (signup/login, CRUD simples).
+1. Expandir os hooks para cobrir CRUD de clientes e usuários reutilizando os tokens já gerados.
 2. Adicionar job de contrato ao pipeline principal após o backend estar disponível.
 3. Expor resultados dos testes em badges ou comentários automáticos em PRs.

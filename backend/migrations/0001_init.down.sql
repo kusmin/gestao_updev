@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS audit_logs;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS services;
+DROP TABLE IF EXISTS clients;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS companies;
+DROP FUNCTION IF EXISTS trigger_set_timestamp;

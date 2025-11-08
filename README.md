@@ -11,6 +11,7 @@ Plataforma de gestão para negócios locais (barbearias, lojas de roupa e comér
 
 ## Documentação-chave
 - Visão geral e arquitetura: `docs/README.md`, `docs/arquitetura-backend.md`.
+- Passo a passo de configuração do backend: `docs/backend-setup.md`.
 - Modelo de dados: `docs/modelo-dados.md`.
 - Fluxos de uso: `docs/fluxos-uso.md`.
 - Padrões de código: `docs/padroes-codigo.md`.
@@ -37,6 +38,8 @@ https://kusmin.github.io/gestao_updev/
 - `make api-types`: gera definições TypeScript em `frontend/src/types/api.d.ts`.
 - `npm run build` (frontend): executa `generate:api-types` automaticamente antes do build real (placeholder por enquanto).
 - `docker compose up --build`: sobe PostgreSQL + API + frontend (ver `docs/docker.md`).
+- `make swagger`: regenera os artefatos do Swagger (usados no `/swagger`).
+- `make -C backend seed`: popula dados de demonstração via CLI (`cmd/seed`).
 
 ## CI/CD
 - `API Spec Quality`: lint + publicação do spec.

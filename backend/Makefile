@@ -1,6 +1,7 @@
 .PHONY: test
 test:
-	go test ./...
+	go test -coverprofile=coverage.out -coverpkg ./... ./...
+	go tool cover -func=coverage.out | tail -n 1
 
 .PHONY: lint
 lint:
@@ -20,4 +21,12 @@ run:
 
 .PHONY: swagger
 swagger:
-	swag init
+	go run github.com/swaggo/swag/cmd/swag@latest init -g cmd/api/main.go -o docs
+
+.PHONY: migrate
+migrate:
+	go run ./cmd/migrate
+
+.PHONY: seed
+seed:
+	go run ./cmd/seed

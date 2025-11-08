@@ -1,12 +1,17 @@
 API_SPEC := docs/api.yaml
 BACKEND_DIR := backend
 FRONTEND_DIR := frontend
+BACKOFFICE_DIR := backoffice
 
 .PHONY: api-lint api-preview api-types backend-run api-contract-test \
 	backend-test backend-lint backend-build backend-tidy \
 	frontend-install frontend-dev frontend-build frontend-preview \
 	frontend-lint frontend-test compose-up compose-down compose-logs \
 	compose-restart pre-commit-install pre-commit-run pre-commit-update
+
+.PHONY: swagger
+swagger:
+	$(MAKE) -C $(BACKEND_DIR) swagger
 
 api-lint:
 	npx @stoplight/spectral-cli lint $(API_SPEC)
@@ -17,6 +22,8 @@ api-preview:
 api-types:
 	mkdir -p $(FRONTEND_DIR)/src/types
 	npx openapi-typescript $(API_SPEC) -o $(FRONTEND_DIR)/src/types/api.d.ts
+	mkdir -p $(BACKOFFICE_DIR)/src/types
+	npx openapi-typescript $(API_SPEC) -o $(BACKOFFICE_DIR)/src/types/api.d.ts
 
 backend-run:
 	$(MAKE) -C $(BACKEND_DIR) run

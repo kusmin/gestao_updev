@@ -32,8 +32,8 @@ A documentação da API é gerada automaticamente a partir dos comentários do c
 
 ### Atualizando a Documentação
 
-Após adicionar ou modificar os comentários de anotação da API, regenere os arquivos da documentação com o seguinte comando, a partir da pasta `backend`:
+Após adicionar ou modificar os comentários de anotação da API, regenere os arquivos executando:
 
 ```bash
-go run github.com/swaggo/swag/cmd/swag init -g cmd/api/main.go
+make -C backend swagger
 ```
