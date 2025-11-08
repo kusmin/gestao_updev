@@ -1,0 +1,4 @@
+extends: ["@stoplight/spectral-oas:recommended"]
+rules:
+  # Disabling a rule that is often too strict for initial development
+  oas3-schema-no-pattern-properties: off

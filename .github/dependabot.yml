@@ -1,0 +1,41 @@
+version: 2
+updates:
+  # Group updates for backend Go modules
+  - package-ecosystem: "gomod"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+    groups:
+      backend:
+        patterns:
+          - "*"
+
+  # Group updates for frontend npm packages
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+    groups:
+      frontend:
+        patterns:
+          - "*"
+
+  # Group updates for backoffice npm packages
+  - package-ecosystem: "npm"
+    directory: "/backoffice"
+    schedule:
+      interval: "weekly"
+    groups:
+      backoffice:
+        patterns:
+          - "*"
+
+  # Group updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      github-actions:
+        patterns:
+          - "*"

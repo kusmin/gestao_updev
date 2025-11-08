@@ -12,6 +12,7 @@ type Config struct {
 	HTTPPort     int    `env:"HTTP_PORT" envDefault:"8080"`
 	TenantHeader string `env:"TENANT_HEADER" envDefault:"X-Tenant-ID"`
 	LogLevel     string `env:"LOG_LEVEL" envDefault:"info"`
+	DBURL        string `env:"DATABASE_URL,required"`
 }
 
 // Load lê variáveis de ambiente e monta a configuração.
