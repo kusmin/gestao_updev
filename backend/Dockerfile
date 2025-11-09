@@ -5,10 +5,10 @@ WORKDIR /app
 
 RUN apk add --no-cache git
 
-COPY backend/go.mod backend/go.sum ./
+COPY go.mod go.sum ./
 RUN go mod download
 
-COPY backend .
+COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -o /tmp/api ./cmd/api
 
 FROM alpine:3.20
