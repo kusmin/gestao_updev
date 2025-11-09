@@ -45,7 +45,12 @@ backend-tidy:
 	$(MAKE) -C $(BACKEND_DIR) tidy
 
 api-contract-test:
-	npx dredd@14 --config tests/dredd/dredd.yml
+	( \
+	  set -a; \
+	  [ -f .env.test ] && . .env.test; \
+	  set +a; \
+	  npx dredd@14 --config tests/dredd/dredd.yml \
+	)
 
 frontend-install:
 	npm --prefix $(FRONTEND_DIR) install
