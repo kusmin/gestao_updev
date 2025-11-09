@@ -63,6 +63,14 @@ func (s *Service) CreateInventoryMovement(ctx context.Context, tenantID uuid.UUI
 	default:
 		return nil, ErrInvalidInventoryType
 	}
+	if err := s.ensureTenantRecord(ctx, &domain.Product{}, tenantID, input.ProductID); err != nil {
+		return nil, err
+	}
+	if input.OrderID != nil {
+		if err := s.ensureTenantRecord(ctx, &domain.SalesOrder{}, tenantID, *input.OrderID); err != nil {
+			return nil, err
+		}
+	}
 
 	movement := &domain.InventoryMovement{
 		TenantModel: domain.TenantModel{

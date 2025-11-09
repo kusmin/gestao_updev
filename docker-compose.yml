@@ -17,12 +17,19 @@ services:
       dockerfile: backend/Dockerfile
     environment:
       APP_ENV: ${APP_ENV:-production}
+      SERVICE_NAME: ${SERVICE_NAME:-gestao-api}
       HTTP_PORT: 8080
       TENANT_HEADER: ${TENANT_HEADER:-X-Tenant-ID}
       LOG_LEVEL: ${LOG_LEVEL:-info}
       DATABASE_URL: ${DATABASE_URL:-postgres://gestao:gestao@postgres:5432/gestao_updev?sslmode=disable}
+      OTEL_ENABLED: ${OTEL_ENABLED:-true}
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-http://otel-collector:4318}
+      OTEL_EXPORTER_OTLP_HEADERS: ${OTEL_EXPORTER_OTLP_HEADERS:-}
+      OTEL_EXPORTER_OTLP_INSECURE: ${OTEL_EXPORTER_OTLP_INSECURE:-true}
+      METRICS_ROUTE: ${METRICS_ROUTE:-/metrics}
     depends_on:
       - postgres
+      - otel-collector
     ports:
       - "${HTTP_PORT:-8080}:8080"
 
@@ -36,6 +43,15 @@ services:
       - backend
     ports:
       - "${FRONTEND_PORT:-4173}:80"
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.104.0
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./docker/otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
+    ports:
+      - "${OTEL_COLLECTOR_HTTP_PORT:-4318}:4318"
+      - "${OTEL_COLLECTOR_GRPC_PORT:-4317}:4317"
 
 volumes:
   postgres_data:

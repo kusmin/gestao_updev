@@ -5,6 +5,7 @@ import (
 	"errors"
 	"strings"
 
+	"github.com/google/uuid"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 
@@ -53,4 +54,11 @@ func (s *Service) clampPagination(page, perPage int) (int, int) {
 		perPage = 100
 	}
 	return page, perPage
+}
+
+func (s *Service) ensureTenantRecord(ctx context.Context, model interface{}, tenantID, recordID uuid.UUID) error {
+	return s.dbWithContext(ctx).
+		Model(model).
+		Where("tenant_id = ? AND id = ?", tenantID, recordID).
+		Take(model).Error
 }

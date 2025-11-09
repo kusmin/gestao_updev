@@ -27,6 +27,7 @@ interface Client {
 const ClientListPage: React.FC = () => {
   const [clients, setClients] = useState<Client[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingClient, setEditingClient] = useState<Client | null>(null);
 
   const fetchClients = async () => {
     try {
@@ -48,18 +49,40 @@ const ClientListPage: React.FC = () => {
     fetchClients();
   }, []);
 
-  const handleOpenForm = () => {
+  const handleOpenForm = (client: Client | null = null) => {
+    setEditingClient(client);
     setIsFormOpen(true);
   };
 
   const handleCloseForm = () => {
+    setEditingClient(null);
     setIsFormOpen(false);
   };
 
   const handleSaveClient = (client: Client) => {
-    // NOTE: This is optimistic UI update.
-    // For a real app, you might want to refetch the list or update more carefully.
-    setClients([...clients, client]);
+    if (editingClient) {
+      setClients(
+        clients.map((c) => (c.id === client.id ? client : c))
+      );
+    } else {
+      setClients([...clients, client]);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      // TODO: Replace with actual API endpoint and add authentication
+      await fetch(`http://localhost:8080/v1/clients/${id}`, {
+        method: 'DELETE',
+        headers: {
+          // TODO: Replace with actual tenant ID
+          'X-Tenant-ID': 'a4b2b2b2-b2b2-4b2b-b2b2-b2b2b2b2b2b2',
+        },
+      });
+      setClients(clients.filter((client) => client.id !== id));
+    } catch (error) {
+      console.error('Error deleting client:', error);
+    }
   };
 
   return (
@@ -68,7 +91,7 @@ const ClientListPage: React.FC = () => {
         <Typography variant="h4" component="h1" gutterBottom>
           Clientes
         </Typography>
-        <Button variant="contained" color="primary" onClick={handleOpenForm}>
+        <Button variant="contained" color="primary" onClick={() => handleOpenForm()}>
           Adicionar Cliente
         </Button>
       </Box>
@@ -89,8 +112,10 @@ const ClientListPage: React.FC = () => {
                 <TableCell>{client.email}</TableCell>
                 <TableCell>{client.phone}</TableCell>
                 <TableCell>
-                  <Button>Editar</Button>
-                  <Button color="error">Excluir</Button>
+                  <Button onClick={() => handleOpenForm(client)}>Editar</Button>
+                  <Button color="error" onClick={() => handleDelete(client.id)}>
+                    Excluir
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -101,6 +126,7 @@ const ClientListPage: React.FC = () => {
         open={isFormOpen}
         onClose={handleCloseForm}
         onSave={handleSaveClient}
+        client={editingClient}
       />
     </Container>
   );

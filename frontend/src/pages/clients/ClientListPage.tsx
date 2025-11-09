@@ -12,29 +12,62 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { fetchClients } from '../lib/apiClient';
+import { deleteClient, fetchClients } from '../lib/apiClient';
 import type { components } from '../types/api';
+import ClientForm from './ClientForm';
 
 type Client = components['schemas']['Client'];
 
 const ClientListPage: React.FC = () => {
   const [clients, setClients] = useState<Client[]>([]);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingClient, setEditingClient] = useState<Client | null>(null);
+
+  const getClients = async () => {
+    try {
+      // TODO: Replace with actual tenant ID
+      const data = await fetchClients('a4b2b2b2-b2b2-4b2b-b2b2-b2b2b2b2b2b2');
+      if (data && Array.isArray(data)) {
+        setClients(data);
+      }
+    } catch (error) {
+      console.error('Error fetching clients:', error);
+    }
+  };
 
   useEffect(() => {
-    const getClients = async () => {
-      try {
-        // TODO: Replace with actual tenant ID
-        const data = await fetchClients('a4b2b2b2-b2b2-4b2b-b2b2-b2b2b2b2b2b2');
-        if (data && Array.isArray(data)) {
-          setClients(data);
-        }
-      } catch (error) {
-        console.error('Error fetching clients:', error);
-      }
-    };
-
     getClients();
   }, []);
+
+  const handleOpenForm = (client: Client | null = null) => {
+    setEditingClient(client);
+    setIsFormOpen(true);
+  };
+
+  const handleCloseForm = () => {
+    setEditingClient(null);
+    setIsFormOpen(false);
+  };
+
+  const handleSaveClient = (client: Client) => {
+    if (editingClient) {
+      setClients(
+        clients.map((c) => (c.id === client.id ? client : c))
+      );
+    } else {
+      setClients([...clients, client]);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      // TODO: Replace with actual tenant ID
+      await deleteClient('a4b2b2b2-b2b2-4b2b-b2b2-b2b2b2b2b2b2', id);
+      setClients(clients.filter((client) => client.id !== id));
+    } catch (error) {
+      console.error('Error deleting client:', error);
+    }
+  };
 
   return (
     <Container>
@@ -42,7 +75,7 @@ const ClientListPage: React.FC = () => {
         <Typography variant="h4" component="h1" gutterBottom>
           Clientes
         </Typography>
-        <Button variant="contained" color="primary">
+        <Button variant="contained" color="primary" onClick={() => handleOpenForm()}>
           Adicionar Cliente
         </Button>
       </Box>
@@ -63,14 +96,22 @@ const ClientListPage: React.FC = () => {
                 <TableCell>{client.email}</TableCell>
                 <TableCell>{client.phone}</TableCell>
                 <TableCell>
-                  <Button>Editar</Button>
-                  <Button color="error">Excluir</Button>
+                  <Button onClick={() => handleOpenForm(client)}>Editar</Button>
+                  <Button color="error" onClick={() => handleDelete(client.id)}>
+                    Excluir
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <ClientForm
+        open={isFormOpen}
+        onClose={handleCloseForm}
+        onSave={handleSaveClient}
+        client={editingClient}
+      />
     </Container>
   );
 };

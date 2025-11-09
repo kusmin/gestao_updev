@@ -7,13 +7,11 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
+import type { components } from '../../types/api';
+import { createClient, updateClient } from '../../lib/apiClient';
 
-interface Client {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-}
+type Client = components['schemas']['Client'];
+type ClientRequest = components['schemas']['ClientRequest'];
 
 interface ClientFormProps {
   open: boolean;
@@ -45,24 +43,17 @@ const ClientForm: React.FC<ClientFormProps> = ({
   }, [client]);
 
   const handleSave = async () => {
-    const clientData = { name, email, phone };
+    const clientData: ClientRequest = { name, email, phone };
     try {
-      const url = client
-        ? `http://localhost:8080/v1/clients/${client.id}`
-        : 'http://localhost:8080/v1/clients';
-      const method = client ? 'PUT' : 'POST';
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          // TODO: Replace with actual tenant ID
-          'X-Tenant-ID': 'a4b2b2b2-b2b2-4b2b-b2b2-b2b2b2b2b2b2',
-        },
-        body: JSON.stringify(clientData),
-      });
-      const savedClient = await response.json();
-      onSave(savedClient.data);
+      let savedClient;
+      // TODO: Replace with actual tenant ID
+      const tenantId = 'a4b2b2b2-b2b2-4b2b-b2b2-b2b2b2b2b2b2';
+      if (client) {
+        savedClient = await updateClient(tenantId, client.id, clientData);
+      } else {
+        savedClient = await createClient(tenantId, clientData);
+      }
+      onSave(savedClient);
       onClose();
     } catch (error) {
       console.error('Error saving client:', error);

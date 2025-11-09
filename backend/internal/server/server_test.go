@@ -27,7 +27,7 @@ func setupTestServer(t *testing.T) *Server {
 	logger := zap.NewNop()
 	db, err := gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
 	require.NoError(t, err)
-	return New(cfg, logger, db)
+	return New(cfg, logger, db, nil)
 }
 
 func TestHealthz(t *testing.T) {

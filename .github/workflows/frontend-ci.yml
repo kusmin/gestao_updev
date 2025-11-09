@@ -7,10 +7,18 @@ on:
     branches: [ main ]
     paths:
       - 'frontend/**'
+      - 'docs/api.yaml'
+      - 'Makefile'
   pull_request:
     branches: [ main ]
     paths:
       - 'frontend/**'
+      - 'docs/api.yaml'
+      - 'Makefile'
+
+defaults:
+  run:
+    working-directory: frontend
 
 jobs:
   lint:
@@ -21,23 +29,53 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '20'
+
+      - name: Cache node modules
+        id: cache-npm
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install dependencies
-        run: echo "TODO: Run npm install"
+        if: steps.cache-npm.outputs.cache-hit != 'true'
+        run: npm install
+
       - name: Run linter
-        run: echo "TODO: Run npm run lint"
+        run: npm run lint
 
   test:
-    name: Test
+    name: Test Coverage
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '20'
+
+      - name: Cache node modules
+        id: cache-npm
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install dependencies
-        run: echo "TODO: Run npm install"
-      - name: Run tests
-        run: echo "TODO: Run npm run test"
+        if: steps.cache-npm.outputs.cache-hit != 'true'
+        run: npm install
+
+      - name: Run tests and generate coverage report
+        run: npm test -- --coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
 
   build:
     name: Build
@@ -47,7 +85,19 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '20'
+
+      - name: Cache node modules
+        id: cache-npm
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install dependencies
-        run: echo "TODO: Run npm install"
+        if: steps.cache-npm.outputs.cache-hit != 'true'
+        run: npm install
+
       - name: Build application
-        run: echo "TODO: Run npm run build"
+        run: npm run build

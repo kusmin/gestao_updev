@@ -14,6 +14,7 @@ import (
 	"github.com/kusmin/gestao_updev/backend/internal/server"
 	"github.com/kusmin/gestao_updev/backend/pkg/database"
 	"github.com/kusmin/gestao_updev/backend/pkg/logger"
+	"github.com/kusmin/gestao_updev/backend/pkg/telemetry"
 )
 
 // @title Gestão UpDev API
@@ -47,6 +48,23 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
+	tel, err := telemetry.Init(ctx, telemetry.Config{
+		ServiceName:   cfg.ServiceName,
+		Environment:   cfg.AppEnv,
+		EnableTracing: cfg.TelemetryEnabled,
+		OTLPEndpoint:  cfg.OTLPEndpoint,
+		OTLPHeaders:   cfg.OTLPHeaders,
+		OTLPInsecure:  cfg.OTLPInsecure,
+	})
+	if err != nil {
+		zapLogger.Fatal("failed to initialize telemetry", zap.Error(err))
+	}
+	defer func() {
+		if err := tel.Shutdown(context.Background()); err != nil {
+			zapLogger.Warn("error shutting down telemetry", zap.Error(err))
+		}
+	}()
+
 	db, err := database.New(database.Config{
 		URL:             cfg.DatabaseURL,
 		MaxIdleConns:    cfg.DBMaxIdleConns,
@@ -63,7 +81,7 @@ func main() {
 	}
 	defer sqlDB.Close()
 
-	srv := server.New(cfg, zapLogger, db)
+	srv := server.New(cfg, zapLogger, db, tel)
 
 	if err := srv.Run(ctx); err != nil {
 		zapLogger.Fatal("server stopped with error", zap.Any("error", err))

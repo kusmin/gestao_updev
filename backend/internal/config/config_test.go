@@ -8,9 +8,40 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var configEnvKeys = []string{
+	"APP_ENV",
+	"SERVICE_NAME",
+	"HTTP_PORT",
+	"TENANT_HEADER",
+	"LOG_LEVEL",
+	"DATABASE_URL",
+	"DB_MAX_IDLE_CONNS",
+	"DB_MAX_OPEN_CONNS",
+	"DB_CONN_MAX_LIFETIME",
+	"JWT_ACCESS_SECRET",
+	"JWT_REFRESH_SECRET",
+	"JWT_ACCESS_TTL",
+	"JWT_REFRESH_TTL",
+	"BCRYPT_COST",
+	"REFRESH_TOKEN_LENGTH",
+	"OTEL_ENABLED",
+	"OTEL_EXPORTER_OTLP_ENDPOINT",
+	"OTEL_EXPORTER_OTLP_HEADERS",
+	"OTEL_EXPORTER_OTLP_INSECURE",
+	"METRICS_ROUTE",
+}
+
+func unsetConfigEnv() {
+	for _, key := range configEnvKeys {
+		os.Unsetenv(key)
+	}
+}
+
 func TestLoad(t *testing.T) {
+	unsetConfigEnv()
 	// Test with environment variables set
 	os.Setenv("APP_ENV", "production")
+	os.Setenv("SERVICE_NAME", "gestao-prod")
 	os.Setenv("HTTP_PORT", "9090")
 	os.Setenv("TENANT_HEADER", "X-My-Tenant-ID")
 	os.Setenv("LOG_LEVEL", "debug")
@@ -24,10 +55,16 @@ func TestLoad(t *testing.T) {
 	os.Setenv("JWT_REFRESH_TTL", "168h")
 	os.Setenv("BCRYPT_COST", "14")
 	os.Setenv("REFRESH_TOKEN_LENGTH", "96")
+	os.Setenv("OTEL_ENABLED", "true")
+	os.Setenv("OTEL_EXPORTER_OTLP_ENDPOINT", "https://telemetry.updev.local:4318")
+	os.Setenv("OTEL_EXPORTER_OTLP_HEADERS", "api-key=secret,tenant=main")
+	os.Setenv("OTEL_EXPORTER_OTLP_INSECURE", "false")
+	os.Setenv("METRICS_ROUTE", "/v1/metrics")
 
 	cfg, err := Load()
 	assert.NoError(t, err)
 	assert.Equal(t, "production", cfg.AppEnv)
+	assert.Equal(t, "gestao-prod", cfg.ServiceName)
 	assert.Equal(t, 9090, cfg.HTTPPort)
 	assert.Equal(t, "X-My-Tenant-ID", cfg.TenantHeader)
 	assert.Equal(t, "debug", cfg.LogLevel)
@@ -41,26 +78,19 @@ func TestLoad(t *testing.T) {
 	assert.Equal(t, 168*time.Hour, cfg.JWTRefreshTTL)
 	assert.Equal(t, 14, cfg.BcryptCost)
 	assert.Equal(t, 96, cfg.RefreshTokenLength)
+	assert.True(t, cfg.TelemetryEnabled)
+	assert.Equal(t, "https://telemetry.updev.local:4318", cfg.OTLPEndpoint)
+	assert.Equal(t, "api-key=secret,tenant=main", cfg.OTLPHeaders)
+	assert.False(t, cfg.OTLPInsecure)
+	assert.Equal(t, "/v1/metrics", cfg.MetricsRoute)
 
 	// Test with default values
-	os.Unsetenv("APP_ENV")
-	os.Unsetenv("HTTP_PORT")
-	os.Unsetenv("TENANT_HEADER")
-	os.Unsetenv("LOG_LEVEL")
-	os.Unsetenv("DATABASE_URL")
-	os.Unsetenv("DB_MAX_IDLE_CONNS")
-	os.Unsetenv("DB_MAX_OPEN_CONNS")
-	os.Unsetenv("DB_CONN_MAX_LIFETIME")
-	os.Unsetenv("JWT_ACCESS_SECRET")
-	os.Unsetenv("JWT_REFRESH_SECRET")
-	os.Unsetenv("JWT_ACCESS_TTL")
-	os.Unsetenv("JWT_REFRESH_TTL")
-	os.Unsetenv("BCRYPT_COST")
-	os.Unsetenv("REFRESH_TOKEN_LENGTH")
+	unsetConfigEnv()
 
 	cfg, err = Load()
 	assert.NoError(t, err)
 	assert.Equal(t, "development", cfg.AppEnv)
+	assert.Equal(t, "gestao-api", cfg.ServiceName)
 	assert.Equal(t, 8080, cfg.HTTPPort)
 	assert.Equal(t, "X-Tenant-ID", cfg.TenantHeader)
 	assert.Equal(t, "info", cfg.LogLevel)
@@ -74,9 +104,74 @@ func TestLoad(t *testing.T) {
 	assert.Equal(t, 720*time.Hour, cfg.JWTRefreshTTL)
 	assert.Equal(t, 12, cfg.BcryptCost)
 	assert.Equal(t, 64, cfg.RefreshTokenLength)
+	assert.False(t, cfg.TelemetryEnabled)
+	assert.Equal(t, "", cfg.OTLPEndpoint)
+	assert.Equal(t, "", cfg.OTLPHeaders)
+	assert.False(t, cfg.OTLPInsecure)
+	assert.Equal(t, "/metrics", cfg.MetricsRoute)
 }
 
 func TestAddress(t *testing.T) {
 	cfg := &Config{HTTPPort: 8888}
 	assert.Equal(t, ":8888", cfg.Address())
+}
+
+func TestLoadProductionValidations(t *testing.T) {
+	tests := []struct {
+		name    string
+		setup   func()
+		wantErr string
+	}{
+		{
+			name: "missing database url",
+			setup: func() {
+				unsetConfigEnv()
+				os.Setenv("APP_ENV", "production")
+				os.Setenv("JWT_ACCESS_SECRET", "prod-access")
+				os.Setenv("JWT_REFRESH_SECRET", "prod-refresh")
+			},
+			wantErr: "DATABASE_URL must be defined in production",
+		},
+		{
+			name: "default database url",
+			setup: func() {
+				unsetConfigEnv()
+				os.Setenv("APP_ENV", "production")
+				os.Setenv("DATABASE_URL", defaultDatabaseURL)
+				os.Setenv("JWT_ACCESS_SECRET", "prod-access")
+				os.Setenv("JWT_REFRESH_SECRET", "prod-refresh")
+			},
+			wantErr: "DATABASE_URL must not use the development default in production",
+		},
+		{
+			name: "default access secret",
+			setup: func() {
+				unsetConfigEnv()
+				os.Setenv("APP_ENV", "production")
+				os.Setenv("DATABASE_URL", "postgres://user:pass@localhost:5432/prod?sslmode=disable")
+				os.Setenv("JWT_ACCESS_SECRET", defaultJWTAccessSecret)
+				os.Setenv("JWT_REFRESH_SECRET", "prod-refresh")
+			},
+			wantErr: "JWT_ACCESS_SECRET must not use the development default in production",
+		},
+		{
+			name: "missing refresh secret",
+			setup: func() {
+				unsetConfigEnv()
+				os.Setenv("APP_ENV", "production")
+				os.Setenv("DATABASE_URL", "postgres://user:pass@localhost:5432/prod?sslmode=disable")
+				os.Setenv("JWT_ACCESS_SECRET", "prod-access")
+			},
+			wantErr: "JWT_REFRESH_SECRET must be defined in production",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.setup()
+			_, err := Load()
+			assert.Error(t, err)
+			assert.Contains(t, err.Error(), tt.wantErr)
+		})
+	}
 }

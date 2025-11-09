@@ -21,8 +21,10 @@ O modelo de dados reforça o problema: as FKs exigem que a referência exista, m
 
 **Mitigação sugerida:** Em cada operação, buscar explicitamente os registros relacionados filtrando por `tenant_id` antes de prosseguir (e rejeitar quando não pertencerem), além de considerar restrições compostas ou triggers no banco para reforçar o vínculo entre `tenant_id` da entidade e de suas dependências.
 
+**Mitigação implementada:** A migração `0005_multitenant_constraints` cria índices únicos em `(tenant_id, id)` e adiciona FKs compostas para `bookings`, `sales_orders`, `sales_items`, `payments` e `inventory_movements`, garantindo que o banco rejeite associações cruzadas mesmo que um UUID de outro tenant seja reutilizado.
+
 ## Próximos Passos Recomendados
 1. Ajustar o carregamento de configuração para falhar quando segredos permanecerem com os defaults de desenvolvimento.
 2. Revisar todos os casos de uso que recebem IDs de entidades relacionadas, garantindo que cada busca use filtros por `tenant_id` antes de criar ou atualizar registros.
-3. Complementar as proteções na camada de banco (FKs compostas ou constraints) para impedir associações cruzadas mesmo em caso de regressões na aplicação.
+3. (Concluído em `0005_multitenant_constraints`) Complementar as proteções na camada de banco (FKs compostas ou constraints) para impedir associações cruzadas mesmo em caso de regressões na aplicação.
 4. Adicionar testes de integração cobrindo cenários de acesso cruzado entre tenants e validações de configuração obrigatória.

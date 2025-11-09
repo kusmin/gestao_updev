@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 
@@ -18,20 +19,22 @@ import (
 	"github.com/kusmin/gestao_updev/backend/internal/middleware"
 	"github.com/kusmin/gestao_updev/backend/internal/repository"
 	"github.com/kusmin/gestao_updev/backend/internal/service"
+	"github.com/kusmin/gestao_updev/backend/pkg/telemetry"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // Server representa a API HTTP.
 type Server struct {
-	cfg    *config.Config
-	logger *zap.Logger
-	engine *gin.Engine
-	db     *gorm.DB
+	cfg       *config.Config
+	logger    *zap.Logger
+	engine    *gin.Engine
+	db        *gorm.DB
+	telemetry *telemetry.Telemetry
 }
 
 // New cria uma instância do servidor HTTP.
-func New(cfg *config.Config, logger *zap.Logger, db *gorm.DB) *Server {
+func New(cfg *config.Config, logger *zap.Logger, db *gorm.DB, telem *telemetry.Telemetry) *Server {
 	if cfg.AppEnv == "production" {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -39,7 +42,10 @@ func New(cfg *config.Config, logger *zap.Logger, db *gorm.DB) *Server {
 	engine := gin.New()
 	engine.Use(gin.Recovery())
 	engine.Use(middleware.RequestID())
-	engine.Use(gin.Logger())
+	if telem != nil && telem.TracerProvider() != nil {
+		engine.Use(otelgin.Middleware(cfg.ServiceName, otelgin.WithTracerProvider(telem.TracerProvider())))
+	}
+	engine.Use(middleware.Logger(logger))
 
 	repo := repository.New(db)
 	jwtManager := auth.NewJWTManager(cfg.JWTAccessSecret, cfg.JWTRefreshSecret, cfg.JWTAccessTTL, cfg.JWTRefreshTTL)
@@ -59,11 +65,16 @@ func New(cfg *config.Config, logger *zap.Logger, db *gorm.DB) *Server {
 
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	if telem != nil && telem.MetricsHandler() != nil && cfg.MetricsRoute != "" {
+		engine.GET(cfg.MetricsRoute, gin.WrapH(telem.MetricsHandler()))
+	}
+
 	return &Server{
-		cfg:    cfg,
-		logger: logger,
-		engine: engine,
-		db:     db,
+		cfg:       cfg,
+		logger:    logger,
+		engine:    engine,
+		db:        db,
+		telemetry: telem,
 	}
 }
 

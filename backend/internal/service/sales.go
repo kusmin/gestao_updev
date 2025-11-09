@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -84,6 +85,17 @@ func (s *Service) ListSalesOrders(ctx context.Context, tenantID uuid.UUID, filte
 func (s *Service) CreateSalesOrder(ctx context.Context, tenantID uuid.UUID, input SalesOrderInput) (*domain.SalesOrder, error) {
 	if len(input.Items) == 0 {
 		return nil, errors.New("ao menos um item é obrigatório")
+	}
+	if err := s.ensureTenantRecord(ctx, &domain.Client{}, tenantID, input.ClientID); err != nil {
+		return nil, err
+	}
+	if input.BookingID != nil {
+		if err := s.ensureTenantRecord(ctx, &domain.Booking{}, tenantID, *input.BookingID); err != nil {
+			return nil, err
+		}
+	}
+	if err := s.ensureSalesItems(ctx, tenantID, input.Items); err != nil {
+		return nil, err
 	}
 
 	order := &domain.SalesOrder{
@@ -181,6 +193,9 @@ func (s *Service) UpdateSalesOrder(ctx context.Context, tenantID, orderID uuid.U
 }
 
 func (s *Service) AddPayment(ctx context.Context, tenantID, orderID uuid.UUID, input PaymentInput) (*domain.Payment, error) {
+	if err := s.ensureTenantRecord(ctx, &domain.SalesOrder{}, tenantID, orderID); err != nil {
+		return nil, err
+	}
 	payment := &domain.Payment{
 		TenantModel: domain.TenantModel{
 			TenantID: tenantID,
@@ -220,4 +235,22 @@ func (s *Service) ListPayments(ctx context.Context, tenantID uuid.UUID, filter P
 		return nil, err
 	}
 	return payments, nil
+}
+
+func (s *Service) ensureSalesItems(ctx context.Context, tenantID uuid.UUID, items []SalesItemInput) error {
+	for _, item := range items {
+		switch item.Type {
+		case "service":
+			if err := s.ensureTenantRecord(ctx, &domain.Service{}, tenantID, item.RefID); err != nil {
+				return err
+			}
+		case "product":
+			if err := s.ensureTenantRecord(ctx, &domain.Product{}, tenantID, item.RefID); err != nil {
+				return err
+			}
+		default:
+			return fmt.Errorf("tipo de item %q não suportado", item.Type)
+		}
+	}
+	return nil
 }

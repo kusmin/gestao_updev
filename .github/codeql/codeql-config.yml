@@ -1,0 +1,8 @@
+name: "CodeQL Configuration"
+
+paths-ignore:
+  - '**/node_modules'
+  - 'frontend/dist'
+  - 'backend/vendor'
+  - 'docs'
+  - 'tests'

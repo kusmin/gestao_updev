@@ -64,6 +64,12 @@ func (s *Service) ListBookings(ctx context.Context, tenantID uuid.UUID, filter B
 }
 
 func (s *Service) CreateBooking(ctx context.Context, tenantID uuid.UUID, input BookingInput) (*domain.Booking, error) {
+	if err := s.ensureTenantRecord(ctx, &domain.Client{}, tenantID, input.ClientID); err != nil {
+		return nil, err
+	}
+	if err := s.ensureTenantRecord(ctx, &domain.Professional{}, tenantID, input.ProfessionalID); err != nil {
+		return nil, err
+	}
 	if input.Status == "" {
 		input.Status = domain.BookingStatusPending
 	}
