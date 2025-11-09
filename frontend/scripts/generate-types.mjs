@@ -12,7 +12,7 @@ const target = path.resolve(cwd, 'src', 'types', 'api.d.ts');
 let specForTypes = specPath;
 
 const specContent = fs.readFileSync(specPath, 'utf8');
-const isSwagger2 = /^\s*swagger:\s*["']?2/.test(specContent);
+const isSwagger2 = /swagger:\s*["']?2/.test(specContent);
 
 if (isSwagger2) {
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'gestao-spec-'));
