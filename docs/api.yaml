@@ -1,1231 +1,1170 @@
-openapi: 3.1.0
-jsonSchemaDialect: https://spec.openapis.org/oas/3.1/dialect/base
-info:
-  title: Plataforma de Gestão Local
-  version: 0.2.0
-  description: >
-    API REST para gestão de barbearias e comércios locais.
-servers:
-  - url: https://api.gestao-local.com/v1
-    description: Produção
-  - url: https://staging.api.gestao-local.com/v1
-    description: Staging
-  - url: http://localhost:8080/v1
-    description: Desenvolvimento
-security:
-  - bearerAuth: []
-  - tenantHeader: []
-components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-    tenantHeader:
-      type: apiKey
-      in: header
-      name: X-Tenant-ID
-  schemas:
-    ErrorResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/NullValue'
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-            message:
-              type: string
-            details:
-              type: array
-              items:
-                type: object
-                properties:
-                  field:
-                    type: string
-                  reason:
-                    type: string
-      required: [error]
-    NullValue:
-      type: 'null'
-      description: Valor reservado para campos que permanecem nulos nas respostas.
-    PaginationMeta:
-      type: object
-      properties:
-        pagination:
-          type: object
-          properties:
-            page:
-              type: integer
-            per_page:
-              type: integer
-            total:
-              type: integer
-      required: [pagination]
-    SignupRequest:
-      type: object
-      properties:
-        company:
-          type: object
-          properties:
-            name:
-              type: string
-            document:
-              type: string
-          required: [name]
-        user:
-          type: object
-          properties:
-            name:
-              type: string
-            email:
-              type: string
-              format: email
-            password:
-              type: string
-              minLength: 8
-          required: [name, email, password]
-        phone:
-          type: string
-      required: [company, user]
-    LoginRequest:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-        password:
-          type: string
-      required: [email, password]
-    TokenResponse:
-      type: object
-      properties:
-        access_token:
-          type: string
-        refresh_token:
-          type: string
-        expires_in:
-          type: integer
-      required: [access_token, refresh_token, expires_in]
-    SignupResponse:
-      type: object
-      properties:
-        tenant_id:
-          type: string
-          format: uuid
-        user_id:
-          type: string
-          format: uuid
-        access_token:
-          type: string
-        refresh_token:
-          type: string
-        expires_in:
-          type: integer
-      required: [tenant_id, user_id, access_token, refresh_token, expires_in]
-    Company:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        document:
-          type: string
-        timezone:
-          type: string
-          example: America/Sao_Paulo
-        settings:
-          type: object
-      required: [id, name]
-    User:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        email:
-          type: string
-          format: email
-        role:
-          type: string
-          enum: [admin, manager, operator]
-        phone:
-          type: string
-        active:
-          type: boolean
-        created_at:
-          type: string
-          format: date-time
-      required: [id, name, email, role]
-    Client:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        phone:
-          type: string
-        email:
-          anyOf:
-            - type: string
-            - type: 'null'
-        notes:
-          anyOf:
-            - type: string
-            - type: 'null'
-        tags:
-          type: array
-          items:
-            type: string
-      required: [id, name]
-    Professional:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        specialties:
-          type: array
-          items:
-            type: string
-        max_parallel:
-          type: integer
-          default: 1
-      required: [id, name]
-    Service:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        duration_minutes:
-          type: integer
-        price:
-          type: number
-          format: float
-        category:
-          type: string
-        description:
-          type: string
-      required: [id, name, duration_minutes, price]
-    Product:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        sku:
-          type: string
-        price:
-          type: number
-        cost:
-          type: number
-        stock_qty:
-          type: integer
-        min_stock:
-          type: integer
-      required: [id, name, sku, price]
-    InventoryMovement:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        product_id:
-          type: string
-          format: uuid
-        type:
-          type: string
-          enum: [in, out, adjustment]
-        quantity:
-          type: integer
-        reason:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-      required: [id, product_id, type, quantity]
-    Booking:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        client_id:
-          type: string
-          format: uuid
-        professional_id:
-          type: string
-          format: uuid
-        service_id:
-          type: string
-          format: uuid
-        status:
-          type: string
-          enum: [pending, confirmed, done, canceled]
-        start_at:
-          type: string
-          format: date-time
-        end_at:
-          type: string
-          format: date-time
-        notes:
-          type: string
-      required: [id, client_id, professional_id, service_id, status, start_at]
-    SalesItem:
-      type: object
-      properties:
-        type:
-          type: string
-          enum: [service, product]
-        ref_id:
-          type: string
-          format: uuid
-        quantity:
-          type: integer
-        unit_price:
-          type: number
-      required: [type, ref_id, quantity, unit_price]
-    SalesOrder:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        client_id:
-          anyOf:
-            - type: string
-              format: uuid
-            - type: 'null'
-        booking_id:
-          anyOf:
-            - type: string
-              format: uuid
-            - type: 'null'
-        status:
-          type: string
-          enum: [draft, confirmed, paid, canceled]
-        discount:
-          type: number
-        total:
-          type: number
+basePath: /v1
+definitions:
+  handler.BookingCancelRequest:
+    properties:
+      reason:
+        type: string
+    type: object
+  handler.BookingRequest:
+    properties:
+      client_id:
+        type: string
+      end_at:
+        type: string
+      notes:
+        type: string
+      professional_id:
+        type: string
+      service_id:
+        type: string
+      start_at:
+        type: string
+      status:
+        type: string
+    required:
+    - client_id
+    - professional_id
+    - service_id
+    - start_at
+    type: object
+  handler.BookingUpdateRequest:
+    properties:
+      end_at:
+        type: string
+      notes:
+        type: string
+      start_at:
+        type: string
+      status:
+        type: string
+    type: object
+  handler.ClientRequest:
+    properties:
+      contact:
+        additionalProperties: true
+        type: object
+      email:
+        type: string
+      name:
+        type: string
+      notes:
+        type: string
+      phone:
+        type: string
+      tags:
         items:
-          type: array
-          items:
-            $ref: '#/components/schemas/SalesItem'
-        created_at:
           type: string
-          format: date-time
-      required: [id, status, total]
-    Payment:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        order_id:
-          type: string
-          format: uuid
-        method:
-          type: string
-          enum: [cash, debit, credit, pix, transfer]
-        amount:
-          type: number
-        paid_at:
-          type: string
-          format: date-time
-      required: [id, order_id, method, amount]
-    DashboardDaily:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date
-        bookings_count:
-          type: integer
-        services_done:
-          type: integer
-        revenue:
-          type: number
-        top_services:
-          type: array
-          items:
-            type: object
-            properties:
-              service_id:
-                type: string
-              count:
-                type: integer
-    HealthStatus:
-      type: object
-      properties:
-        status:
-          type: string
-        env:
-          type: string
-      required: [status, env]
+        type: array
+    required:
+    - name
+    type: object
+  handler.CompanyUpdateRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      settings:
+        additionalProperties: true
+        type: object
+      timezone:
+        type: string
+    type: object
+  handler.CreateUserRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        minLength: 8
+        type: string
+      phone:
+        type: string
+      role:
+        type: string
+    required:
+    - email
+    - name
+    - password
+    - role
+    type: object
+  handler.InventoryRequest:
+    properties:
+      order_id:
+        type: string
+      product_id:
+        type: string
+      quantity:
+        type: integer
+      reason:
+        type: string
+      type:
+        type: string
+    required:
+    - product_id
+    - quantity
+    - type
+    type: object
+  handler.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  handler.PaymentRequest:
+    properties:
+      amount:
+        type: number
+      details:
+        additionalProperties: true
+        type: object
+      method:
+        type: string
+      paid_at:
+        type: string
+    required:
+    - amount
+    - method
+    - paid_at
+    type: object
+  handler.ProductRequest:
+    properties:
+      cost:
+        type: number
+      description:
+        type: string
+      metadata:
+        additionalProperties: true
+        type: object
+      min_stock:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+      sku:
+        type: string
+      stock_qty:
+        type: integer
+    required:
+    - name
+    - price
+    - sku
+    type: object
+  handler.RefreshRequest:
+    properties:
+      refresh_token:
+        type: string
+    required:
+    - refresh_token
+    type: object
+  handler.SalesOrderItemRequest:
+    properties:
+      quantity:
+        type: integer
+      ref_id:
+        type: string
+      type:
+        type: string
+      unit_price:
+        type: number
+    required:
+    - quantity
+    - ref_id
+    - type
+    - unit_price
+    type: object
+  handler.SalesOrderRequest:
+    properties:
+      booking_id:
+        type: string
+      client_id:
+        type: string
+      discount:
+        type: number
+      items:
+        items:
+          $ref: '#/definitions/handler.SalesOrderItemRequest'
+        type: array
+      notes:
+        type: string
+    required:
+    - client_id
+    - items
+    type: object
+  handler.SalesOrderUpdateRequest:
+    properties:
+      notes:
+        type: string
+      status:
+        type: string
+    type: object
+  handler.ServiceRequest:
+    properties:
+      category:
+        type: string
+      color:
+        type: string
+      description:
+        type: string
+      duration_minutes:
+        type: integer
+      metadata:
+        additionalProperties: true
+        type: object
+      name:
+        type: string
+      price:
+        type: number
+    required:
+    - duration_minutes
+    - name
+    - price
+    type: object
+  handler.SignupRequest:
+    properties:
+      company:
+        properties:
+          document:
+            type: string
+          name:
+            type: string
+          phone:
+            type: string
+        required:
+        - name
+        type: object
+      user:
+        properties:
+          email:
+            type: string
+          name:
+            type: string
+          password:
+            minLength: 8
+            type: string
+          phone:
+            type: string
+        required:
+        - email
+        - name
+        - password
+        type: object
+    required:
+    - company
+    - user
+    type: object
+  handler.UpdateUserRequest:
+    properties:
+      active:
+        type: boolean
+      name:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      role:
+        type: string
+    type: object
+  response.APIResponse:
+    properties:
+      data: {}
+      error: {}
+      meta: {}
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@updev.com
+    name: API Support
+  description: API para a plataforma de gestão de comércios locais.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Gestão UpDev API
+  version: "1.0"
 paths:
-  /healthz:
-    get:
-      summary: Status básico da API
-      security: []
-      responses:
-        '200':
-          description: Servidor saudável
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/HealthStatus'
-                  error:
-                    $ref: '#/components/schemas/NullValue'
-  /auth/signup:
-    post:
-      summary: Cria empresa e usuário admin
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SignupRequest'
-      responses:
-        '201':
-          description: Tenant criado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/SignupResponse'
-                  error:
-                    $ref: '#/components/schemas/NullValue'
-        '400':
-          description: Erro de validação
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
   /auth/login:
     post:
-      summary: Autentica usuário
-      requestBody:
+      consumes:
+      - application/json
+      parameters:
+      - description: Credenciais
+        in: body
+        name: request
         required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LoginRequest'
+        schema:
+          $ref: '#/definitions/handler.LoginRequest'
+      produces:
+      - application/json
       responses:
-        '200':
-          description: Tokens retornados
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/TokenResponse'
-                  error:
-                    $ref: '#/components/schemas/NullValue'
-        '401':
-          description: Credenciais inválidas
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      summary: Autentica usuário
+      tags:
+      - Auth
   /auth/refresh:
     post:
-      summary: Atualiza tokens
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                refresh_token:
-                  type: string
-              required: [refresh_token]
-      responses:
-        '200':
-          description: Novo par de tokens
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/TokenResponse'
-                  error:
-                    $ref: '#/components/schemas/NullValue'
-  /companies/me:
-    get:
-      summary: Retorna dados da empresa atual
-      security:
-        - bearerAuth: []
-        - tenantHeader: []
-      responses:
-        '200':
-          description: Empresa
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/Company'
-                  error:
-                    $ref: '#/components/schemas/NullValue'
-    put:
-      summary: Atualiza empresa
-      security:
-        - bearerAuth: []
-        - tenantHeader: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Company'
-      responses:
-        '200':
-          description: Empresa atualizada
-  /users:
-    get:
-      summary: Lista usuários
+      consumes:
+      - application/json
       parameters:
-        - in: query
-          name: role
-          schema:
-            type: string
-        - in: query
-          name: page
-          schema:
-            type: integer
-            default: 1
-        - in: query
-          name: per_page
-          schema:
-            type: integer
-            default: 20
+      - description: Refresh token
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.RefreshRequest'
+      produces:
+      - application/json
       responses:
-        '200':
-          description: Lista de usuários
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/User'
-                  meta:
-                    $ref: '#/components/schemas/PaginationMeta'
-                  error:
-                    $ref: '#/components/schemas/NullValue'
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      summary: Atualiza tokens de acesso
+      tags:
+      - Auth
+  /auth/signup:
     post:
-      summary: Cria usuário
-      requestBody:
+      consumes:
+      - application/json
+      description: 'Fluxo inicial da plataforma: cria empresa, usuário admin e retorna
+        tokens.'
+      parameters:
+      - description: Dados do signup
+        in: body
+        name: request
         required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                email:
-                  type: string
-                  format: email
-                role:
-                  type: string
-                  enum: [admin, manager, operator]
-                phone:
-                  type: string
-                password:
-                  type: string
-              required: [name, email, role, password]
+        schema:
+          $ref: '#/definitions/handler.SignupRequest'
+      produces:
+      - application/json
       responses:
-        '201':
-          description: Usuário criado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/User'
-                  error:
-                    $ref: '#/components/schemas/NullValue'
-  /users/{id}:
-    patch:
-      summary: Atualiza parcialmente usuário
-      parameters:
-        - in: path
-          name: id
-          required: true
+        "201":
+          description: Created
           schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                role:
-                  type: string
-                active:
-                  type: boolean
-                phone:
-                  type: string
-      responses:
-        '200':
-          description: Usuário atualizado
-    delete:
-      summary: Remove usuário
-      parameters:
-        - in: path
-          name: id
-          required: true
+            $ref: '#/definitions/response.APIResponse'
+        "400":
+          description: Bad Request
           schema:
-            type: string
-            format: uuid
-      responses:
-        '204':
-          description: Removido
-  /clients:
-    get:
-      summary: Lista clientes
-      parameters:
-        - in: query
-          name: search
-          schema:
-            type: string
-        - in: query
-          name: page
-          schema:
-            type: integer
-            default: 1
-        - in: query
-          name: per_page
-          schema:
-            type: integer
-            default: 20
-      responses:
-        '200':
-          description: Lista de clientes
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Client'
-                  meta:
-                    $ref: '#/components/schemas/PaginationMeta'
-                  error:
-                    $ref: '#/components/schemas/NullValue'
-    post:
-      summary: Cria cliente
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                phone:
-                  type: string
-                email:
-                  type: string
-                  format: email
-                notes:
-                  type: string
-              required: [name]
-      responses:
-        '201':
-          description: Cliente criado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/Client'
-                  error:
-                    $ref: '#/components/schemas/NullValue'
-  /clients/{id}:
-    get:
-      summary: Detalha cliente
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '200':
-          description: Cliente encontrado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/Client'
-                  error:
-                    $ref: '#/components/schemas/NullValue'
-        '404':
-          description: Cliente não encontrado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-    put:
-      summary: Atualiza cliente
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Client'
-      responses:
-        '200':
-          description: Cliente atualizado
-    delete:
-      summary: Remove cliente
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '204':
-          description: Removido
-  /professionals:
-    get:
-      summary: Lista profissionais
-      responses:
-        '200':
-          description: Lista
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Professional'
-                  error:
-                    $ref: '#/components/schemas/NullValue'
-  /services:
-    get:
-      summary: Lista serviços
-      responses:
-        '200':
-          description: Lista de serviços
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Service'
-                  error:
-                    $ref: '#/components/schemas/NullValue'
-    post:
-      summary: Cria serviço
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                duration_minutes:
-                  type: integer
-                price:
-                  type: number
-                category:
-                  type: string
-                description:
-                  type: string
-              required: [name, duration_minutes, price]
-      responses:
-        '201':
-          description: Serviço criado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/Service'
-                  error:
-                    $ref: '#/components/schemas/NullValue'
-  /services/{id}:
-    put:
-      summary: Atualiza serviço
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Service'
-      responses:
-        '200':
-          description: Serviço atualizado
-    delete:
-      summary: Remove serviço
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '204':
-          description: Removido
-  /products:
-    get:
-      summary: Lista produtos
-      responses:
-        '200':
-          description: Lista de produtos
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Product'
-                  error:
-                    $ref: '#/components/schemas/NullValue'
-    post:
-      summary: Cria produto
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                sku:
-                  type: string
-                price:
-                  type: number
-                cost:
-                  type: number
-                stock_qty:
-                  type: integer
-                min_stock:
-                  type: integer
-              required: [name, sku, price]
-      responses:
-        '201':
-          description: Produto criado
-  /products/{id}:
-    put:
-      summary: Atualiza produto
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Product'
-      responses:
-        '200':
-          description: Produto atualizado
-    delete:
-      summary: Remove produto
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '204':
-          description: Removido
-  /inventory/movements:
-    get:
-      summary: Lista movimentos de estoque
-      parameters:
-        - in: query
-          name: product_id
-          schema:
-            type: string
-            format: uuid
-        - in: query
-          name: type
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Lista
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/InventoryMovement'
-                  error:
-                    $ref: '#/components/schemas/NullValue'
-    post:
-      summary: Registra movimento
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                product_id:
-                  type: string
-                  format: uuid
-                type:
-                  type: string
-                  enum: [in, out, adjustment]
-                quantity:
-                  type: integer
-                reason:
-                  type: string
-              required: [product_id, type, quantity]
-      responses:
-        '201':
-          description: Movimento registrado
+            $ref: '#/definitions/response.APIResponse'
+      summary: Cria empresa e usuário administrador
+      tags:
+      - Auth
   /bookings:
     get:
-      summary: Lista agendamentos
       parameters:
-        - in: query
-          name: date
-          schema:
-            type: string
-            format: date
-        - in: query
-          name: professional_id
-          schema:
-            type: string
-            format: uuid
-        - in: query
-          name: status
-          schema:
-            type: string
+      - description: Data (YYYY-MM-DD)
+        in: query
+        name: date
+        type: string
+      - description: Profissional
+        in: query
+        name: professional_id
+        type: string
+      - description: Status
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
       responses:
-        '200':
-          description: Lista de bookings
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Booking'
-                  error:
-                    $ref: '#/components/schemas/NullValue'
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Lista agendamentos
+      tags:
+      - Bookings
     post:
-      summary: Cria agendamento
-      requestBody:
+      consumes:
+      - application/json
+      parameters:
+      - description: Agendamento
+        in: body
+        name: request
         required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Booking'
+        schema:
+          $ref: '#/definitions/handler.BookingRequest'
+      produces:
+      - application/json
       responses:
-        '201':
-          description: Booking criado
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Cria agendamento
+      tags:
+      - Bookings
   /bookings/{id}:
     patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: Booking ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Campos editáveis
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.BookingUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
       summary: Atualiza agendamento
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                status:
-                  type: string
-                start_at:
-                  type: string
-                  format: date-time
-                end_at:
-                  type: string
-                  format: date-time
-                notes:
-                  type: string
-      responses:
-        '200':
-          description: Booking atualizado
+      tags:
+      - Bookings
+  /bookings/{id}/cancel:
     post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Booking ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Motivo
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.BookingCancelRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
       summary: Cancela agendamento
-      operationId: cancelBooking
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                reason:
-                  type: string
-              required: [reason]
-      responses:
-        '200':
-          description: Booking cancelado
-  /sales/orders:
+      tags:
+      - Bookings
+  /clients:
     get:
-      summary: Lista pedidos/vendas
       parameters:
-        - in: query
-          name: status
-          schema:
-            type: string
-        - in: query
-          name: date
-          schema:
-            type: string
-            format: date
-        - in: query
-          name: client_id
-          schema:
-            type: string
-            format: uuid
+      - description: Filtro por nome/email/telefone
+        in: query
+        name: search
+        type: string
+      - description: Lista de tags separadas por vírgula
+        in: query
+        name: tags
+        type: string
+      - default: 1
+        description: Página
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: Itens por página
+        in: query
+        name: per_page
+        type: integer
+      produces:
+      - application/json
       responses:
-        '200':
-          description: Lista de pedidos
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/SalesOrder'
-                  error:
-                    $ref: '#/components/schemas/NullValue'
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Lista clientes
+      tags:
+      - Clients
     post:
-      summary: Cria pedido
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                client_id:
-                  anyOf:
-                    - type: string
-                      format: uuid
-                    - type: 'null'
-                booking_id:
-                  anyOf:
-                    - type: string
-                      format: uuid
-                    - type: 'null'
-                items:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/SalesItem'
-                discount:
-                  type: number
-                notes:
-                  type: string
-              required: [items]
-      responses:
-        '201':
-          description: Pedido criado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/SalesOrder'
-                  error:
-                    $ref: '#/components/schemas/NullValue'
-  /sales/orders/{id}:
-    patch:
-      summary: Atualiza pedido
+      consumes:
+      - application/json
       parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
+      - description: Cliente
+        in: body
+        name: request
         required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                status:
-                  type: string
-                notes:
-                  type: string
+        schema:
+          $ref: '#/definitions/handler.ClientRequest'
+      produces:
+      - application/json
       responses:
-        '200':
-          description: Pedido atualizado
-  /sales/orders/{id}/payments:
-    post:
-      summary: Registra pagamento
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Cria cliente
+      tags:
+      - Clients
+  /clients/{id}:
+    delete:
       parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
+      - description: Client ID
+        in: path
+        name: id
         required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                method:
-                  type: string
-                  enum: [cash, debit, credit, pix, transfer]
-                amount:
-                  type: number
-                paid_at:
-                  type: string
-                  format: date-time
-              required: [method, amount, paid_at]
+        type: string
       responses:
-        '201':
-          description: Pagamento registrado
-  /payments:
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Remove cliente
+      tags:
+      - Clients
     get:
-      summary: Lista pagamentos
       parameters:
-        - in: query
-          name: method
-          schema:
-            type: string
-        - in: query
-          name: date_range
-          schema:
-            type: string
-            example: 2024-01-01,2024-01-31
+      - description: Client ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
       responses:
-        '200':
-          description: Lista
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Payment'
-                  error:
-                    $ref: '#/components/schemas/NullValue'
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Busca cliente
+      tags:
+      - Clients
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Client ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Cliente
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.ClientRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Atualiza cliente
+      tags:
+      - Clients
+  /companies/me:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Retorna dados da empresa atual
+      tags:
+      - Company
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Campos editáveis
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.CompanyUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Atualiza dados da empresa atual
+      tags:
+      - Company
   /dashboard/daily:
     get:
-      summary: KPIs diários
       parameters:
-        - in: query
-          name: date
-          schema:
-            type: string
-            format: date
-        - in: query
-          name: professional_id
-          schema:
-            type: string
-            format: uuid
+      - description: Data (YYYY-MM-DD)
+        in: query
+        name: date
+        type: string
+      - description: Profissional
+        in: query
+        name: professional_id
+        type: string
+      produces:
+      - application/json
       responses:
-        '200':
-          description: Indicadores
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/DashboardDaily'
-                  error:
-                    $ref: '#/components/schemas/NullValue'
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: KPIs diários
+      tags:
+      - Dashboard
+  /inventory/movements:
+    get:
+      parameters:
+      - description: Filtro por produto
+        in: query
+        name: product_id
+        type: string
+      - description: Tipo (in|out|adjustment)
+        in: query
+        name: type
+        type: string
+      - description: Data inicial (RFC3339)
+        in: query
+        name: start_date
+        type: string
+      - description: Data final (RFC3339)
+        in: query
+        name: end_date
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Lista movimentações de estoque
+      tags:
+      - Inventory
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Movimentação
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.InventoryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Registra movimento de estoque
+      tags:
+      - Inventory
+  /payments:
+    get:
+      parameters:
+      - description: Método
+        in: query
+        name: method
+        type: string
+      - description: Data inicial RFC3339
+        in: query
+        name: start_date
+        type: string
+      - description: Data final RFC3339
+        in: query
+        name: end_date
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Lista pagamentos
+      tags:
+      - Payments
+  /products:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Lista produtos
+      tags:
+      - Products
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Produto
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.ProductRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Cria produto
+      tags:
+      - Products
+  /products/{id}:
+    delete:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Remove produto
+      tags:
+      - Products
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Produto
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.ProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Atualiza produto
+      tags:
+      - Products
+  /professionals:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Lista profissionais ativos
+      tags:
+      - Professionals
+  /sales/orders:
+    get:
+      parameters:
+      - description: Status
+        in: query
+        name: status
+        type: string
+      - description: Cliente
+        in: query
+        name: client_id
+        type: string
+      - description: Data (YYYY-MM-DD)
+        in: query
+        name: date
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Lista pedidos/vendas
+      tags:
+      - Sales
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Pedido
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.SalesOrderRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Cria pedido/venda
+      tags:
+      - Sales
+  /sales/orders/{id}:
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Campos editáveis
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.SalesOrderUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Atualiza pedido
+      tags:
+      - Sales
+  /sales/orders/{id}/payments:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Pagamento
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.PaymentRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Registra pagamento
+      tags:
+      - Payments
+  /services:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Lista serviços
+      tags:
+      - Services
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Serviço
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.ServiceRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Cria serviço
+      tags:
+      - Services
+  /services/{id}:
+    delete:
+      parameters:
+      - description: Service ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Remove serviço
+      tags:
+      - Services
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Service ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Serviço
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.ServiceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Atualiza serviço
+      tags:
+      - Services
+  /users:
+    get:
+      parameters:
+      - description: Filtro por role
+        in: query
+        name: role
+        type: string
+      - default: 1
+        description: Página
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: Itens por página
+        in: query
+        name: per_page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Lista usuários do tenant
+      tags:
+      - Users
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Novo usuário
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Cria um usuário
+      tags:
+      - Users
+  /users/{id}:
+    delete:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Remove (soft delete) um usuário
+      tags:
+      - Users
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Campos editáveis
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.APIResponse'
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Atualiza parcialmente um usuário
+      tags:
+      - Users
+securityDefinitions:
+  BearerAuth:
+    description: Token JWT no formato `Bearer <token>`
+    in: header
+    name: Authorization
+    type: apiKey
+  TenantHeader:
+    in: header
+    name: X-Tenant-ID
+    type: apiKey
+swagger: "2.0"

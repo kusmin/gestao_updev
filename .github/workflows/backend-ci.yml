@@ -26,7 +26,6 @@ jobs:
         with:
           version: v1.55
           working-directory: backend
-          cache: true
 
   test:
     name: Test

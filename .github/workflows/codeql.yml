@@ -34,11 +34,10 @@ jobs:
       with:
         languages: go
 
-    # Autobuild attempts to build any Go code in the repository.
-    # If the autobuild fails for your project, you can replace it with your custom build steps.
-    - name: Autobuild
+    - name: Build backend
       working-directory: backend
-      uses: github/codeql-action/autobuild@v2
+      run: |
+        go build ./...
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2

@@ -21,11 +21,12 @@ services:
         condition: service_healthy
     environment:
       - DATABASE_URL=postgres://testuser:testpassword@db:5432/testdb?sslmode=disable
+      - CGO_ENABLED=1
     volumes:
       - .:/workspace
     command: >
       sh -c "
-        apk add --no-cache git &&
+        apk add --no-cache git build-base &&
         go test -v -coverprofile=coverage.out -coverpkg ./... ./... &&
         go tool cover -func=coverage.out
       "
