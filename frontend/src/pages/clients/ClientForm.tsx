@@ -7,11 +7,12 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
-import type { components } from '../../types/api';
-import { createClient, updateClient } from '../../lib/apiClient';
-
-type Client = components['schemas']['Client'];
-type ClientRequest = components['schemas']['ClientRequest'];
+import {
+  createClient,
+  updateClient,
+  type Client,
+  type ClientRequest,
+} from '../../lib/apiClient';
 
 interface ClientFormProps {
   open: boolean;
@@ -33,8 +34,8 @@ const ClientForm: React.FC<ClientFormProps> = ({
   useEffect(() => {
     if (client) {
       setName(client.name);
-      setEmail(client.email);
-      setPhone(client.phone);
+      setEmail(client.email ?? '');
+      setPhone(client.phone ?? '');
     } else {
       setName('');
       setEmail('');

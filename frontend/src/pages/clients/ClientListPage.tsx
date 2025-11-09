@@ -12,11 +12,12 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { deleteClient, fetchClients } from '../lib/apiClient';
-import type { components } from '../types/api';
+import {
+  deleteClient,
+  fetchClients,
+  type Client,
+} from '../../lib/apiClient';
 import ClientForm from './ClientForm';
-
-type Client = components['schemas']['Client'];
 
 const ClientListPage: React.FC = () => {
   const [clients, setClients] = useState<Client[]>([]);

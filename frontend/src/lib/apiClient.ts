@@ -1,10 +1,22 @@
-import type { paths, components } from '../types/api';
+import type { components } from '../types/api';
 
 const API_BASE =
   import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080/v1';
 
-type HealthResponse =
-  paths['/healthz']['get']['responses']['200']['content']['application/json']['data'];
+type HealthResponse = {
+  status?: string;
+  env?: string;
+};
+
+export interface Client {
+  id: string;
+  name: string;
+  email?: string | null;
+  phone?: string | null;
+  notes?: string | null;
+}
+
+export type ClientRequest = components['schemas']['handler.ClientRequest'];
 
 // fetchHealth consulta o endpoint público /v1/healthz e retorna os dados relevantes.
 export const fetchHealth = async (): Promise<HealthResponse> => {
@@ -18,10 +30,7 @@ export const fetchHealth = async (): Promise<HealthResponse> => {
   return payload.data;
 };
 
-type ClientsResponse =
-  paths['/clients']['get']['responses']['200']['content']['application/json']['data'];
-
-export const fetchClients = async (tenantId: string): Promise<ClientsResponse> => {
+export const fetchClients = async (tenantId: string): Promise<Client[]> => {
   const res = await fetch(`${API_BASE.replace(/\/$/, '')}/clients`, {
     headers: {
       'X-Tenant-ID': tenantId,
@@ -31,10 +40,10 @@ export const fetchClients = async (tenantId: string): Promise<ClientsResponse> =
     throw new Error(`Falha ao consultar clientes: ${res.status}`);
   }
   const payload = (await res.json()) as {
-    data: ClientsResponse;
+    data?: Client[];
   };
-  return payload.data;
-}
+  return payload.data ?? [];
+};
 
 export const deleteClient = async (tenantId: string, clientId: string): Promise<void> => {
   const res = await fetch(`${API_BASE.replace(/\/$/, '')}/clients/${clientId}`, {
@@ -46,12 +55,9 @@ export const deleteClient = async (tenantId: string, clientId: string): Promise<
   if (!res.ok) {
     throw new Error(`Falha ao remover cliente: ${res.status}`);
   }
-}
+};
 
-type ClientRequest = components['schemas']['ClientRequest'];
-type ClientResponse = components['schemas']['Client'];
-
-export const createClient = async (tenantId: string, client: ClientRequest): Promise<ClientResponse> => {
+export const createClient = async (tenantId: string, client: ClientRequest): Promise<Client> => {
   const res = await fetch(`${API_BASE.replace(/\/$/, '')}/clients`, {
     method: 'POST',
     headers: {
@@ -63,13 +69,18 @@ export const createClient = async (tenantId: string, client: ClientRequest): Pro
   if (!res.ok) {
     throw new Error(`Falha ao criar cliente: ${res.status}`);
   }
-  const payload = (await res.json()) as {
-    data: ClientResponse;
-  };
+  const payload = (await res.json()) as { data?: Client };
+  if (!payload.data) {
+    throw new Error('Resposta inesperada ao criar cliente');
+  }
   return payload.data;
-}
+};
 
-export const updateClient = async (tenantId: string, clientId: string, client: ClientRequest): Promise<ClientResponse> => {
+export const updateClient = async (
+  tenantId: string,
+  clientId: string,
+  client: ClientRequest
+): Promise<Client> => {
   const res = await fetch(`${API_BASE.replace(/\/$/, '')}/clients/${clientId}`, {
     method: 'PUT',
     headers: {
@@ -81,8 +92,9 @@ export const updateClient = async (tenantId: string, clientId: string, client: C
   if (!res.ok) {
     throw new Error(`Falha ao atualizar cliente: ${res.status}`);
   }
-  const payload = (await res.json()) as {
-    data: ClientResponse;
-  };
+  const payload = (await res.json()) as { data?: Client };
+  if (!payload.data) {
+    throw new Error('Resposta inesperada ao atualizar cliente');
+  }
   return payload.data;
-}
+};
