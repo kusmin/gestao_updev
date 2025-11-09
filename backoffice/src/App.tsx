@@ -1,12 +1,8 @@
-import { Admin, Resource, ListGuesser } from 'react-admin';
-import jsonServerProvider from 'ra-data-json-server';
+import React from 'react';
+import ClientListPage from './pages/clients/ClientListPage';
 
-const dataProvider = jsonServerProvider('https://jsonplaceholder.typicode.com');
-
-const App = () => (
-  <Admin dataProvider={dataProvider}>
-    <Resource name="users" list={ListGuesser} />
-  </Admin>
-);
+const App: React.FC = () => {
+  return <ClientListPage />;
+};
 
 export default App;

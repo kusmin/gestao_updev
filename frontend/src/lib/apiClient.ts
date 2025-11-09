@@ -17,3 +17,21 @@ export const fetchHealth = async (): Promise<HealthResponse> => {
   };
   return payload.data;
 };
+
+type ClientsResponse =
+  paths['/clients']['get']['responses']['200']['content']['application/json']['data'];
+
+export const fetchClients = async (tenantId: string): Promise<ClientsResponse> => {
+  const res = await fetch(`${API_BASE.replace(/\/$/, '')}/clients`, {
+    headers: {
+      'X-Tenant-ID': tenantId,
+    },
+  });
+  if (!res.ok) {
+    throw new Error(`Falha ao consultar clientes: ${res.status}`);
+  }
+  const payload = (await res.json()) as {
+    data: ClientsResponse;
+  };
+  return payload.data;
+}
