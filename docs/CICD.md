@@ -68,6 +68,15 @@ A seguir, uma descrição detalhada de cada workflow configurado no diretório `
 - **Jobs:**
     - `build-and-push`: Realiza o login no GHCR, extrai metadados da imagem e constrói/publica a imagem Docker do backend com tags `latest` e SHA do commit.
 
+### 8. `pre-commit.yml`
+
+- **Propósito:** Executa uma série de verificações de formatação e linting no código-fonte usando o framework `pre-commit`.
+- **Gatilhos:** Acionado em `push` ou `pull_request` para a branch `main`.
+- **Jobs:**
+    - `pre-commit`:
+        - **Configuração do Ambiente:** Instala todas as ferramentas necessárias para os hooks, como Go, Node.js, `golangci-lint` e dependências `npm`.
+        - **Execução:** Roda `pre-commit run --all-files` para garantir que todo o código no repositório esteja em conformidade com os padrões definidos no arquivo `.pre-commit-config.yaml`. Isso ajuda a manter a consistência e a qualidade do código de forma automatizada.
+
 ---
 
 ## Melhorias Implementadas e Próximos Passos
