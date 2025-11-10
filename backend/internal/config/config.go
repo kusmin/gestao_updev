@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/caarlos0/env/v11"
+	env "github.com/caarlos0/env/v11"
 )
 
 const (

@@ -48,9 +48,13 @@ backend-tidy:
 
 api-contract-test:
 	( \
-	  set -a; \
-	  [ -f .env.test ] && . .env.test; \
-	  set +a; \
+	  if [ -f .env.test ]; then \
+	    set -a; \
+	    . ./.env.test; \
+	    set +a; \
+	  else \
+	    echo ".env.test not found – continuing without injecting extra env vars"; \
+	  fi; \
 	  $(MAKE) backend-migrate; \
 	  npx dredd@14 --config tests/dredd/dredd.yml \
 	)

@@ -3,7 +3,7 @@ package auth
 import (
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
+	jwt "github.com/golang-jwt/jwt/v5"
 )
 
 // Claims representa os dados adicionais embutidos no token.

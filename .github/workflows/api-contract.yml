@@ -47,6 +47,9 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Create test environment file
+        run: cp .env.example .env.test
+
       - name: Download Go dependencies
         run: go mod download
         working-directory: backend
