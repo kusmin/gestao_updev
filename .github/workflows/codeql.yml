@@ -20,8 +20,6 @@ jobs:
   go-analysis:
     name: Go CodeQL Analysis
     runs-on: ubuntu-latest
-    env:
-      CODEQL_ACTION_DISABLE_UPLOAD: true
     permissions:
       security-events: write
       actions: read
@@ -43,12 +41,12 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v4
+      with:
+        upload: false
 
   javascript-analysis:
     name: JavaScript CodeQL Analysis
     runs-on: ubuntu-latest
-    env:
-      CODEQL_ACTION_DISABLE_UPLOAD: true
     permissions:
       security-events: write
       actions: read
@@ -66,3 +64,5 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v4
+      with:
+        upload: false
