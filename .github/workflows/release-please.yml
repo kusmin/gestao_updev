@@ -12,5 +12,8 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Run release-please
         uses: googleapis/release-please-action@v4
