@@ -12,9 +12,7 @@ services:
       - "${POSTGRES_PORT:-5432}:5432"
 
   backend:
-    build:
-      context: .
-      dockerfile: backend/Dockerfile
+    image: ghcr.io/kusmin/gestao_updev/backend:latest
     environment:
       APP_ENV: ${APP_ENV:-production}
       SERVICE_NAME: ${SERVICE_NAME:-gestao-api}
