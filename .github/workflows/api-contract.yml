@@ -23,13 +23,13 @@ jobs:
       postgres:
         image: postgres:16-alpine
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: gestao
+          POSTGRES_PASSWORD: gestao
           POSTGRES_DB: gestao_updev
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U postgres -d gestao_updev"
+          --health-cmd "pg_isready -U gestao -d gestao_updev"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 5
@@ -40,7 +40,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v6
         with:
-          go-version: '1.25'
+          go-version: '1.22'
 
       - name: Setup Node.js
         uses: actions/setup-node@v6

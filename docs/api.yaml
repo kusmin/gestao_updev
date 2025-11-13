@@ -804,6 +804,22 @@ paths:
       tags:
       - Products
   /products/{id}:
+    delete:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Remove produto
+      tags:
+      - Products
     get:
       parameters:
       - description: Product ID
@@ -822,22 +838,6 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Busca produto por ID
-      tags:
-      - Products
-    delete:
-      parameters:
-      - description: Product ID
-        in: path
-        name: id
-        required: true
-        type: string
-      responses:
-        "204":
-          description: No Content
-      security:
-      - BearerAuth: []
-      - TenantHeader: []
-      summary: Remove produto
       tags:
       - Products
     put:
@@ -1031,6 +1031,22 @@ paths:
       tags:
       - Services
   /services/{id}:
+    delete:
+      parameters:
+      - description: Service ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Remove serviço
+      tags:
+      - Services
     get:
       parameters:
       - description: Service ID
@@ -1049,22 +1065,6 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Busca serviço por ID
-      tags:
-      - Services
-    delete:
-      parameters:
-      - description: Service ID
-        in: path
-        name: id
-        required: true
-        type: string
-      responses:
-        "204":
-          description: No Content
-      security:
-      - BearerAuth: []
-      - TenantHeader: []
-      summary: Remove serviço
       tags:
       - Services
     put:
@@ -1153,6 +1153,22 @@ paths:
       tags:
       - Users
   /users/{id}:
+    delete:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Remove (soft delete) um usuário
+      tags:
+      - Users
     get:
       parameters:
       - description: User ID
@@ -1171,22 +1187,6 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Busca usuário por ID
-      tags:
-      - Users
-    delete:
-      parameters:
-      - description: User ID
-        in: path
-        name: id
-        required: true
-        type: string
-      responses:
-        "204":
-          description: No Content
-      security:
-      - BearerAuth: []
-      - TenantHeader: []
-      summary: Remove (soft delete) um usuário
       tags:
       - Users
     patch:

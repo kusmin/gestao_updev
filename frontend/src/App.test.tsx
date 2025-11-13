@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // Mock the apiClient used in ClientListPage
@@ -11,13 +11,14 @@ vi.mock('./lib/apiClient', () => ({
 const queryClient = new QueryClient();
 
 describe('App', () => {
-  it('should render the clients list page', () => {
+  it('should render the clients list page', async () => {
     render(
       <QueryClientProvider client={queryClient}>
         <App />
       </QueryClientProvider>
     );
 
-    expect(screen.getByRole('heading', { name: /clientes/i })).toBeInTheDocument();
+    const heading = await screen.findByRole('heading', { name: /clientes/i });
+    expect(heading).toBeInTheDocument();
   });
 });
