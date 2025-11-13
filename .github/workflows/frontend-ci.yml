@@ -16,10 +16,6 @@ on:
       - 'docs/api.yaml'
       - 'Makefile'
 
-defaults:
-  run:
-    working-directory: frontend
-
 jobs:
   lint:
     name: Lint
@@ -35,7 +31,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
@@ -44,7 +40,7 @@ jobs:
         run: npm install
 
       - name: Run linter
-        run: npm run lint
+        run: npm run lint -w frontend
 
   test:
     name: Test Coverage
@@ -60,7 +56,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
@@ -69,7 +65,7 @@ jobs:
         run: npm install
 
       - name: Run tests and generate coverage report
-        run: npm test -- --coverage
+        run: npm test -- -w frontend -- --coverage
 
       - name: Upload coverage to Codecov
         # This step requires the CODECOV_TOKEN to be set in the repository secrets.
@@ -93,7 +89,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
@@ -102,4 +98,4 @@ jobs:
         run: npm install
 
       - name: Build application
-        run: npm run build
+        run: npm run build -w frontend
