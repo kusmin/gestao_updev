@@ -31,12 +31,9 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Update dependencies
-        run: go get -u ./...
-        working-directory: backend
-
       - name: Install golangci-lint
-        run: go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.59.1
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.59.1
 
       - name: Install pre-commit
         run: pip install pre-commit
