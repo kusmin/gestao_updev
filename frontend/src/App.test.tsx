@@ -15,7 +15,7 @@ describe('App', () => {
     render(
       <QueryClientProvider client={queryClient}>
         <App />
-      </QueryClientProvider>
+      </QueryClientProvider>,
     );
 
     const heading = await screen.findByRole('heading', { name: /clientes/i });

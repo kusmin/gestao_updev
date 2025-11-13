@@ -22,12 +22,7 @@ interface ClientFormProps {
   client: Client | null;
 }
 
-const ClientForm: React.FC<ClientFormProps> = ({
-  open,
-  onClose,
-  onSave,
-  client,
-}) => {
+const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSave, client }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');

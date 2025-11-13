@@ -4,1523 +4,1523 @@
  */
 
 export interface paths {
-    "/healthz": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Status básico da API */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Servidor saudável */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data?: components["schemas"]["HealthStatus"];
-                            error?: unknown;
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+  '/healthz': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/auth/signup": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** Status básico da API */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Servidor saudável */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              data?: components['schemas']['HealthStatus'];
+              error?: unknown;
+            };
+          };
         };
-        get?: never;
-        put?: never;
-        /** Cria empresa e usuário admin */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["SignupRequest"];
-                };
-            };
-            responses: {
-                /** @description Tenant criado */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data?: {
-                                /** Format: uuid */
-                                tenant_id?: string;
-                                /** Format: uuid */
-                                user_id?: string;
-                            };
-                            error?: unknown;
-                        };
-                    };
-                };
-                /** @description Erro de validação */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/auth/login": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Autentica usuário */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["LoginRequest"];
-                };
-            };
-            responses: {
-                /** @description Tokens retornados */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data?: components["schemas"]["TokenResponse"];
-                            error?: unknown;
-                        };
-                    };
-                };
-                /** @description Credenciais inválidas */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/auth/signup': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/auth/refresh": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    /** Cria empresa e usuário admin */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['SignupRequest'];
         };
-        get?: never;
-        put?: never;
-        /** Atualiza tokens */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
+      };
+      responses: {
+        /** @description Tenant criado */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              data?: {
+                /** Format: uuid */
+                tenant_id?: string;
+                /** Format: uuid */
+                user_id?: string;
+              };
+              error?: unknown;
             };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        refresh_token: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description Novo par de tokens */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data?: components["schemas"]["TokenResponse"];
-                            error?: unknown;
-                        };
-                    };
-                };
-            };
+          };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        /** @description Erro de validação */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['ErrorResponse'];
+          };
+        };
+      };
     };
-    "/companies/me": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Retorna dados da empresa atual */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Empresa */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data?: components["schemas"]["Company"];
-                            error?: unknown;
-                        };
-                    };
-                };
-            };
-        };
-        /** Atualiza empresa */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["Company"];
-                };
-            };
-            responses: {
-                /** @description Empresa atualizada */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/auth/login': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/users": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    /** Autentica usuário */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['LoginRequest'];
         };
-        /** Lista usuários */
-        get: {
-            parameters: {
-                query?: {
-                    role?: string;
-                    page?: number;
-                    per_page?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
+      };
+      responses: {
+        /** @description Tokens retornados */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              data?: components['schemas']['TokenResponse'];
+              error?: unknown;
             };
-            requestBody?: never;
-            responses: {
-                /** @description Lista de usuários */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data?: components["schemas"]["User"][];
-                            meta?: components["schemas"]["PaginationMeta"];
-                            error?: unknown;
-                        };
-                    };
-                };
-            };
+          };
         };
-        put?: never;
-        /** Cria usuário */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        name: string;
-                        /** Format: email */
-                        email: string;
-                        /** @enum {string} */
-                        role: "admin" | "manager" | "operator";
-                        phone?: string;
-                        password: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description Usuário criado */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data?: components["schemas"]["User"];
-                            error?: unknown;
-                        };
-                    };
-                };
-            };
+        /** @description Credenciais inválidas */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['ErrorResponse'];
+          };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/users/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /** Remove usuário */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Removido */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        /** Atualiza parcialmente usuário */
-        patch: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        role?: string;
-                        active?: boolean;
-                        phone?: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description Usuário atualizado */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/auth/refresh': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/clients": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Lista clientes */
-        get: {
-            parameters: {
-                query?: {
-                    search?: string;
-                    page?: number;
-                    per_page?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Lista de clientes */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data?: components["schemas"]["Client"][];
-                            meta?: components["schemas"]["PaginationMeta"];
-                            error?: unknown;
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        /** Cria cliente */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        name: string;
-                        phone?: string;
-                        /** Format: email */
-                        email?: string;
-                        notes?: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description Cliente criado */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data?: components["schemas"]["Client"];
-                            error?: unknown;
-                        };
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/clients/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Detalha cliente */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Cliente encontrado */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data?: components["schemas"]["Client"];
-                            error?: unknown;
-                        };
-                    };
-                };
-                /** @description Cliente não encontrado */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-            };
-        };
-        /** Atualiza cliente */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["Client"];
-                };
-            };
-            responses: {
-                /** @description Cliente atualizado */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        post?: never;
-        /** Remove cliente */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Removido */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/professionals": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Lista profissionais */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Lista */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data?: components["schemas"]["Professional"][];
-                            error?: unknown;
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/services": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Lista serviços */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Lista de serviços */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data?: components["schemas"]["Service"][];
-                            error?: unknown;
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        /** Cria serviço */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        name: string;
-                        duration_minutes: number;
-                        price: number;
-                        category?: string;
-                        description?: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description Serviço criado */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data?: components["schemas"]["Service"];
-                            error?: unknown;
-                        };
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/services/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        /** Atualiza serviço */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["Service"];
-                };
-            };
-            responses: {
-                /** @description Serviço atualizado */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        post?: never;
-        /** Remove serviço */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Removido */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/products": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Lista produtos */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Lista de produtos */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data?: components["schemas"]["Product"][];
-                            error?: unknown;
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        /** Cria produto */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        name: string;
-                        sku: string;
-                        price: number;
-                        cost?: number;
-                        stock_qty?: number;
-                        min_stock?: number;
-                    };
-                };
-            };
-            responses: {
-                /** @description Produto criado */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/products/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        /** Atualiza produto */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["Product"];
-                };
-            };
-            responses: {
-                /** @description Produto atualizado */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        post?: never;
-        /** Remove produto */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Removido */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/inventory/movements": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Lista movimentos de estoque */
-        get: {
-            parameters: {
-                query?: {
-                    product_id?: string;
-                    type?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Lista */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data?: components["schemas"]["InventoryMovement"][];
-                            error?: unknown;
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        /** Registra movimento */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        /** Format: uuid */
-                        product_id: string;
-                        /** @enum {string} */
-                        type: "in" | "out" | "adjustment";
-                        quantity: number;
-                        reason?: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description Movimento registrado */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/bookings": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Lista agendamentos */
-        get: {
-            parameters: {
-                query?: {
-                    date?: string;
-                    professional_id?: string;
-                    status?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Lista de bookings */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data?: components["schemas"]["Booking"][];
-                            error?: unknown;
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        /** Cria agendamento */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["Booking"];
-                };
-            };
-            responses: {
-                /** @description Booking criado */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/bookings/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Cancela agendamento */
-        post: operations["cancelBooking"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Atualiza agendamento */
-        patch: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        status?: string;
-                        /** Format: date-time */
-                        start_at?: string;
-                        /** Format: date-time */
-                        end_at?: string;
-                        notes?: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description Booking atualizado */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        trace?: never;
-    };
-    "/sales/orders": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Lista pedidos/vendas */
-        get: {
-            parameters: {
-                query?: {
-                    status?: string;
-                    date?: string;
-                    client_id?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Lista de pedidos */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data?: components["schemas"]["SalesOrder"][];
-                            error?: unknown;
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        /** Cria pedido */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        /** Format: uuid */
-                        client_id?: string | null;
-                        /** Format: uuid */
-                        booking_id?: string | null;
-                        items: components["schemas"]["SalesItem"][];
-                        discount?: number;
-                        notes?: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description Pedido criado */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data?: components["schemas"]["SalesOrder"];
-                            error?: unknown;
-                        };
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/sales/orders/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Atualiza pedido */
-        patch: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        status?: string;
-                        notes?: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description Pedido atualizado */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        trace?: never;
-    };
-    "/sales/orders/{id}/payments": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Registra pagamento */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        /** @enum {string} */
-                        method: "cash" | "debit" | "credit" | "pix" | "transfer";
-                        amount: number;
-                        /** Format: date-time */
-                        paid_at: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description Pagamento registrado */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/payments": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Lista pagamentos */
-        get: {
-            parameters: {
-                query?: {
-                    method?: string;
-                    date_range?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Lista */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data?: components["schemas"]["Payment"][];
-                            error?: unknown;
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/dashboard/daily": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** KPIs diários */
-        get: {
-            parameters: {
-                query?: {
-                    date?: string;
-                    professional_id?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Indicadores */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data?: components["schemas"]["DashboardDaily"];
-                            error?: unknown;
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-}
-export type webhooks = Record<string, never>;
-export interface components {
-    schemas: {
-        ErrorResponse: {
-            data?: unknown;
-            error: {
-                code?: string;
-                message?: string;
-                details?: {
-                    field?: string;
-                    reason?: string;
-                }[];
-            };
-        };
-        PaginationMeta: {
-            pagination: {
-                page?: number;
-                per_page?: number;
-                total?: number;
-            };
-        };
-        SignupRequest: {
-            company: {
-                name: string;
-                document?: string;
-            };
-            user: {
-                name: string;
-                /** Format: email */
-                email: string;
-                password: string;
-            };
-            phone?: string;
-        };
-        LoginRequest: {
-            /** Format: email */
-            email: string;
-            password: string;
-        };
-        TokenResponse: {
-            access_token: string;
+    get?: never;
+    put?: never;
+    /** Atualiza tokens */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': {
             refresh_token: string;
-            expires_in: number;
+          };
         };
-        Company: {
-            /** Format: uuid */
-            id: string;
-            name: string;
-            document?: string;
-            /** @example America/Sao_Paulo */
-            timezone?: string;
-            settings?: Record<string, never>;
+      };
+      responses: {
+        /** @description Novo par de tokens */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              data?: components['schemas']['TokenResponse'];
+              error?: unknown;
+            };
+          };
         };
-        User: {
-            /** Format: uuid */
-            id: string;
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/companies/me': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Retorna dados da empresa atual */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Empresa */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              data?: components['schemas']['Company'];
+              error?: unknown;
+            };
+          };
+        };
+      };
+    };
+    /** Atualiza empresa */
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['Company'];
+        };
+      };
+      responses: {
+        /** @description Empresa atualizada */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/users': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Lista usuários */
+    get: {
+      parameters: {
+        query?: {
+          role?: string;
+          page?: number;
+          per_page?: number;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Lista de usuários */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              data?: components['schemas']['User'][];
+              meta?: components['schemas']['PaginationMeta'];
+              error?: unknown;
+            };
+          };
+        };
+      };
+    };
+    put?: never;
+    /** Cria usuário */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': {
             name: string;
             /** Format: email */
             email: string;
             /** @enum {string} */
-            role: "admin" | "manager" | "operator";
+            role: 'admin' | 'manager' | 'operator';
             phone?: string;
+            password: string;
+          };
+        };
+      };
+      responses: {
+        /** @description Usuário criado */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              data?: components['schemas']['User'];
+              error?: unknown;
+            };
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/users/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** Remove usuário */
+    delete: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Removido */
+        204: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    options?: never;
+    head?: never;
+    /** Atualiza parcialmente usuário */
+    patch: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': {
+            role?: string;
             active?: boolean;
-            /** Format: date-time */
-            created_at?: string;
+            phone?: string;
+          };
         };
-        Client: {
-            /** Format: uuid */
-            id: string;
+      };
+      responses: {
+        /** @description Usuário atualizado */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    trace?: never;
+  };
+  '/clients': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Lista clientes */
+    get: {
+      parameters: {
+        query?: {
+          search?: string;
+          page?: number;
+          per_page?: number;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Lista de clientes */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              data?: components['schemas']['Client'][];
+              meta?: components['schemas']['PaginationMeta'];
+              error?: unknown;
+            };
+          };
+        };
+      };
+    };
+    put?: never;
+    /** Cria cliente */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': {
             name: string;
             phone?: string;
-            email?: string | null;
-            notes?: string | null;
-            tags?: string[];
+            /** Format: email */
+            email?: string;
+            notes?: string;
+          };
         };
-        Professional: {
-            /** Format: uuid */
-            id: string;
-            name: string;
-            specialties?: string[];
-            /** @default 1 */
-            max_parallel: number;
+      };
+      responses: {
+        /** @description Cliente criado */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              data?: components['schemas']['Client'];
+              error?: unknown;
+            };
+          };
         };
-        Service: {
-            /** Format: uuid */
-            id: string;
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/clients/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Detalha cliente */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Cliente encontrado */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              data?: components['schemas']['Client'];
+              error?: unknown;
+            };
+          };
+        };
+        /** @description Cliente não encontrado */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['ErrorResponse'];
+          };
+        };
+      };
+    };
+    /** Atualiza cliente */
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['Client'];
+        };
+      };
+      responses: {
+        /** @description Cliente atualizado */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    post?: never;
+    /** Remove cliente */
+    delete: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Removido */
+        204: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/professionals': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Lista profissionais */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Lista */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              data?: components['schemas']['Professional'][];
+              error?: unknown;
+            };
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/services': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Lista serviços */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Lista de serviços */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              data?: components['schemas']['Service'][];
+              error?: unknown;
+            };
+          };
+        };
+      };
+    };
+    put?: never;
+    /** Cria serviço */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': {
             name: string;
             duration_minutes: number;
-            /** Format: float */
             price: number;
             category?: string;
             description?: string;
+          };
         };
-        Product: {
-            /** Format: uuid */
-            id: string;
+      };
+      responses: {
+        /** @description Serviço criado */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              data?: components['schemas']['Service'];
+              error?: unknown;
+            };
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/services/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Atualiza serviço */
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['Service'];
+        };
+      };
+      responses: {
+        /** @description Serviço atualizado */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    post?: never;
+    /** Remove serviço */
+    delete: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Removido */
+        204: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/products': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Lista produtos */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Lista de produtos */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              data?: components['schemas']['Product'][];
+              error?: unknown;
+            };
+          };
+        };
+      };
+    };
+    put?: never;
+    /** Cria produto */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': {
             name: string;
             sku: string;
             price: number;
             cost?: number;
             stock_qty?: number;
             min_stock?: number;
+          };
         };
-        InventoryMovement: {
-            /** Format: uuid */
-            id: string;
+      };
+      responses: {
+        /** @description Produto criado */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/products/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Atualiza produto */
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['Product'];
+        };
+      };
+      responses: {
+        /** @description Produto atualizado */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    post?: never;
+    /** Remove produto */
+    delete: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Removido */
+        204: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/inventory/movements': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Lista movimentos de estoque */
+    get: {
+      parameters: {
+        query?: {
+          product_id?: string;
+          type?: string;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Lista */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              data?: components['schemas']['InventoryMovement'][];
+              error?: unknown;
+            };
+          };
+        };
+      };
+    };
+    put?: never;
+    /** Registra movimento */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': {
             /** Format: uuid */
             product_id: string;
             /** @enum {string} */
-            type: "in" | "out" | "adjustment";
+            type: 'in' | 'out' | 'adjustment';
             quantity: number;
             reason?: string;
-            /** Format: date-time */
-            created_at?: string;
+          };
         };
-        Booking: {
-            /** Format: uuid */
-            id: string;
-            /** Format: uuid */
-            client_id: string;
-            /** Format: uuid */
-            professional_id: string;
-            /** Format: uuid */
-            service_id: string;
-            /** @enum {string} */
-            status: "pending" | "confirmed" | "done" | "canceled";
+      };
+      responses: {
+        /** @description Movimento registrado */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/bookings': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Lista agendamentos */
+    get: {
+      parameters: {
+        query?: {
+          date?: string;
+          professional_id?: string;
+          status?: string;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Lista de bookings */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              data?: components['schemas']['Booking'][];
+              error?: unknown;
+            };
+          };
+        };
+      };
+    };
+    put?: never;
+    /** Cria agendamento */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['Booking'];
+        };
+      };
+      responses: {
+        /** @description Booking criado */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/bookings/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Cancela agendamento */
+    post: operations['cancelBooking'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    /** Atualiza agendamento */
+    patch: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': {
+            status?: string;
             /** Format: date-time */
-            start_at: string;
+            start_at?: string;
             /** Format: date-time */
             end_at?: string;
             notes?: string;
+          };
         };
-        SalesItem: {
-            /** @enum {string} */
-            type: "service" | "product";
-            /** Format: uuid */
-            ref_id: string;
-            quantity: number;
-            unit_price: number;
+      };
+      responses: {
+        /** @description Booking atualizado */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
         };
-        SalesOrder: {
-            /** Format: uuid */
-            id: string;
+      };
+    };
+    trace?: never;
+  };
+  '/sales/orders': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Lista pedidos/vendas */
+    get: {
+      parameters: {
+        query?: {
+          status?: string;
+          date?: string;
+          client_id?: string;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Lista de pedidos */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              data?: components['schemas']['SalesOrder'][];
+              error?: unknown;
+            };
+          };
+        };
+      };
+    };
+    put?: never;
+    /** Cria pedido */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': {
             /** Format: uuid */
             client_id?: string | null;
             /** Format: uuid */
             booking_id?: string | null;
-            /** @enum {string} */
-            status: "draft" | "confirmed" | "paid" | "canceled";
+            items: components['schemas']['SalesItem'][];
             discount?: number;
-            total: number;
-            items?: components["schemas"]["SalesItem"][];
-            /** Format: date-time */
-            created_at?: string;
+            notes?: string;
+          };
         };
-        Payment: {
-            /** Format: uuid */
-            id: string;
-            /** Format: uuid */
-            order_id: string;
+      };
+      responses: {
+        /** @description Pedido criado */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              data?: components['schemas']['SalesOrder'];
+              error?: unknown;
+            };
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/sales/orders/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /** Atualiza pedido */
+    patch: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': {
+            status?: string;
+            notes?: string;
+          };
+        };
+      };
+      responses: {
+        /** @description Pedido atualizado */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    trace?: never;
+  };
+  '/sales/orders/{id}/payments': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Registra pagamento */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': {
             /** @enum {string} */
-            method: "cash" | "debit" | "credit" | "pix" | "transfer";
+            method: 'cash' | 'debit' | 'credit' | 'pix' | 'transfer';
             amount: number;
             /** Format: date-time */
-            paid_at?: string;
+            paid_at: string;
+          };
         };
-        DashboardDaily: {
-            /** Format: date */
-            date?: string;
-            bookings_count?: number;
-            services_done?: number;
-            revenue?: number;
-            top_services?: {
-                service_id?: string;
-                count?: number;
-            }[];
+      };
+      responses: {
+        /** @description Pagamento registrado */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
         };
-        HealthStatus: {
-            status: string;
-            env: string;
-        };
+      };
     };
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/payments': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Lista pagamentos */
+    get: {
+      parameters: {
+        query?: {
+          method?: string;
+          date_range?: string;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Lista */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              data?: components['schemas']['Payment'][];
+              error?: unknown;
+            };
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/dashboard/daily': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** KPIs diários */
+    get: {
+      parameters: {
+        query?: {
+          date?: string;
+          professional_id?: string;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Indicadores */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': {
+              data?: components['schemas']['DashboardDaily'];
+              error?: unknown;
+            };
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+}
+export type webhooks = Record<string, never>;
+export interface components {
+  schemas: {
+    ErrorResponse: {
+      data?: unknown;
+      error: {
+        code?: string;
+        message?: string;
+        details?: {
+          field?: string;
+          reason?: string;
+        }[];
+      };
+    };
+    PaginationMeta: {
+      pagination: {
+        page?: number;
+        per_page?: number;
+        total?: number;
+      };
+    };
+    SignupRequest: {
+      company: {
+        name: string;
+        document?: string;
+      };
+      user: {
+        name: string;
+        /** Format: email */
+        email: string;
+        password: string;
+      };
+      phone?: string;
+    };
+    LoginRequest: {
+      /** Format: email */
+      email: string;
+      password: string;
+    };
+    TokenResponse: {
+      access_token: string;
+      refresh_token: string;
+      expires_in: number;
+    };
+    Company: {
+      /** Format: uuid */
+      id: string;
+      name: string;
+      document?: string;
+      /** @example America/Sao_Paulo */
+      timezone?: string;
+      settings?: Record<string, never>;
+    };
+    User: {
+      /** Format: uuid */
+      id: string;
+      name: string;
+      /** Format: email */
+      email: string;
+      /** @enum {string} */
+      role: 'admin' | 'manager' | 'operator';
+      phone?: string;
+      active?: boolean;
+      /** Format: date-time */
+      created_at?: string;
+    };
+    Client: {
+      /** Format: uuid */
+      id: string;
+      name: string;
+      phone?: string;
+      email?: string | null;
+      notes?: string | null;
+      tags?: string[];
+    };
+    Professional: {
+      /** Format: uuid */
+      id: string;
+      name: string;
+      specialties?: string[];
+      /** @default 1 */
+      max_parallel: number;
+    };
+    Service: {
+      /** Format: uuid */
+      id: string;
+      name: string;
+      duration_minutes: number;
+      /** Format: float */
+      price: number;
+      category?: string;
+      description?: string;
+    };
+    Product: {
+      /** Format: uuid */
+      id: string;
+      name: string;
+      sku: string;
+      price: number;
+      cost?: number;
+      stock_qty?: number;
+      min_stock?: number;
+    };
+    InventoryMovement: {
+      /** Format: uuid */
+      id: string;
+      /** Format: uuid */
+      product_id: string;
+      /** @enum {string} */
+      type: 'in' | 'out' | 'adjustment';
+      quantity: number;
+      reason?: string;
+      /** Format: date-time */
+      created_at?: string;
+    };
+    Booking: {
+      /** Format: uuid */
+      id: string;
+      /** Format: uuid */
+      client_id: string;
+      /** Format: uuid */
+      professional_id: string;
+      /** Format: uuid */
+      service_id: string;
+      /** @enum {string} */
+      status: 'pending' | 'confirmed' | 'done' | 'canceled';
+      /** Format: date-time */
+      start_at: string;
+      /** Format: date-time */
+      end_at?: string;
+      notes?: string;
+    };
+    SalesItem: {
+      /** @enum {string} */
+      type: 'service' | 'product';
+      /** Format: uuid */
+      ref_id: string;
+      quantity: number;
+      unit_price: number;
+    };
+    SalesOrder: {
+      /** Format: uuid */
+      id: string;
+      /** Format: uuid */
+      client_id?: string | null;
+      /** Format: uuid */
+      booking_id?: string | null;
+      /** @enum {string} */
+      status: 'draft' | 'confirmed' | 'paid' | 'canceled';
+      discount?: number;
+      total: number;
+      items?: components['schemas']['SalesItem'][];
+      /** Format: date-time */
+      created_at?: string;
+    };
+    Payment: {
+      /** Format: uuid */
+      id: string;
+      /** Format: uuid */
+      order_id: string;
+      /** @enum {string} */
+      method: 'cash' | 'debit' | 'credit' | 'pix' | 'transfer';
+      amount: number;
+      /** Format: date-time */
+      paid_at?: string;
+    };
+    DashboardDaily: {
+      /** Format: date */
+      date?: string;
+      bookings_count?: number;
+      services_done?: number;
+      revenue?: number;
+      top_services?: {
+        service_id?: string;
+        count?: number;
+      }[];
+    };
+    HealthStatus: {
+      status: string;
+      env: string;
+    };
+  };
+  responses: never;
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    cancelBooking: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    reason: string;
-                };
-            };
-        };
-        responses: {
-            /** @description Booking cancelado */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+  cancelBooking: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: string;
+      };
+      cookie?: never;
     };
+    requestBody: {
+      content: {
+        'application/json': {
+          reason: string;
+        };
+      };
+    };
+    responses: {
+      /** @description Booking cancelado */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
 }

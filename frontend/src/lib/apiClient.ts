@@ -1,7 +1,6 @@
 import type { components } from '../types/api';
 
-const API_BASE =
-  import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080/v1';
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080/v1';
 
 type HealthResponse = {
   status?: string;
@@ -79,7 +78,7 @@ export const createClient = async (tenantId: string, client: ClientRequest): Pro
 export const updateClient = async (
   tenantId: string,
   clientId: string,
-  client: ClientRequest
+  client: ClientRequest,
 ): Promise<Client> => {
   const res = await fetch(`${API_BASE.replace(/\/$/, '')}/clients/${clientId}`, {
     method: 'PUT',

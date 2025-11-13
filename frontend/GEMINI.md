@@ -42,11 +42,12 @@ To get the frontend up and running, you'll need to have Node.js and npm installe
 
 ## Development Conventions
 
-*   **Language:** The codebase is written in TypeScript and JSX.
-*   **Styling:** CSS files are used for styling.
-*   **Linting:** The project uses ESLint for code quality and consistency. You can run the linter with:
+- **Language:** The codebase is written in TypeScript and JSX.
+- **Styling:** CSS files are used for styling.
+- **Linting:** The project uses ESLint for code quality and consistency. You can run the linter with:
 
-    ```bash
-    npm run lint
-    ```
-*   **API Interaction:** All communication with the backend API should be done through the `apiClient.ts` module or similar modules. The API types are available in `src/types/api.d.ts`.
+  ```bash
+  npm run lint
+  ```
+
+- **API Interaction:** All communication with the backend API should be done through the `apiClient.ts` module or similar modules. The API types are available in `src/types/api.d.ts`.

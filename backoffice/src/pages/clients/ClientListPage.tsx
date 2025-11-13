@@ -61,9 +61,7 @@ const ClientListPage: React.FC = () => {
 
   const handleSaveClient = (client: Client) => {
     if (editingClient) {
-      setClients(
-        clients.map((c) => (c.id === client.id ? client : c))
-      );
+      setClients(clients.map((c) => (c.id === client.id ? client : c)));
     } else {
       setClients([...clients, client]);
     }

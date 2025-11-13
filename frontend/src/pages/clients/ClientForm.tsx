@@ -7,12 +7,7 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
-import {
-  createClient,
-  updateClient,
-  type Client,
-  type ClientRequest,
-} from '../../lib/apiClient';
+import { createClient, updateClient, type Client, type ClientRequest } from '../../lib/apiClient';
 
 interface ClientFormProps {
   open: boolean;
@@ -21,12 +16,7 @@ interface ClientFormProps {
   client: Client | null;
 }
 
-const ClientForm: React.FC<ClientFormProps> = ({
-  open,
-  onClose,
-  onSave,
-  client,
-}) => {
+const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSave, client }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');

@@ -12,11 +12,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import {
-  deleteClient,
-  fetchClients,
-  type Client,
-} from '../../lib/apiClient';
+import { deleteClient, fetchClients, type Client } from '../../lib/apiClient';
 import ClientForm from './ClientForm';
 
 const ClientListPage: React.FC = () => {
@@ -52,9 +48,7 @@ const ClientListPage: React.FC = () => {
 
   const handleSaveClient = (client: Client) => {
     if (editingClient) {
-      setClients(
-        clients.map((c) => (c.id === client.id ? client : c))
-      );
+      setClients(clients.map((c) => (c.id === client.id ? client : c)));
     } else {
       setClients([...clients, client]);
     }
