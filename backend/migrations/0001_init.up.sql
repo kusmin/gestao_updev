@@ -10,7 +10,7 @@ $$ LANGUAGE plpgsql;
 CREATE TABLE companies (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(140) NOT NULL,
-    document VARCHAR(32) UNIQUE,
+    document VARCHAR(36) UNIQUE,
     timezone VARCHAR(60) NOT NULL DEFAULT 'America/Sao_Paulo',
     phone VARCHAR(32),
     email VARCHAR(120),

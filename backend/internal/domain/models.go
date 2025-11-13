@@ -45,7 +45,7 @@ type TenantModel struct {
 type Company struct {
 	BaseModel
 	Name     string            `gorm:"size:140;not null" json:"name"`
-	Document string            `gorm:"size:32;uniqueIndex" json:"document"`
+	Document string            `gorm:"size:36;uniqueIndex" json:"document"`
 	Timezone string            `gorm:"size:60;default:'America/Sao_Paulo'" json:"timezone"`
 	Settings datatypes.JSONMap `gorm:"type:jsonb;default:'{}'" json:"settings"`
 	Phone    string            `gorm:"size:32" json:"phone"`
