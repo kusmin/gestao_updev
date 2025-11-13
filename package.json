@@ -10,5 +10,8 @@
   ],
   "scripts": {
     "test:e2e": "npm test --prefix tests/e2e"
+  },
+  "devDependencies": {
+    "@stoplight/spectral-cli": "^6.15.0"
   }
 }

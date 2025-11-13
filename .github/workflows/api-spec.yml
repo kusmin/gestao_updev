@@ -24,9 +24,11 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
 
-      - name: Install Spectral dependencies
-        run: npm install @stoplight/spectral-cli @stoplight/spectral-oas
+      - name: Install dependencies
+        run: npm ci
 
       - name: Run Spectral lint
         run: ./node_modules/.bin/spectral lint docs/api.yaml
