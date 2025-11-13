@@ -43,6 +43,16 @@ func (s *Service) ListServices(ctx context.Context, tenantID uuid.UUID) ([]domai
 	return services, nil
 }
 
+func (s *Service) GetService(ctx context.Context, tenantID, serviceID uuid.UUID) (*domain.Service, error) {
+	var service domain.Service
+	if err := s.dbWithContext(ctx).
+		Where("tenant_id = ? AND id = ?", tenantID, serviceID).
+		First(&service).Error; err != nil {
+		return nil, err
+	}
+	return &service, nil
+}
+
 func (s *Service) CreateService(ctx context.Context, tenantID uuid.UUID, input ServiceInput) (*domain.Service, error) {
 	service := &domain.Service{
 		TenantModel: domain.TenantModel{
@@ -110,6 +120,16 @@ func (s *Service) ListProducts(ctx context.Context, tenantID uuid.UUID) ([]domai
 		return nil, err
 	}
 	return products, nil
+}
+
+func (s *Service) GetProduct(ctx context.Context, tenantID, productID uuid.UUID) (*domain.Product, error) {
+	var product domain.Product
+	if err := s.dbWithContext(ctx).
+		Where("tenant_id = ? AND id = ?", tenantID, productID).
+		First(&product).Error; err != nil {
+		return nil, err
+	}
+	return &product, nil
 }
 
 func (s *Service) CreateProduct(ctx context.Context, tenantID uuid.UUID, input ProductInput) (*domain.Product, error) {

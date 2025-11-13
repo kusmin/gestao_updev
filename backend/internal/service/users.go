@@ -66,6 +66,17 @@ func (s *Service) ListUsers(ctx context.Context, tenantID uuid.UUID, filter User
 	return users, total, nil
 }
 
+// GetUser busca um usuário por ID.
+func (s *Service) GetUser(ctx context.Context, tenantID, userID uuid.UUID) (*domain.User, error) {
+	var user domain.User
+	if err := s.dbWithContext(ctx).
+		Where("tenant_id = ? AND id = ?", tenantID, userID).
+		First(&user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
 // CreateUser adiciona um novo colaborador ao tenant.
 func (s *Service) CreateUser(ctx context.Context, tenantID uuid.UUID, input CreateUserInput) (*domain.User, error) {
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(input.Password), s.cfg.BcryptCost)

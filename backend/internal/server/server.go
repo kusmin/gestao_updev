@@ -119,6 +119,7 @@ func registerRoutes(api *gin.RouterGroup, cfg *config.Config, h *handler.API, jw
 
 	protected.GET("/users", h.ListUsers)
 	protected.POST("/users", h.CreateUser)
+	protected.GET("/users/:id", h.GetUser)
 	protected.PATCH("/users/:id", h.UpdateUser)
 	protected.DELETE("/users/:id", h.DeleteUser)
 
@@ -132,11 +133,13 @@ func registerRoutes(api *gin.RouterGroup, cfg *config.Config, h *handler.API, jw
 
 	protected.GET("/services", h.ListServices)
 	protected.POST("/services", h.CreateService)
+	protected.GET("/services/:id", h.GetService)
 	protected.PUT("/services/:id", h.UpdateService)
 	protected.DELETE("/services/:id", h.DeleteService)
 
 	protected.GET("/products", h.ListProducts)
 	protected.POST("/products", h.CreateProduct)
+	protected.GET("/products/:id", h.GetProduct)
 	protected.PUT("/products/:id", h.UpdateProduct)
 	protected.DELETE("/products/:id", h.DeleteProduct)
 

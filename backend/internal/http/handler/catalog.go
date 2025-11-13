@@ -165,6 +165,36 @@ func (api *API) DeleteService(c *gin.Context) {
 	c.Status(http.StatusNoContent)
 }
 
+// GetService
+// @Summary Busca serviço por ID
+// @Tags Services
+// @Produce json
+// @Security BearerAuth
+// @Security TenantHeader
+// @Param id path string true "Service ID"
+// @Success 200 {object} response.APIResponse
+// @Router /services/{id} [get]
+func (api *API) GetService(c *gin.Context) {
+	tenantID, ok := api.tenantID(c)
+	if !ok {
+		return
+	}
+
+	serviceID, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		response.Error(c, http.StatusBadRequest, "INVALID_ID", "ID de serviço inválido", nil)
+		return
+	}
+
+	service, err := api.svc.GetService(c.Request.Context(), tenantID, serviceID)
+	if err != nil {
+		api.handleError(c, err)
+		return
+	}
+
+	response.Success(c, http.StatusOK, service, nil)
+}
+
 // ListProducts
 // @Summary Lista produtos
 // @Tags Products
@@ -298,4 +328,34 @@ func (api *API) DeleteProduct(c *gin.Context) {
 		return
 	}
 	c.Status(http.StatusNoContent)
+}
+
+// GetProduct
+// @Summary Busca produto por ID
+// @Tags Products
+// @Produce json
+// @Security BearerAuth
+// @Security TenantHeader
+// @Param id path string true "Product ID"
+// @Success 200 {object} response.APIResponse
+// @Router /products/{id} [get]
+func (api *API) GetProduct(c *gin.Context) {
+	tenantID, ok := api.tenantID(c)
+	if !ok {
+		return
+	}
+
+	productID, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		response.Error(c, http.StatusBadRequest, "INVALID_ID", "ID de produto inválido", nil)
+		return
+	}
+
+	product, err := api.svc.GetProduct(c.Request.Context(), tenantID, productID)
+	if err != nil {
+		api.handleError(c, err)
+		return
+	}
+
+	response.Success(c, http.StatusOK, product, nil)
 }

@@ -25,8 +25,11 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install Spectral dependencies
+        run: npm install @stoplight/spectral-cli @stoplight/spectral-oas
+
       - name: Run Spectral lint
-        run: npx @stoplight/spectral-cli lint docs/api.yaml
+        run: ./node_modules/.bin/spectral lint docs/api.yaml
 
       - name: Build Redoc HTML
         run: npx @redocly/cli build-docs docs/api.yaml --output api-reference.html

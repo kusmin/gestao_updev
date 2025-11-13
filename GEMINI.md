@@ -6,6 +6,10 @@ This project, `gestao_updev`, is a SaaS platform designed for local businesses l
 
 The project is currently in the planning phase, with the `backend` and `frontend` directories still empty. All the information is based on the documentation in the `docs` directory.
 
+## Interação com o Gemini
+
+- **Idioma:** Todas as respostas e interações com o Gemini devem ser em **português**.
+
 ## Building and Running
 
 As the project is in its initial phase, there are no scripts or commands to build or run the application yet. However, based on the documentation, the following commands are expected to be used:

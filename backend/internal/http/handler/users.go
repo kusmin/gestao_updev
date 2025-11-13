@@ -61,6 +61,36 @@ func (api *API) ListUsers(c *gin.Context) {
 	response.Success(c, http.StatusOK, users, metaPagination(page, perPage, total))
 }
 
+// GetUser
+// @Summary Busca usuário por ID
+// @Tags Users
+// @Produce json
+// @Security BearerAuth
+// @Security TenantHeader
+// @Param id path string true "User ID"
+// @Success 200 {object} response.APIResponse
+// @Router /users/{id} [get]
+func (api *API) GetUser(c *gin.Context) {
+	tenantID, ok := api.tenantID(c)
+	if !ok {
+		return
+	}
+
+	userID, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		response.Error(c, http.StatusBadRequest, "INVALID_ID", "ID de usuário inválido", nil)
+		return
+	}
+
+	user, err := api.svc.GetUser(c.Request.Context(), tenantID, userID)
+	if err != nil {
+		api.handleError(c, err)
+		return
+	}
+
+	response.Success(c, http.StatusOK, user, nil)
+}
+
 // CreateUser
 // @Summary Cria um usuário
 // @Tags Users

@@ -17,7 +17,7 @@ import {
 interface ClientFormProps {
   open: boolean;
   onClose: () => void;
-  onSave: (client: any) => void;
+  onSave: (client: Client) => void;
   client: Client | null;
 }
 
