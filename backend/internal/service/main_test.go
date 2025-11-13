@@ -5,6 +5,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/google/uuid"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
@@ -75,7 +76,8 @@ func setupTestDatabase() (*gorm.DB, error) {
 // Helper function to create a tenant for tests
 func createTestTenant() (*domain.Company, error) {
 	tenant := &domain.Company{
-		Name: "Test Tenant",
+		Name:     "Test Tenant",
+		Document: uuid.New().String(),
 	}
 	if err := testDB.Create(tenant).Error; err != nil {
 		return nil, err

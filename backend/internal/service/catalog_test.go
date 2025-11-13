@@ -12,22 +12,19 @@ import (
 )
 
 func TestGetProduct(t *testing.T) {
-	// Setup: Ensure clean state and create a tenant
-	clearAllData()
-	tenant, err := createTestTenant()
-	require.NoError(t, err)
-
-	// Create a product to be fetched
-	product := &domain.Product{
-		TenantModel: domain.TenantModel{TenantID: tenant.ID},
-		Name:        "Test Product",
-		SKU:         "TST-001",
-		Price:       99.99,
-	}
-	err = testDB.Create(product).Error
-	require.NoError(t, err)
-
 	t.Run("should get product successfully", func(t *testing.T) {
+		clearAllData()
+		tenant, err := createTestTenant()
+		require.NoError(t, err)
+		product := &domain.Product{
+			TenantModel: domain.TenantModel{TenantID: tenant.ID},
+			Name:        "Test Product",
+			SKU:         "TST-001",
+			Price:       99.99,
+		}
+		err = testDB.Create(product).Error
+		require.NoError(t, err)
+
 		// Act
 		foundProduct, err := testSvc.GetProduct(context.Background(), tenant.ID, product.ID)
 
@@ -39,6 +36,10 @@ func TestGetProduct(t *testing.T) {
 	})
 
 	t.Run("should return error for non-existent product", func(t *testing.T) {
+		clearAllData()
+		tenant, err := createTestTenant()
+		require.NoError(t, err)
+
 		// Act
 		nonExistentID := uuid.New()
 		foundProduct, err := testSvc.GetProduct(context.Background(), tenant.ID, nonExistentID)
@@ -49,7 +50,18 @@ func TestGetProduct(t *testing.T) {
 	})
 
 	t.Run("should return error for product in another tenant", func(t *testing.T) {
-		// Setup: create another tenant and product
+		clearAllData()
+		tenant, err := createTestTenant()
+		require.NoError(t, err)
+		product := &domain.Product{
+			TenantModel: domain.TenantModel{TenantID: tenant.ID},
+			Name:        "Test Product",
+			SKU:         "TST-001",
+			Price:       99.99,
+		}
+		err = testDB.Create(product).Error
+		require.NoError(t, err)
+
 		otherTenant, err := createTestTenant()
 		require.NoError(t, err)
 
@@ -63,22 +75,19 @@ func TestGetProduct(t *testing.T) {
 }
 
 func TestGetService(t *testing.T) {
-	// Setup: Ensure clean state and create a tenant
-	clearAllData()
-	tenant, err := createTestTenant()
-	require.NoError(t, err)
-
-	// Create a service to be fetched
-	service := &domain.Service{
-		TenantModel:     domain.TenantModel{TenantID: tenant.ID},
-		Name:            "Test Service",
-		DurationMinutes: 60,
-		Price:           150.00,
-	}
-	err = testDB.Create(service).Error
-	require.NoError(t, err)
-
 	t.Run("should get service successfully", func(t *testing.T) {
+		clearAllData()
+		tenant, err := createTestTenant()
+		require.NoError(t, err)
+		service := &domain.Service{
+			TenantModel:     domain.TenantModel{TenantID: tenant.ID},
+			Name:            "Test Service",
+			DurationMinutes: 60,
+			Price:           150.00,
+		}
+		err = testDB.Create(service).Error
+		require.NoError(t, err)
+
 		// Act
 		foundService, err := testSvc.GetService(context.Background(), tenant.ID, service.ID)
 
@@ -90,6 +99,10 @@ func TestGetService(t *testing.T) {
 	})
 
 	t.Run("should return error for non-existent service", func(t *testing.T) {
+		clearAllData()
+		tenant, err := createTestTenant()
+		require.NoError(t, err)
+
 		// Act
 		nonExistentID := uuid.New()
 		foundService, err := testSvc.GetService(context.Background(), tenant.ID, nonExistentID)
@@ -100,7 +113,18 @@ func TestGetService(t *testing.T) {
 	})
 
 	t.Run("should return error for service in another tenant", func(t *testing.T) {
-		// Setup: create another tenant
+		clearAllData()
+		tenant, err := createTestTenant()
+		require.NoError(t, err)
+		service := &domain.Service{
+			TenantModel:     domain.TenantModel{TenantID: tenant.ID},
+			Name:            "Test Service",
+			DurationMinutes: 60,
+			Price:           150.00,
+		}
+		err = testDB.Create(service).Error
+		require.NoError(t, err)
+
 		otherTenant, err := createTestTenant()
 		require.NoError(t, err)
 

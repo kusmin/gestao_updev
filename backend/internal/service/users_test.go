@@ -12,24 +12,21 @@ import (
 )
 
 func TestGetUser(t *testing.T) {
-	// Setup: Ensure clean state and create a tenant
-	clearAllData()
-	tenant, err := createTestTenant()
-	require.NoError(t, err)
-
-	// Create a user to be fetched
-	user := &domain.User{
-		TenantModel:  domain.TenantModel{TenantID: tenant.ID},
-		Name:         "Test User",
-		Email:        "test@example.com",
-		PasswordHash: "some-hash", // Not relevant for get
-		Role:         "admin",
-		Active:       true,
-	}
-	err = testDB.Create(user).Error
-	require.NoError(t, err)
-
 	t.Run("should get user successfully", func(t *testing.T) {
+		clearAllData()
+		tenant, err := createTestTenant()
+		require.NoError(t, err)
+		user := &domain.User{
+			TenantModel:  domain.TenantModel{TenantID: tenant.ID},
+			Name:         "Test User",
+			Email:        "test@example.com",
+			PasswordHash: "some-hash",
+			Role:         "admin",
+			Active:       true,
+		}
+		err = testDB.Create(user).Error
+		require.NoError(t, err)
+
 		// Act
 		foundUser, err := testSvc.GetUser(context.Background(), tenant.ID, user.ID)
 
@@ -42,6 +39,10 @@ func TestGetUser(t *testing.T) {
 	})
 
 	t.Run("should return error for non-existent user", func(t *testing.T) {
+		clearAllData()
+		tenant, err := createTestTenant()
+		require.NoError(t, err)
+
 		// Act
 		nonExistentID := uuid.New()
 		foundUser, err := testSvc.GetUser(context.Background(), tenant.ID, nonExistentID)
@@ -52,7 +53,20 @@ func TestGetUser(t *testing.T) {
 	})
 
 	t.Run("should return error for user in another tenant", func(t *testing.T) {
-		// Setup: create another tenant
+		clearAllData()
+		tenant, err := createTestTenant()
+		require.NoError(t, err)
+		user := &domain.User{
+			TenantModel:  domain.TenantModel{TenantID: tenant.ID},
+			Name:         "Test User",
+			Email:        "test@example.com",
+			PasswordHash: "some-hash",
+			Role:         "admin",
+			Active:       true,
+		}
+		err = testDB.Create(user).Error
+		require.NoError(t, err)
+
 		otherTenant, err := createTestTenant()
 		require.NoError(t, err)
 

@@ -17,7 +17,10 @@ build:
 
 .PHONY: run
 run:
-	APP_ENV=development HTTP_PORT=8080 LOG_LEVEL=info go run cmd/api/main.go
+	export APP_ENV=development; \
+	export HTTP_PORT=8080; \
+	export LOG_LEVEL=info; \
+	go run cmd/api/main.go
 
 .PHONY: swagger
 swagger:
