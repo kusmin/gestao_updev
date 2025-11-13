@@ -54,7 +54,8 @@ jobs:
         run: go mod download
         working-directory: backend
 
+      - name: Use localhost for DB host
+        run: sed -i 's/@postgres:/@localhost:/g' .env.test
+
       - name: Run Dredd contract tests
-        env:
-          DATABASE_URL: postgres://gestao:gestao@localhost:5432/gestao_updev?sslmode=disable
         run: make api-contract-test
