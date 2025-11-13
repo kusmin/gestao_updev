@@ -44,17 +44,17 @@ type TenantModel struct {
 
 type Company struct {
 	BaseModel
-	Name     string             `gorm:"size:140;not null" json:"name"`
-	Document string             `gorm:"size:32;uniqueIndex" json:"document"`
-	Timezone string             `gorm:"size:60;default:'America/Sao_Paulo'" json:"timezone"`
-	Settings datatypes.JSONMap  `gorm:"type:jsonb;default:'{}'" json:"settings"`
-	Phone    string             `gorm:"size:32" json:"phone"`
-	Email    string             `gorm:"size:120" json:"email"`
-	Metadata datatypes.JSONMap  `gorm:"type:jsonb;default:'{}'" json:"metadata"`
-	Users    []User             `gorm:"foreignKey:TenantID;references:ID" json:"-"`
-	Clients  []Client           `gorm:"foreignKey:TenantID;references:ID" json:"-"`
-	Services []Service          `gorm:"foreignKey:TenantID;references:ID" json:"-"`
-	Products []Product          `gorm:"foreignKey:TenantID;references:ID" json:"-"`
+	Name     string            `gorm:"size:140;not null" json:"name"`
+	Document string            `gorm:"size:32;uniqueIndex" json:"document"`
+	Timezone string            `gorm:"size:60;default:'America/Sao_Paulo'" json:"timezone"`
+	Settings datatypes.JSONMap `gorm:"type:jsonb;default:'{}'" json:"settings"`
+	Phone    string            `gorm:"size:32" json:"phone"`
+	Email    string            `gorm:"size:120" json:"email"`
+	Metadata datatypes.JSONMap `gorm:"type:jsonb;default:'{}'" json:"metadata"`
+	Users    []User            `gorm:"foreignKey:TenantID;references:ID" json:"-"`
+	Clients  []Client          `gorm:"foreignKey:TenantID;references:ID" json:"-"`
+	Services []Service         `gorm:"foreignKey:TenantID;references:ID" json:"-"`
+	Products []Product         `gorm:"foreignKey:TenantID;references:ID" json:"-"`
 }
 
 type User struct {
@@ -81,11 +81,11 @@ type Client struct {
 
 type Professional struct {
 	TenantModel
-	UserID       *uuid.UUID       `gorm:"type:uuid" json:"user_id"`
-	Name         string           `gorm:"size:160;not null" json:"name"`
-	Specialties  datatypes.JSON   `gorm:"type:jsonb" json:"specialties"`
-	MaxParallel  int              `gorm:"default:1" json:"max_parallel"`
-	Active       bool             `gorm:"default:true" json:"active"`
+	UserID       *uuid.UUID         `gorm:"type:uuid" json:"user_id"`
+	Name         string             `gorm:"size:160;not null" json:"name"`
+	Specialties  datatypes.JSON     `gorm:"type:jsonb" json:"specialties"`
+	MaxParallel  int                `gorm:"default:1" json:"max_parallel"`
+	Active       bool               `gorm:"default:true" json:"active"`
 	Availability []AvailabilityRule `gorm:"foreignKey:ProfessionalID;references:ID"`
 }
 
@@ -99,30 +99,30 @@ type AvailabilityRule struct {
 
 type Service struct {
 	TenantModel
-	Name            string           `gorm:"size:160;not null;index:idx_services_name_tenant,unique" json:"name"`
-	Category        string           `gorm:"size:80" json:"category"`
-	Description     string           `gorm:"type:text" json:"description"`
-	DurationMinutes int              `gorm:"not null" json:"duration_minutes"`
-	Price           float64          `gorm:"type:numeric(12,2);not null" json:"price"`
-	Color           string           `gorm:"size:16" json:"color"`
+	Name            string            `gorm:"size:160;not null;index:idx_services_name_tenant,unique" json:"name"`
+	Category        string            `gorm:"size:80" json:"category"`
+	Description     string            `gorm:"type:text" json:"description"`
+	DurationMinutes int               `gorm:"not null" json:"duration_minutes"`
+	Price           float64           `gorm:"type:numeric(12,2);not null" json:"price"`
+	Color           string            `gorm:"size:16" json:"color"`
 	Metadata        datatypes.JSONMap `gorm:"type:jsonb;default:'{}'" json:"metadata"`
 }
 
 type Product struct {
 	TenantModel
-	Name        string           `gorm:"size:160;not null" json:"name"`
-	SKU         string           `gorm:"size:80;not null;index:idx_products_sku_tenant,unique" json:"sku"`
-	Price       float64          `gorm:"type:numeric(12,2);not null" json:"price"`
-	Cost        float64          `gorm:"type:numeric(12,2)" json:"cost"`
-	StockQty    int              `gorm:"default:0" json:"stock_qty"`
-	MinStock    int              `gorm:"default:0" json:"min_stock"`
-	Description string           `gorm:"type:text" json:"description"`
+	Name        string            `gorm:"size:160;not null" json:"name"`
+	SKU         string            `gorm:"size:80;not null;index:idx_products_sku_tenant,unique" json:"sku"`
+	Price       float64           `gorm:"type:numeric(12,2);not null" json:"price"`
+	Cost        float64           `gorm:"type:numeric(12,2)" json:"cost"`
+	StockQty    int               `gorm:"default:0" json:"stock_qty"`
+	MinStock    int               `gorm:"default:0" json:"min_stock"`
+	Description string            `gorm:"type:text" json:"description"`
 	Metadata    datatypes.JSONMap `gorm:"type:jsonb;default:'{}'" json:"metadata"`
 }
 
 type InventoryMovement struct {
 	TenantModel
-	ProductID uuid.UUID `gorm:"type:uuid;not null;index" json:"product_id"`
+	ProductID uuid.UUID  `gorm:"type:uuid;not null;index" json:"product_id"`
 	OrderID   *uuid.UUID `gorm:"type:uuid" json:"order_id"`
 	Type      string     `gorm:"size:16;not null" json:"type"`
 	Quantity  int        `gorm:"not null" json:"quantity"`
@@ -131,26 +131,26 @@ type InventoryMovement struct {
 
 type Booking struct {
 	TenantModel
-	ClientID       uuid.UUID          `gorm:"type:uuid;not null;index" json:"client_id"`
-	ProfessionalID uuid.UUID          `gorm:"type:uuid;not null;index" json:"professional_id"`
-	ServiceID      uuid.UUID          `gorm:"type:uuid;not null" json:"service_id"`
-	Status         string             `gorm:"size:32;not null" json:"status"`
-	StartAt        time.Time          `gorm:"not null" json:"start_at"`
-	EndAt          time.Time          `gorm:"not null" json:"end_at"`
-	Notes          string             `gorm:"type:text" json:"notes"`
-	Metadata       datatypes.JSONMap  `gorm:"type:jsonb;default:'{}'" json:"metadata"`
+	ClientID       uuid.UUID         `gorm:"type:uuid;not null;index" json:"client_id"`
+	ProfessionalID uuid.UUID         `gorm:"type:uuid;not null;index" json:"professional_id"`
+	ServiceID      uuid.UUID         `gorm:"type:uuid;not null" json:"service_id"`
+	Status         string            `gorm:"size:32;not null" json:"status"`
+	StartAt        time.Time         `gorm:"not null" json:"start_at"`
+	EndAt          time.Time         `gorm:"not null" json:"end_at"`
+	Notes          string            `gorm:"type:text" json:"notes"`
+	Metadata       datatypes.JSONMap `gorm:"type:jsonb;default:'{}'" json:"metadata"`
 }
 
 type SalesOrder struct {
 	TenantModel
-	ClientID    uuid.UUID         `gorm:"type:uuid;not null;index" json:"client_id"`
-	BookingID   *uuid.UUID        `gorm:"type:uuid" json:"booking_id"`
-	Status      string            `gorm:"size:32;not null" json:"status"`
-	PaymentType string            `gorm:"size:32" json:"payment_method"`
-	Total       float64           `gorm:"type:numeric(12,2);default:0" json:"total"`
-	Discount    float64           `gorm:"type:numeric(12,2);default:0" json:"discount"`
-	Notes       string            `gorm:"type:text" json:"notes"`
-	Items       []SalesItem       `gorm:"foreignKey:OrderID;references:ID" json:"items"`
+	ClientID    uuid.UUID   `gorm:"type:uuid;not null;index" json:"client_id"`
+	BookingID   *uuid.UUID  `gorm:"type:uuid" json:"booking_id"`
+	Status      string      `gorm:"size:32;not null" json:"status"`
+	PaymentType string      `gorm:"size:32" json:"payment_method"`
+	Total       float64     `gorm:"type:numeric(12,2);default:0" json:"total"`
+	Discount    float64     `gorm:"type:numeric(12,2);default:0" json:"discount"`
+	Notes       string      `gorm:"type:text" json:"notes"`
+	Items       []SalesItem `gorm:"foreignKey:OrderID;references:ID" json:"items"`
 }
 
 type SalesItem struct {

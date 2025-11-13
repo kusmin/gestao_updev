@@ -12,7 +12,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
-  
+
   /* Run your local dev server before starting the tests */
   webServer: [
     {
@@ -38,7 +38,7 @@ export default defineConfig({
     // === Frontend Projects ===
     {
       name: 'frontend:chromium',
-      use: { 
+      use: {
         ...devices['Desktop Chrome'],
         baseURL: 'http://localhost:5173',
       },
@@ -46,7 +46,7 @@ export default defineConfig({
     },
     {
       name: 'frontend:firefox',
-      use: { 
+      use: {
         ...devices['Desktop Firefox'],
         baseURL: 'http://localhost:5173',
       },
@@ -54,7 +54,7 @@ export default defineConfig({
     },
     {
       name: 'frontend:webkit',
-      use: { 
+      use: {
         ...devices['Desktop Safari'],
         baseURL: 'http://localhost:5173',
       },
@@ -64,7 +64,7 @@ export default defineConfig({
     // === Backoffice Projects ===
     {
       name: 'backoffice:chromium',
-      use: { 
+      use: {
         ...devices['Desktop Chrome'],
         baseURL: 'http://localhost:5174',
       },
@@ -72,7 +72,7 @@ export default defineConfig({
     },
     {
       name: 'backoffice:firefox',
-      use: { 
+      use: {
         ...devices['Desktop Firefox'],
         baseURL: 'http://localhost:5174',
       },
@@ -80,7 +80,7 @@ export default defineConfig({
     },
     {
       name: 'backoffice:webkit',
-      use: { 
+      use: {
         ...devices['Desktop Safari'],
         baseURL: 'http://localhost:5174',
       },

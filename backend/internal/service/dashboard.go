@@ -11,11 +11,11 @@ import (
 
 // DashboardDailyDTO estrutura retorno do endpoint.
 type DashboardDailyDTO struct {
-	Date         string         `json:"date"`
-	Bookings     int64          `json:"bookings"`
-	Completed    int64          `json:"completed"`
-	Revenue      float64        `json:"revenue"`
-	TopServices  []TopService   `json:"top_services"`
+	Date        string       `json:"date"`
+	Bookings    int64        `json:"bookings"`
+	Completed   int64        `json:"completed"`
+	Revenue     float64      `json:"revenue"`
+	TopServices []TopService `json:"top_services"`
 }
 
 // TopService agrega ranking diário.

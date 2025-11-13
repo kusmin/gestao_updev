@@ -10,7 +10,9 @@
     "prebuild": "npm run generate:api-types",
     "lint": "eslint .",
     "preview": "vite preview",
-    "generate:api-types": "node scripts/generate-types.mjs"
+    "generate:api-types": "node scripts/generate-types.mjs",
+    "format": "prettier --config ../.prettierrc.json --ignore-path ../.prettierignore --write \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\" \"*.{ts,tsx,js,jsx,json,css,scss,md}\"",
+    "format:check": "prettier --config ../.prettierrc.json --ignore-path ../.prettierignore --check \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\" \"*.{ts,tsx,js,jsx,json,css,scss,md}\""
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

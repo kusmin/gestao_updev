@@ -40,21 +40,21 @@
 - Dashboard inicial com KPIs diários e alertas de estoque.
 
 ## Roadmap de Evolução
-1. **Fase 1 (MVP – 5/6 semanas)**  
-   - Core backend Go, autenticação, empresas/usuários.  
-   - Agenda, clientes, serviços e vendas básicas.  
+1. **Fase 1 (MVP – 5/6 semanas)**
+   - Core backend Go, autenticação, empresas/usuários.
+   - Agenda, clientes, serviços e vendas básicas.
    - Dashboard com métricas essenciais.
-2. **Fase 2 (6/8 semanas)**  
-   - Estoque avançado, relatórios customizáveis, exportações.  
-   - Melhoria UX, atalhos mobile, templates de promoções.  
+2. **Fase 2 (6/8 semanas)**
+   - Estoque avançado, relatórios customizáveis, exportações.
+   - Melhoria UX, atalhos mobile, templates de promoções.
    - Integrações de calendário externo (Google) e webhooks.
-3. **Fase 3 (8+ semanas)**  
-   - Pagamentos Pix/Boleto via parceiros, automações (WhatsApp/SMS).  
-   - App mobile híbrido para colaboradores.  
+3. **Fase 3 (8+ semanas)**
+   - Pagamentos Pix/Boleto via parceiros, automações (WhatsApp/SMS).
+   - App mobile híbrido para colaboradores.
    - BI leve com indicadores preditivos e segmentação de clientes.
 
 ## Próximos Passos
-- Validar tecnologia frontend e componentes UI.  
-- Definir modelo de dados físico (diagramas) e convenções de multi-tenancy.  
-- Preparar repositório backend (Go module, configs, migrações iniciais).  
+- Validar tecnologia frontend e componentes UI.
+- Definir modelo de dados físico (diagramas) e convenções de multi-tenancy.
+- Preparar repositório backend (Go module, configs, migrações iniciais).
 - Criar guias de contribuição e padrões de código para acelerar o time.

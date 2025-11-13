@@ -34,6 +34,9 @@ jobs:
             backoffice/package-lock.json
             tests/e2e/package-lock.json
 
+      - name: Create dummy lib directory
+        run: mkdir -p frontend/lib
+
       - name: Install frontend dependencies
         run: npm ci
         working-directory: frontend

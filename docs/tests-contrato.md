@@ -12,7 +12,7 @@ Objetivo: garantir que as respostas reais do backend estejam alinhadas com o spe
    ```bash
    npm install -g dredd
    ```
-2. O repositório já possui `tests/dredd/dredd.yml` apontando para o spec e para `make backend-run` (que sobe o servidor Go).  
+2. O repositório já possui `tests/dredd/dredd.yml` apontando para o spec e para `make backend-run` (que sobe o servidor Go).
 3. Hooks ficam em `tests/dredd/hooks/`. O arquivo `basic-flow.js` valida `signup -> login -> refresh -> companies/me` e continua o fluxo cobrindo o CRUD completo de usuários e clientes usando apenas dados criados durante o teste. Operações ainda não tratadas seguem marcadas com `skip` para evitar falsos negativos.
 4. Execute localmente:
    ```bash

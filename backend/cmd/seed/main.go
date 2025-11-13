@@ -96,7 +96,7 @@ func ensureAdminUser(ctx context.Context, db *gorm.DB, company domain.Company) e
 	}
 
 	user = domain.User{
-		TenantModel: domain.TenantModel{TenantID: company.ID},
+		TenantModel:  domain.TenantModel{TenantID: company.ID},
 		Name:         "Admin Demo",
 		Email:        demoEmail,
 		Role:         "admin",
