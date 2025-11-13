@@ -21,7 +21,7 @@ interface Client {
   phone: string;
   notes: string;
   tags: string[];
-  contact: Record<string, any>;
+  contact: Record<string, unknown>;
 }
 
 const ClientListPage: React.FC = () => {

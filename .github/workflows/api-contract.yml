@@ -55,4 +55,6 @@ jobs:
         working-directory: backend
 
       - name: Run Dredd contract tests
+        env:
+          DATABASE_URL: postgres://gestao:gestao@localhost:5432/gestao_updev?sslmode=disable
         run: make api-contract-test
