@@ -44,6 +44,7 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "happy-dom": "^20.0.10",
     "openapi-typescript": "^7.10.1",
+    "prettier": "^3.3.3",
     "swagger2openapi": "^7.0.8",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.3",

@@ -31,3 +31,4 @@ frontend/src/types/api.d.ts
 # Go coverage artifacts
 coverage.out
 backend/coverage.out
+/frontend/coverage/

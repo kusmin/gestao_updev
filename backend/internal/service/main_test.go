@@ -5,12 +5,12 @@ import (
 	"os"
 	"testing"
 
-	"github.com/google/uuid"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
 	"github.com/kusmin/gestao_updev/backend/internal/config"
 	"github.com/kusmin/gestao_updev/backend/internal/domain"
+	"github.com/kusmin/gestao_updev/backend/internal/repository"
 )
 
 var (
@@ -28,14 +28,14 @@ func TestMain(m *testing.M) {
 
 	// Run migrations
 	err = db.AutoMigrate(
-		&domain.Tenant{},
+		&domain.Company{},
 		&domain.User{},
 		&domain.Client{},
 		&domain.Service{},
 		&domain.Product{},
 		&domain.Booking{},
 		&domain.SalesOrder{},
-		&domain.SalesOrderItem{},
+		&domain.SalesItem{},
 		&domain.Payment{},
 		&domain.InventoryMovement{},
 	)
@@ -45,8 +45,8 @@ func TestMain(m *testing.M) {
 
 	// Create a mock service
 	// In a real scenario, you might want to mock dependencies like JWT manager
-	testSvc = New(&config.Config{}, nil, nil, nil) // Adjust as needed
-	testSvc.db = testDB
+	repo := repository.New(testDB)
+	testSvc = New(&config.Config{}, repo, nil, nil) // Adjust as needed
 
 	// Run tests
 	code := m.Run()
@@ -73,8 +73,8 @@ func setupTestDatabase() (*gorm.DB, error) {
 }
 
 // Helper function to create a tenant for tests
-func createTestTenant() (*domain.Tenant, error) {
-	tenant := &domain.Tenant{
+func createTestTenant() (*domain.Company, error) {
+	tenant := &domain.Company{
 		Name: "Test Tenant",
 	}
 	if err := testDB.Create(tenant).Error; err != nil {
@@ -86,8 +86,8 @@ func createTestTenant() (*domain.Tenant, error) {
 // Helper function to clear all data from tables
 func clearAllData() {
 	tables := []string{
-		"payments", "sales_order_items", "sales_orders", "inventory_movements",
-		"bookings", "products", "services", "clients", "users", "tenants",
+		"payments", "sales_items", "sales_orders", "inventory_movements",
+		"bookings", "products", "services", "clients", "users", "companies",
 	}
 	for _, table := range tables {
 		testDB.Exec("DELETE FROM " + table)
