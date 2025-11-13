@@ -65,7 +65,7 @@ jobs:
         run: npm install
 
       - name: Run tests and generate coverage report
-        run: npm test -- -w frontend -- --coverage
+        run: npm run test -w frontend -- --coverage
 
       - name: Upload coverage to Codecov
         # This step requires the CODECOV_TOKEN to be set in the repository secrets.
