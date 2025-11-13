@@ -2,7 +2,7 @@ color: true
 dry-run: false
 language: nodejs
 hookfiles: ./tests/dredd/hooks/*.js
-server: APP_ENV=development HTTP_PORT=8080 LOG_LEVEL=info make backend-contract-run
+server: sh -c "APP_ENV=development HTTP_PORT=8080 LOG_LEVEL=info make backend-contract-run"
 server-wait: 5
 endpoint: http://127.0.0.1:8080/v1
 blueprint: docs/api.yaml

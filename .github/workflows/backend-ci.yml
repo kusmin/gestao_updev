@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-go@v6
         with:
-          go-version: '1.22'
+          go-version: '1.25'
       - name: Run linter
         uses: golangci/golangci-lint-action@v6
         with:
@@ -61,6 +61,20 @@ jobs:
   coverage:
     name: Test Coverage
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: gestao
+          POSTGRES_PASSWORD: gestao
+          POSTGRES_DB: gestao_updev
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U gestao -d gestao_updev"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-go@v6
@@ -80,6 +94,8 @@ jobs:
       - name: Run unit tests and generate coverage report
         run: go test -v ./... -coverprofile=coverage.out
         working-directory: backend
+        env:
+          DATABASE_URL: postgres://gestao:gestao@localhost:5432/gestao_updev?sslmode=disable
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5

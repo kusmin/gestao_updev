@@ -31,6 +31,10 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
+      - name: Update dependencies
+        run: go get -u
+        working-directory: backend
+
       - name: Install golangci-lint
         run: go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.59.1
 
