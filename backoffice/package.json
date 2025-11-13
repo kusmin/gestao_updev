@@ -12,7 +12,9 @@
     "preview": "vite preview",
     "generate:api-types": "node scripts/generate-types.mjs",
     "format": "prettier --config ../.prettierrc.json --ignore-path ../.prettierignore --write \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\" \"*.{ts,tsx,js,jsx,json,css,scss,md}\"",
-    "format:check": "prettier --config ../.prettierrc.json --ignore-path ../.prettierignore --check \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\" \"*.{ts,tsx,js,jsx,json,css,scss,md}\""
+    "format:check": "prettier --config ../.prettierrc.json --ignore-path ../.prettierignore --check \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\" \"*.{ts,tsx,js,jsx,json,css,scss,md}\"",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -23,18 +25,24 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^24.6.0",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.4",
+    "@vitest/coverage-v8": "^4.0.8",
     "eslint": "^9.36.0",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
+    "happy-dom": "^20.0.10",
     "openapi-typescript": "^7.10.1",
     "prettier": "^3.3.3",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.45.0",
-    "vite": "^7.1.7"
+    "vite": "^7.1.7",
+    "vitest": "^4.0.8"
   }
 }

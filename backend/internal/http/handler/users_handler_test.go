@@ -88,7 +88,9 @@ func setupTestAPI(t *testing.T) (*gin.Engine, *domain.Company, string) {
 // registerUserRoutes é uma função helper para registrar apenas as rotas de usuário para os testes.
 func registerUserRoutes(api *gin.RouterGroup, h *API) {
 	api.POST("/users", h.CreateUser)
-	// Adicione outras rotas de usuário aqui conforme necessário para outros testes
+	api.GET("/users/:id", h.GetUser)
+	api.PATCH("/users/:id", h.UpdateUser)
+	api.DELETE("/users/:id", h.DeleteUser)
 }
 
 func TestCreateUserHandler(t *testing.T) {
@@ -186,6 +188,113 @@ func TestCreateUserHandler(t *testing.T) {
 		assert.Equal(t, http.StatusInternalServerError, w2.Code) // GORM retorna erro de constraint
 	})
 }
+
+func TestGetUserHandler(t *testing.T) {
+	router, tenant, token := setupTestAPI(t)
+
+	// Cria um usuário para buscar
+	user := &domain.User{
+		TenantModel: domain.TenantModel{TenantID: tenant.ID},
+		Name:        "Find Me",
+		Email:       "findme@test.com",
+		Role:        "viewer",
+	}
+	require.NoError(t, testDB.Create(user).Error)
+
+	t.Run("should get user successfully", func(t *testing.T) {
+		req, _ := http.NewRequest(http.MethodGet, "/v1/users/"+user.ID.String(), nil)
+		req.Header.Set("Authorization", "Bearer "+token)
+		req.Header.Set("X-Tenant-Id", tenant.ID.String())
+
+		w := httptest.NewRecorder()
+		router.ServeHTTP(w, req)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+		var responseBody map[string]interface{}
+		err := json.Unmarshal(w.Body.Bytes(), &responseBody)
+		require.NoError(t, err)
+		data, _ := responseBody["data"].(map[string]interface{})
+		assert.Equal(t, "Find Me", data["name"])
+	})
+
+	t.Run("should return error for non-existent user", func(t *testing.T) {
+		nonExistentID := uuid.New().String()
+		req, _ := http.NewRequest(http.MethodGet, "/v1/users/"+nonExistentID, nil)
+		req.Header.Set("Authorization", "Bearer "+token)
+		req.Header.Set("X-Tenant-Id", tenant.ID.String())
+
+		w := httptest.NewRecorder()
+		router.ServeHTTP(w, req)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code) // GORM ErrRecordNotFound
+	})
+}
+
+func TestUpdateUserHandler(t *testing.T) {
+	router, tenant, token := setupTestAPI(t)
+
+	user := &domain.User{
+		TenantModel: domain.TenantModel{TenantID: tenant.ID},
+		Name:        "Before Update",
+		Email:       "update@test.com",
+		Role:        "viewer",
+	}
+	require.NoError(t, testDB.Create(user).Error)
+
+	t.Run("should update user successfully", func(t *testing.T) {
+		newName := "After Update"
+		payload := UpdateUserRequest{Name: &newName}
+		payloadBytes, _ := json.Marshal(payload)
+
+		req, _ := http.NewRequest(http.MethodPatch, "/v1/users/"+user.ID.String(), bytes.NewBuffer(payloadBytes))
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "Bearer "+token)
+		req.Header.Set("X-Tenant-Id", tenant.ID.String())
+
+		w := httptest.NewRecorder()
+		router.ServeHTTP(w, req)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+		var responseBody map[string]interface{}
+		err := json.Unmarshal(w.Body.Bytes(), &responseBody)
+		require.NoError(t, err)
+		data, _ := responseBody["data"].(map[string]interface{})
+		assert.Equal(t, "After Update", data["name"])
+	})
+}
+
+func TestDeleteUserHandler(t *testing.T) {
+	router, tenant, token := setupTestAPI(t)
+
+	user := &domain.User{
+		TenantModel: domain.TenantModel{TenantID: tenant.ID},
+		Name:        "To Be Deleted",
+		Email:       "delete@test.com",
+		Role:        "viewer",
+	}
+	require.NoError(t, testDB.Create(user).Error)
+
+	t.Run("should delete user successfully", func(t *testing.T) {
+		req, _ := http.NewRequest(http.MethodDelete, "/v1/users/"+user.ID.String(), nil)
+		req.Header.Set("Authorization", "Bearer "+token)
+		req.Header.Set("X-Tenant-Id", tenant.ID.String())
+
+		w := httptest.NewRecorder()
+		router.ServeHTTP(w, req)
+
+		assert.Equal(t, http.StatusNoContent, w.Code)
+
+		// Verifica se o usuário foi realmente soft-deleted
+		var count int64
+		testDB.Model(&domain.User{}).Where("id = ?", user.ID).Count(&count)
+		assert.Equal(t, int64(0), count, "User should not be found by default scope")
+
+		var deletedUser domain.User
+		testDB.Unscoped().First(&deletedUser, user.ID)
+		assert.NotNil(t, deletedUser.DeletedAt, "DeletedAt should be set")
+	})
+}
+
 
 // --- Funções Helper de Teste ---
 
