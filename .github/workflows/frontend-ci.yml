@@ -72,6 +72,8 @@ jobs:
         run: npm test -- --coverage
 
       - name: Upload coverage to Codecov
+        # This step requires the CODECOV_TOKEN to be set in the repository secrets.
+        # If it's not set, the upload will fail.
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
