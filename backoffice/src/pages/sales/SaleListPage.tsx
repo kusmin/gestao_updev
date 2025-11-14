@@ -15,13 +15,7 @@ import {
 import SaleForm from './SaleForm';
 import apiClient from '../../lib/apiClient';
 
-interface SalesOrder {
-  id: string;
-  client_id: string;
-  status: string;
-  total: number;
-  tenant_id: string;
-}
+import { SalesOrder } from '../../types/sales';
 
 const SaleListPage: React.FC = () => {
   const [sales, setSales] = useState<SalesOrder[]>([]);

@@ -15,14 +15,7 @@ import {
 import ProductForm from './ProductForm';
 import apiClient from '../../lib/apiClient';
 
-interface Product {
-  id: string;
-  name: string;
-  sku: string;
-  price: number;
-  stock_qty: number;
-  tenant_id: string;
-}
+import { Product } from '../../types/product';
 
 const ProductListPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);

@@ -8,17 +8,7 @@ import {
   TextField,
 } from '@mui/material';
 
-interface Product {
-  id: string;
-  name: string;
-  sku: string;
-  price: number;
-  cost: number;
-  stock_qty: number;
-  min_stock: number;
-  description: string;
-  tenant_id: string;
-}
+import { Product } from '../../types/product';
 
 interface ProductFormProps {
   open: boolean;
@@ -58,7 +48,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ open, onClose, onSave, produc
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev: Partial<Product>) => ({ ...prev, [name]: value }));
   };
 
   const handleSave = async () => {

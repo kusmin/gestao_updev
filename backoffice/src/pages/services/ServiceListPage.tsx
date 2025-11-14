@@ -15,13 +15,7 @@ import {
 import ServiceForm from './ServiceForm';
 import apiClient from '../../lib/apiClient';
 
-interface Service {
-  id: string;
-  name: string;
-  duration_minutes: number;
-  price: number;
-  tenant_id: string;
-}
+import { Service } from '../../types/service';
 
 const ServiceListPage: React.FC = () => {
   const [services, setServices] = useState<Service[]>([]);

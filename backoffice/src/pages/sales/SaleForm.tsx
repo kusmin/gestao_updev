@@ -8,22 +8,7 @@ import {
   TextField,
 } from '@mui/material';
 
-interface SalesItem {
-  ref_id: string;
-  type: string;
-  quantity: number;
-  unit_price: number;
-}
-
-interface SalesOrder {
-  id: string;
-  client_id: string;
-  booking_id?: string;
-  discount?: number;
-  notes?: string;
-  items: SalesItem[];
-  tenant_id: string;
-}
+import { SalesItem, SalesOrder } from '../../types/sales';
 
 interface SaleFormProps {
   open: boolean;
@@ -53,7 +38,7 @@ const SaleForm: React.FC<SaleFormProps> = ({ open, onClose, onSave, sale }) => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev: Partial<SalesOrder>) => ({ ...prev, [name]: value }));
   };
 
   const handleSave = async () => {
