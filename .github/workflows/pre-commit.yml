@@ -35,9 +35,16 @@ jobs:
         run: go mod tidy
         working-directory: backend
 
-      - name: Install golangci-lint
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.59.1
+      - name: Download Go modules
+        run: go mod download
+        working-directory: backend
+
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.59.1 # Use a versão específica que estava sendo usada antes
+          working-directory: backend
 
       - name: Install pre-commit
         run: pip install pre-commit

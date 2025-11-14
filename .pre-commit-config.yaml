@@ -15,16 +15,7 @@ repos:
         files: ^backend/.*\.go$
         args: ['-w']
 
-      - id: backend-golangci-lint
-        name: golangci-lint (backend)
-        entry: bash
-        args:
-          - -c
-          - |
-            cd backend && golangci-lint run --config .golangci.yml ./...
-        language: system
-        pass_filenames: false
-        files: ^backend/
+
 
       - id: frontend-format
         name: format (frontend)
