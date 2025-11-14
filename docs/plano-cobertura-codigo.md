@@ -48,7 +48,7 @@ vitest run --coverage.enabled true --coverage.reporter=text-summary --coverage.r
 | Backend    | 17% statements            | 70%                          | 80%+             | Cobrir services críticos e regras de negócio. |
 | Frontend   | 31.6% statements          | 65%                          | 75%+             | Componentes de página + hooks compartilhados. |
 | Backoffice | 0% (sem testes ainda)     | 60%                          | 75%+             | Telas administrativas e validações de permissão. |
-| E2E        | A medir                   | 12 fluxos                    | 15 fluxos        | Focar fluxos receita, faturamento e suporte. |
+| E2E        | 8 fluxos (Chromium/Firefox) | 12 fluxos                    | 15 fluxos        | Focar fluxos receita, faturamento e suporte. |
 
 > Ajustar metas após capturar a linha de base real; manter gráficos no Codecov e no dashboard do time.
 

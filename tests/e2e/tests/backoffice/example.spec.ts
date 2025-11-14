@@ -1,18 +1,20 @@
 import { test, expect } from '@playwright/test';
 
-test('has title', async ({ page }) => {
-  await page.goto('/');
+test.describe('Backoffice - Login', () => {
+  test('redireciona usuários sem token para /login', async ({ page }) => {
+    await page.goto('/');
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Vite \+ React/);
-});
+    await expect(page).toHaveURL(/\/login$/);
+    await expect(page.getByRole('heading', { name: /Login/i })).toBeVisible();
+    await expect(page.getByLabel('Email')).toBeVisible();
+    await expect(page.getByLabel('Password')).toBeVisible();
+  });
 
-test('get started link', async ({ page }) => {
-  await page.goto('/');
+  test('permite preencher o formulário de login', async ({ page }) => {
+    await page.goto('/login');
 
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click();
-
-  // Expects the URL to contain intro.
-  await expect(page).toHaveURL(/.*intro/);
+    await page.getByLabel('Email').fill('admin@gestao.com');
+    await page.getByLabel('Password').fill('supersecret');
+    await expect(page.getByRole('button', { name: /Sign In/i })).toBeEnabled();
+  });
 });

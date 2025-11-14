@@ -1,5 +1,34 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const onlyChromium = process.env.PLAYWRIGHT_ONLY_CHROMIUM === '1';
+const includeWebkit = process.env.PLAYWRIGHT_INCLUDE_WEBKIT === '1';
+
+const browserMatrix = (() => {
+  if (onlyChromium) return ['chromium'];
+  const defaults = ['chromium', 'firefox'];
+  return includeWebkit ? [...defaults, 'webkit'] : defaults;
+})();
+
+const browserDevice = {
+  chromium: devices['Desktop Chrome'],
+  firefox: devices['Desktop Firefox'],
+  webkit: devices['Desktop Safari'],
+} as const;
+
+const createProjects = (
+  prefix: 'frontend' | 'backoffice',
+  baseURL: string,
+  testDir: string,
+) =>
+  browserMatrix.map((browser) => ({
+    name: `${prefix}:${browser}`,
+    use: {
+      ...browserDevice[browser as keyof typeof browserDevice],
+      baseURL,
+    },
+    testDir,
+  }));
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -35,56 +64,7 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
-    // === Frontend Projects ===
-    {
-      name: 'frontend:chromium',
-      use: {
-        ...devices['Desktop Chrome'],
-        baseURL: 'http://localhost:5173',
-      },
-      testDir: './tests/frontend',
-    },
-    {
-      name: 'frontend:firefox',
-      use: {
-        ...devices['Desktop Firefox'],
-        baseURL: 'http://localhost:5173',
-      },
-      testDir: './tests/frontend',
-    },
-    {
-      name: 'frontend:webkit',
-      use: {
-        ...devices['Desktop Safari'],
-        baseURL: 'http://localhost:5173',
-      },
-      testDir: './tests/frontend',
-    },
-
-    // === Backoffice Projects ===
-    {
-      name: 'backoffice:chromium',
-      use: {
-        ...devices['Desktop Chrome'],
-        baseURL: 'http://localhost:5174',
-      },
-      testDir: './tests/backoffice',
-    },
-    {
-      name: 'backoffice:firefox',
-      use: {
-        ...devices['Desktop Firefox'],
-        baseURL: 'http://localhost:5174',
-      },
-      testDir: './tests/backoffice',
-    },
-    {
-      name: 'backoffice:webkit',
-      use: {
-        ...devices['Desktop Safari'],
-        baseURL: 'http://localhost:5174',
-      },
-      testDir: './tests/backoffice',
-    },
+    ...createProjects('frontend', 'http://localhost:5173', './tests/frontend'),
+    ...createProjects('backoffice', 'http://localhost:5174', './tests/backoffice'),
   ],
 });
