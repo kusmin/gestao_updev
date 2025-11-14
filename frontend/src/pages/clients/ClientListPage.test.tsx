@@ -68,10 +68,7 @@ describe('ClientListPage', () => {
 
     // Espera que o erro seja logado
     await waitFor(() => {
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'Error fetching clients:',
-        expect.any(Error)
-      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith('Error fetching clients:', expect.any(Error));
     });
 
     // Verifica se nenhum cliente foi renderizado

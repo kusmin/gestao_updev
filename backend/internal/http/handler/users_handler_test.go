@@ -295,7 +295,6 @@ func TestDeleteUserHandler(t *testing.T) {
 	})
 }
 
-
 // --- Funções Helper de Teste ---
 
 func setupTestDatabase() (*gorm.DB, error) {
