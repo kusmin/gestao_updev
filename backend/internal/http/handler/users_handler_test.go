@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -25,7 +26,21 @@ import (
 	"github.com/kusmin/gestao_updev/backend/internal/service"
 )
 
-var testDB *gorm.DB
+var (
+	testDB       *gorm.DB
+	schemaModels = []interface{}{
+		&domain.Company{},
+		&domain.User{},
+		&domain.Client{},
+		&domain.Service{},
+		&domain.Product{},
+		&domain.Booking{},
+		&domain.SalesOrder{},
+		&domain.SalesItem{},
+		&domain.Payment{},
+		&domain.InventoryMovement{},
+	}
+)
 
 // setupTestAPI cria um ambiente de teste completo com um tenant e um usuário admin.
 // Retorna o motor do Gin, o tenant criado e um token de autenticação válido.
@@ -35,16 +50,9 @@ func setupTestAPI(t *testing.T) (*gin.Engine, *domain.Company, string) {
 	testDB, err = setupTestDatabase()
 	require.NoError(t, err)
 
-	// Garante que o banco esteja limpo
+	// Garante que o schema existe e está limpo para cada teste
+	ensureSchema(t)
 	clearAllData()
-
-	// Roda as migrações
-	err = testDB.AutoMigrate(
-		&domain.Company{}, &domain.User{}, &domain.Client{}, &domain.Service{},
-		&domain.Product{}, &domain.Booking{}, &domain.SalesOrder{}, &domain.SalesItem{},
-		&domain.Payment{}, &domain.InventoryMovement{},
-	)
-	require.NoError(t, err)
 
 	// Cria o tenant
 	tenant, err := createTestTenant()
@@ -57,7 +65,7 @@ func setupTestAPI(t *testing.T) (*gin.Engine, *domain.Company, string) {
 	}
 	logger := zap.NewNop()
 	repo := repository.New(testDB)
-	jwtManager := auth.NewJWTManager(cfg.JWTAccessSecret, "", 0, 0)
+	jwtManager := auth.NewJWTManager(cfg.JWTAccessSecret, "", time.Hour, time.Hour)
 	svc := service.New(cfg, repo, jwtManager, logger)
 
 	// Cria um usuário admin para autenticação
@@ -156,7 +164,9 @@ func TestCreateUserHandler(t *testing.T) {
 		var responseBody map[string]interface{}
 		err := json.Unmarshal(w.Body.Bytes(), &responseBody)
 		require.NoError(t, err)
-		assert.Equal(t, "VALIDATION_ERROR", responseBody["code"])
+		errorBody, ok := responseBody["error"].(map[string]interface{})
+		require.True(t, ok)
+		assert.Equal(t, "VALIDATION_ERROR", errorBody["code"])
 	})
 
 	t.Run("should return error for duplicate email", func(t *testing.T) {
@@ -330,4 +340,26 @@ func clearAllData() {
 	for _, table := range tables {
 		testDB.Exec("DELETE FROM " + table)
 	}
+}
+
+func ensureSchema(t *testing.T) {
+	t.Helper()
+	if shouldSkipAutoMigrate() && schemaAlreadyPresent() {
+		return
+	}
+	require.NoError(t, testDB.AutoMigrate(schemaModels...))
+}
+
+func shouldSkipAutoMigrate() bool {
+	return os.Getenv("SKIP_AUTO_MIGRATE") == "1"
+}
+
+func schemaAlreadyPresent() bool {
+	migrator := testDB.Migrator()
+	for _, model := range schemaModels {
+		if !migrator.HasTable(model) {
+			return false
+		}
+	}
+	return true
 }

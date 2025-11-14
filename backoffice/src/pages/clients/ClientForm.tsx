@@ -13,55 +13,51 @@ interface Client {
   name: string;
   email: string;
   phone: string;
+  tenant_id: string;
 }
 
 interface ClientFormProps {
   open: boolean;
   onClose: () => void;
-  onSave: (client: Client) => void;
+  onSave: (client: Partial<Client>) => Promise<void>;
   client: Client | null;
 }
 
-const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSave, client }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+const ClientForm: React.FC<ClientFormProps> = ({
+  open,
+  onClose,
+  onSave,
+  client,
+}) => {
+  const [formData, setFormData] = useState<Partial<Client>>({
+    name: '',
+    email: '',
+    phone: '',
+    tenant_id: '',
+  });
 
   useEffect(() => {
     if (client) {
-      setName(client.name);
-      setEmail(client.email);
-      setPhone(client.phone);
+      setFormData(client);
     } else {
-      setName('');
-      setEmail('');
-      setPhone('');
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        tenant_id: '',
+      });
     }
-  }, [client]);
+  }, [client, open]);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSave = async () => {
-    const clientData = { name, email, phone };
-    try {
-      const url = client
-        ? `http://localhost:8080/v1/clients/${client.id}`
-        : 'http://localhost:8080/v1/clients';
-      const method = client ? 'PUT' : 'POST';
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          // TODO: Replace with actual tenant ID
-          'X-Tenant-ID': 'a4b2b2b2-b2b2-4b2b-b2b2-b2b2b2b2b2b2',
-        },
-        body: JSON.stringify(clientData),
-      });
-      const savedClient = await response.json();
-      onSave(savedClient.data);
-      onClose();
-    } catch (error) {
-      console.error('Error saving client:', error);
-    }
+    // TODO: Add validation
+    await onSave(formData);
+    onClose();
   };
 
   return (
@@ -71,33 +67,43 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSave, client }
         <TextField
           autoFocus
           margin="dense"
-          id="name"
+          name="name"
           label="Nome"
           type="text"
           fullWidth
           variant="standard"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={formData.name}
+          onChange={handleChange}
         />
         <TextField
           margin="dense"
-          id="email"
+          name="email"
           label="Email"
           type="email"
           fullWidth
           variant="standard"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={formData.email}
+          onChange={handleChange}
         />
         <TextField
           margin="dense"
-          id="phone"
+          name="phone"
           label="Telefone"
           type="tel"
           fullWidth
           variant="standard"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          value={formData.phone}
+          onChange={handleChange}
+        />
+        <TextField
+          margin="dense"
+          name="tenant_id"
+          label="Tenant ID"
+          type="text"
+          fullWidth
+          variant="standard"
+          value={formData.tenant_id}
+          onChange={handleChange}
         />
       </DialogContent>
       <DialogActions>

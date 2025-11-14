@@ -254,3 +254,36 @@ func (s *Service) ensureSalesItems(ctx context.Context, tenantID uuid.UUID, item
 	}
 	return nil
 }
+
+func (s *Service) ListAllSalesOrders(ctx context.Context) ([]domain.SalesOrder, error) {
+	var orders []domain.SalesOrder
+	if err := s.dbWithContext(ctx).
+		Preload("Items").
+		Order("created_at DESC").
+		Find(&orders).Error; err != nil {
+		return nil, err
+	}
+	return orders, nil
+}
+
+type AdminSalesOrderInput struct {
+	SalesOrderInput
+	TenantID uuid.UUID
+}
+
+func (s *Service) AdminCreateSalesOrder(ctx context.Context, input AdminSalesOrderInput) (*domain.SalesOrder, error) {
+	return s.CreateSalesOrder(ctx, input.TenantID, input.SalesOrderInput)
+}
+
+func (s *Service) AdminUpdateSalesOrder(ctx context.Context, orderID uuid.UUID, input SalesOrderUpdateInput) (*domain.SalesOrder, error) {
+	var order domain.SalesOrder
+	if err := s.dbWithContext(ctx).First(&order, "id = ?", orderID).Error; err != nil {
+		return nil, err
+	}
+	return s.UpdateSalesOrder(ctx, order.TenantID, orderID, input)
+}
+
+func (s *Service) AdminDeleteSalesOrder(ctx context.Context, orderID uuid.UUID) error {
+	return s.dbWithContext(ctx).Delete(&domain.SalesOrder{}, "id = ?", orderID).Error
+}
+

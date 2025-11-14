@@ -90,3 +90,66 @@ func (s *Service) DashboardDaily(ctx context.Context, tenantID uuid.UUID, date t
 		TopServices: topServices,
 	}, nil
 }
+
+// OverallMetricsDTO estrutura retorno do endpoint.
+type OverallMetricsDTO struct {
+	TotalTenants  int64 `json:"total_tenants"`
+	TotalUsers    int64 `json:"total_users"`
+	TotalClients  int64 `json:"total_clients"`
+	TotalProducts int64 `json:"total_products"`
+	TotalServices int64 `json:"total_services"`
+	TotalBookings int64 `json:"total_bookings"`
+	TotalRevenue  float64 `json:"total_revenue"`
+}
+
+func (s *Service) GetOverallMetrics(ctx context.Context) (*OverallMetricsDTO, error) {
+	var totalTenants int64
+	if err := s.dbWithContext(ctx).Model(&domain.Company{}).Count(&totalTenants).Error; err != nil {
+		return nil, err
+	}
+
+	var totalUsers int64
+	if err := s.dbWithContext(ctx).Model(&domain.User{}).Count(&totalUsers).Error; err != nil {
+		return nil, err
+	}
+
+	var totalClients int64
+	if err := s.dbWithContext(ctx).Model(&domain.Client{}).Count(&totalClients).Error; err != nil {
+		return nil, err
+	}
+
+	var totalProducts int64
+	if err := s.dbWithContext(ctx).Model(&domain.Product{}).Count(&totalProducts).Error; err != nil {
+		return nil, err
+	}
+
+	var totalServices int64
+	if err := s.dbWithContext(ctx).Model(&domain.Service{}).Count(&totalServices).Error; err != nil {
+		return nil, err
+	}
+
+	var totalBookings int64
+	if err := s.dbWithContext(ctx).Model(&domain.Booking{}).Count(&totalBookings).Error; err != nil {
+		return nil, err
+	}
+
+	var totalRevenue float64
+	var rev struct {
+		Total float64
+	}
+	if err := s.dbWithContext(ctx).Model(&domain.SalesOrder{}).Select("COALESCE(SUM(total),0) as total").Scan(&rev).Error; err != nil {
+		return nil, err
+	}
+	totalRevenue = rev.Total
+
+	return &OverallMetricsDTO{
+		TotalTenants:  totalTenants,
+		TotalUsers:    totalUsers,
+		TotalClients:  totalClients,
+		TotalProducts: totalProducts,
+		TotalServices: totalServices,
+		TotalBookings: totalBookings,
+		TotalRevenue:  totalRevenue,
+	}, nil
+}
+

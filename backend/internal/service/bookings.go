@@ -217,3 +217,47 @@ func (s *Service) checkBookingConflict(ctx context.Context, tenantID, profession
 	}
 	return ErrBookingConflict
 }
+
+func (s *Service) ListAllBookings(ctx context.Context, filter BookingFilter) ([]domain.Booking, error) {
+	query := s.dbWithContext(ctx).Model(&domain.Booking{})
+
+	if filter.Status != "" {
+		query = query.Where("status = ?", filter.Status)
+	}
+	if filter.ProfessionalID != nil {
+		query = query.Where("professional_id = ?", *filter.ProfessionalID)
+	}
+	if filter.Date != nil {
+		start := filter.Date.Truncate(24 * time.Hour)
+		end := start.Add(24 * time.Hour)
+		query = query.Where("start_at >= ? AND start_at < ?", start, end)
+	}
+
+	var bookings []domain.Booking
+	if err := query.Order("start_at ASC").Find(&bookings).Error; err != nil {
+		return nil, err
+	}
+	return bookings, nil
+}
+
+type AdminBookingInput struct {
+	BookingInput
+	TenantID uuid.UUID
+}
+
+func (s *Service) AdminCreateBooking(ctx context.Context, input AdminBookingInput) (*domain.Booking, error) {
+	return s.CreateBooking(ctx, input.TenantID, input.BookingInput)
+}
+
+func (s *Service) AdminUpdateBooking(ctx context.Context, bookingID uuid.UUID, input BookingUpdateInput) (*domain.Booking, error) {
+	var booking domain.Booking
+	if err := s.dbWithContext(ctx).First(&booking, "id = ?", bookingID).Error; err != nil {
+		return nil, err
+	}
+	return s.UpdateBooking(ctx, booking.TenantID, bookingID, input)
+}
+
+func (s *Service) AdminDeleteBooking(ctx context.Context, bookingID uuid.UUID) error {
+	return s.dbWithContext(ctx).Delete(&domain.Booking{}, "id = ?", bookingID).Error
+}
+

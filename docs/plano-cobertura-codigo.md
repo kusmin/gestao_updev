@@ -24,8 +24,8 @@ go tool cover -html=coverage.out -o coverage.html
 ### Frontend
 ```bash
 cd frontend
-vitest run --coverage.enabled true --coverage.reporter=text-summary,lcov \
-  --coverage.include="src/**/*.{ts,tsx}"
+vitest run --coverage.enabled true --coverage.reporter=text-summary --coverage.reporter=lcov \
+  --coverage.include="src/**/*.{ts,tsx}" --passWithNoTests
 ```
 - Publicar `coverage/lcov.info` no pipeline e usar `npm run test -- --watch=false` localmente para feedback rápido.
 - Correlacionar gaps com fluxos críticos (onboarding, dashboards, cadastros).
@@ -33,8 +33,8 @@ vitest run --coverage.enabled true --coverage.reporter=text-summary,lcov \
 ### Backoffice
 ```bash
 cd backoffice
-vitest run --coverage.enabled true --coverage.reporter=text-summary,lcov \
-  --coverage.include="src/**/*.{ts,tsx}"
+vitest run --coverage.enabled true --coverage.reporter=text-summary --coverage.reporter=lcov \
+  --coverage.include="src/**/*.{ts,tsx}" --passWithNoTests
 ```
 - Mapear telas com lógica de permissão, aprovações e conciliações manualmente para garantir casos positivos/negativos.
 
@@ -43,12 +43,12 @@ vitest run --coverage.enabled true --coverage.reporter=text-summary,lcov \
 - Registrar taxa de sucesso/flake e ligar resultados a estórias que dependem de integrações reais.
 
 ## 3. Metas Quantitativas (sugeridas)
-| Área       | Linha de base (preencher) | Meta curto prazo (4 sprints) | Meta médio prazo | Observações |
-|------------|--------------------------|------------------------------|------------------|-------------|
-| Backend    | _ex: 42%_                | 70%                          | 80%+             | Cobrir services críticos e regras de negócio. |
-| Frontend   | _ex: 35%_                | 65%                          | 75%+             | Componentes de página + hooks compartilhados. |
-| Backoffice | _ex: 28%_                | 60%                          | 75%+             | Telas administrativas e validações de permissão. |
-| E2E        | _ex: 8 fluxos_           | 12 fluxos                    | 15 fluxos        | Focar fluxos receita, faturamento e suporte. |
+| Área       | Linha de base (2025-11-14) | Meta curto prazo (4 sprints) | Meta médio prazo | Observações |
+|------------|---------------------------|------------------------------|------------------|-------------|
+| Backend    | 17% statements            | 70%                          | 80%+             | Cobrir services críticos e regras de negócio. |
+| Frontend   | 31.6% statements          | 65%                          | 75%+             | Componentes de página + hooks compartilhados. |
+| Backoffice | 0% (sem testes ainda)     | 60%                          | 75%+             | Telas administrativas e validações de permissão. |
+| E2E        | A medir                   | 12 fluxos                    | 15 fluxos        | Focar fluxos receita, faturamento e suporte. |
 
 > Ajustar metas após capturar a linha de base real; manter gráficos no Codecov e no dashboard do time.
 

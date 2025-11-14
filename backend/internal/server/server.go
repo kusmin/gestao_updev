@@ -47,14 +47,22 @@ func New(cfg *config.Config, logger *zap.Logger, db *gorm.DB, telem *telemetry.T
 	}
 	engine.Use(middleware.Logger(logger))
 
+	// Repositories
 	repo := repository.New(db)
+	companyRepo := repository.NewCompanyRepository(db)
+
+	// Services
 	jwtManager := auth.NewJWTManager(cfg.JWTAccessSecret, cfg.JWTRefreshSecret, cfg.JWTAccessTTL, cfg.JWTRefreshTTL)
 	svc := service.New(cfg, repo, jwtManager, logger)
+	companySvc := service.NewCompanyService(companyRepo)
+
+	// Handlers
 	apiHandler := handler.New(svc, logger)
+	companyHandler := handler.NewCompanyHandler(companySvc)
 
 	api := engine.Group("/v1")
 	api.Use(middleware.TenantEnforcer(cfg.TenantHeader))
-	registerRoutes(api, cfg, apiHandler, jwtManager)
+	registerRoutes(api, cfg, apiHandler, companyHandler, jwtManager)
 
 	engine.GET("/v1/healthz", func(c *gin.Context) {
 		response.Success(c, http.StatusOK, gin.H{
@@ -105,7 +113,7 @@ func (s *Server) Run(ctx context.Context) error {
 	}
 }
 
-func registerRoutes(api *gin.RouterGroup, cfg *config.Config, h *handler.API, jwtManager *auth.JWTManager) {
+func registerRoutes(api *gin.RouterGroup, cfg *config.Config, h *handler.API, companyHandler *handler.CompanyHandler, jwtManager *auth.JWTManager) {
 	authGroup := api.Group("/auth")
 	authGroup.POST("/signup", h.Signup)
 	authGroup.POST("/login", h.Login)
@@ -158,4 +166,16 @@ func registerRoutes(api *gin.RouterGroup, cfg *config.Config, h *handler.API, jw
 	protected.GET("/payments", h.ListPayments)
 
 	protected.GET("/dashboard/daily", h.DashboardDaily)
+
+	// Admin routes
+	admin := api.Group("/admin")
+	admin.Use(middleware.Auth(jwtManager, cfg.TenantHeader), middleware.Admin())
+	companyHandler.RegisterRoutes(admin)
+	h.RegisterAdminUserRoutes(admin)
+	h.RegisterAdminProductRoutes(admin)
+	h.RegisterAdminServiceRoutes(admin)
+	h.RegisterAdminClientRoutes(admin)
+	h.RegisterAdminBookingRoutes(admin)
+	h.RegisterAdminSalesRoutes(admin)
+	h.RegisterAdminDashboardRoutes(admin)
 }

@@ -1,11 +1,11 @@
 .PHONY: test
 test:
-	go test -coverprofile=coverage.out -coverpkg ./... ./...
+	go test -p 1 -coverprofile=coverage.out -coverpkg ./... ./...
 	go tool cover -func=coverage.out | tail -n 1
 
 .PHONY: coverage
 coverage:
-	go test ./... -covermode=atomic -coverpkg=./... -coverprofile=coverage.out
+	go test -p 1 ./... -covermode=atomic -coverpkg=./... -coverprofile=coverage.out
 	go tool cover -func=coverage.out | tail -n 1
 	go tool cover -html=coverage.out -o coverage.html
 

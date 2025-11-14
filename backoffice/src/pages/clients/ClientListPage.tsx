@@ -13,6 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 import ClientForm from './ClientForm';
+import apiClient from '../../lib/apiClient';
 
 interface Client {
   id: string;
@@ -22,6 +23,7 @@ interface Client {
   notes: string;
   tags: string[];
   contact: Record<string, unknown>;
+  tenant_id: string;
 }
 
 const ClientListPage: React.FC = () => {
@@ -31,15 +33,8 @@ const ClientListPage: React.FC = () => {
 
   const fetchClients = async () => {
     try {
-      // TODO: Replace with actual API endpoint and add authentication
-      const response = await fetch('http://localhost:8080/v1/clients', {
-        headers: {
-          // TODO: Replace with actual tenant ID
-          'X-Tenant-ID': 'a4b2b2b2-b2b2-4b2b-b2b2-b2b2b2b2b2b2',
-        },
-      });
-      const data = await response.json();
-      setClients(data.data); // Assuming the API returns data in a 'data' property
+      const response = await apiClient<{ data: Client[] }>('/admin/clients');
+      setClients(response.data);
     } catch (error) {
       console.error('Error fetching clients:', error);
     }
@@ -57,27 +52,31 @@ const ClientListPage: React.FC = () => {
   const handleCloseForm = () => {
     setEditingClient(null);
     setIsFormOpen(false);
+    fetchClients();
   };
 
-  const handleSaveClient = (client: Client) => {
-    if (editingClient) {
-      setClients(clients.map((c) => (c.id === client.id ? client : c)));
-    } else {
-      setClients([...clients, client]);
+  const handleSaveClient = async (client: Partial<Client>) => {
+    try {
+      if (editingClient) {
+        await apiClient(`/admin/clients/${editingClient.id}`, {
+          method: 'PUT',
+          body: JSON.stringify(client),
+        });
+      } else {
+        await apiClient('/admin/clients', {
+          method: 'POST',
+          body: JSON.stringify(client),
+        });
+      }
+    } catch (error) {
+      console.error('Error saving client:', error);
     }
   };
 
   const handleDelete = async (id: string) => {
     try {
-      // TODO: Replace with actual API endpoint and add authentication
-      await fetch(`http://localhost:8080/v1/clients/${id}`, {
-        method: 'DELETE',
-        headers: {
-          // TODO: Replace with actual tenant ID
-          'X-Tenant-ID': 'a4b2b2b2-b2b2-4b2b-b2b2-b2b2b2b2b2b2',
-        },
-      });
-      setClients(clients.filter((client) => client.id !== id));
+      await apiClient(`/admin/clients/${id}`, { method: 'DELETE' });
+      fetchClients();
     } catch (error) {
       console.error('Error deleting client:', error);
     }
@@ -100,6 +99,7 @@ const ClientListPage: React.FC = () => {
               <TableCell>Nome</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Telefone</TableCell>
+              <TableCell>Tenant ID</TableCell>
               <TableCell>Ações</TableCell>
             </TableRow>
           </TableHead>
@@ -109,6 +109,7 @@ const ClientListPage: React.FC = () => {
                 <TableCell>{client.name}</TableCell>
                 <TableCell>{client.email}</TableCell>
                 <TableCell>{client.phone}</TableCell>
+                <TableCell>{client.tenant_id}</TableCell>
                 <TableCell>
                   <Button onClick={() => handleOpenForm(client)}>Editar</Button>
                   <Button color="error" onClick={() => handleDelete(client.id)}>

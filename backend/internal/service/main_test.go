@@ -17,18 +17,7 @@ import (
 var (
 	testDB  *gorm.DB
 	testSvc *Service
-)
-
-func TestMain(m *testing.M) {
-	// Setup
-	db, err := setupTestDatabase()
-	if err != nil {
-		log.Fatalf("could not set up test database: %v", err)
-	}
-	testDB = db
-
-	// Run migrations
-	err = db.AutoMigrate(
+	schemaModels = []interface{}{
 		&domain.Company{},
 		&domain.User{},
 		&domain.Client{},
@@ -39,10 +28,21 @@ func TestMain(m *testing.M) {
 		&domain.SalesItem{},
 		&domain.Payment{},
 		&domain.InventoryMovement{},
-	)
+	}
+)
+
+func TestMain(m *testing.M) {
+	// Setup
+	db, err := setupTestDatabase()
 	if err != nil {
+		log.Fatalf("could not set up test database: %v", err)
+	}
+	testDB = db
+
+	if err := autoMigrateIfNeeded(db); err != nil {
 		log.Fatalf("could not run migrations: %v", err)
 	}
+	clearAllData()
 
 	// Create a mock service
 	// In a real scenario, you might want to mock dependencies like JWT manager
@@ -94,4 +94,21 @@ func clearAllData() {
 	for _, table := range tables {
 		testDB.Exec("DELETE FROM " + table)
 	}
+}
+
+func autoMigrateIfNeeded(db *gorm.DB) error {
+	if os.Getenv("SKIP_AUTO_MIGRATE") == "1" && schemaAlreadyPresent(db) {
+		return nil
+	}
+	return db.AutoMigrate(schemaModels...)
+}
+
+func schemaAlreadyPresent(db *gorm.DB) bool {
+	migrator := db.Migrator()
+	for _, model := range schemaModels {
+		if !migrator.HasTable(model) {
+			return false
+		}
+	}
+	return true
 }

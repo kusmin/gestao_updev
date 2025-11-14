@@ -183,6 +183,103 @@ func (s *Service) DeleteClient(ctx context.Context, tenantID, clientID uuid.UUID
 		Delete(&domain.Client{}).Error
 }
 
+func (s *Service) ListAllClients(ctx context.Context, filter ClientsFilter) ([]domain.Client, int64, error) {
+	var clients []domain.Client
+	var total int64
+
+	page, perPage := s.clampPagination(filter.Page, filter.PerPage)
+
+	query := s.dbWithContext(ctx).Model(&domain.Client{})
+
+	if filter.Search != "" {
+		like := "%" + filter.Search + "%"
+		query = query.Where("(name ILIKE ? OR email ILIKE ? OR phone ILIKE ?)", like, like, like)
+	}
+
+	for _, tag := range filter.Tags {
+		tagJSON, _ := json.Marshal([]string{tag})
+		query = query.Where("tags @> ?", datatypes.JSON(tagJSON))
+	}
+
+	if err := query.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	if total == 0 {
+		return []domain.Client{}, 0, nil
+	}
+
+	if err := query.
+		Order("created_at DESC").
+		Limit(perPage).
+		Offset((page - 1) * perPage).
+		Find(&clients).Error; err != nil {
+		return nil, 0, err
+	}
+
+	return clients, total, nil
+}
+
+type AdminClientInput struct {
+	ClientInput
+	TenantID uuid.UUID
+}
+
+func (s *Service) AdminCreateClient(ctx context.Context, input AdminClientInput) (*domain.Client, error) {
+	client := &domain.Client{
+		TenantModel: domain.TenantModel{
+			TenantID: input.TenantID,
+		},
+		Name:    input.Name,
+		Email:   input.Email,
+		Phone:   input.Phone,
+		Notes:   input.Notes,
+		Tags:    marshalTags(input.Tags),
+		Contact: marshalContact(input.Contact),
+	}
+	if err := s.dbWithContext(ctx).Create(client).Error; err != nil {
+		return nil, err
+	}
+	return client, nil
+}
+
+func (s *Service) AdminUpdateClient(ctx context.Context, clientID uuid.UUID, input ClientInput) (*domain.Client, error) {
+	var client domain.Client
+	if err := s.dbWithContext(ctx).
+		First(&client, "id = ?", clientID).Error; err != nil {
+		return nil, err
+	}
+
+	updates := map[string]interface{}{
+		"name":    input.Name,
+		"email":   input.Email,
+		"phone":   input.Phone,
+		"notes":   input.Notes,
+		"contact": marshalContact(input.Contact),
+		"tags":    marshalTags(input.Tags),
+	}
+
+	if err := s.dbWithContext(ctx).
+		Model(&domain.Client{}).
+		Where("id = ?", clientID).
+		Updates(updates).Error; err != nil {
+		return nil, err
+	}
+
+	if err := s.dbWithContext(ctx).
+		First(&client, "id = ?", clientID).Error; err != nil {
+		return nil, err
+	}
+
+	return &client, nil
+}
+
+func (s *Service) AdminDeleteClient(ctx context.Context, clientID uuid.UUID) error {
+	return s.dbWithContext(ctx).
+		Delete(&domain.Client{}, "id = ?", clientID).Error
+}
+
+
 func marshalTags(tags []string) datatypes.JSON {
 	if tags == nil {
 		return datatypes.JSON([]byte("[]"))

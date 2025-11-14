@@ -1,8 +1,8 @@
 import React from 'react';
-import ClientListPage from './pages/clients/ClientListPage';
+import AppRouter from './router';
 
 const App: React.FC = () => {
-  return <ClientListPage />;
+  return <AppRouter />;
 };
 
 export default App;
