@@ -40,16 +40,9 @@ type Telemetry struct {
 
 // Init configura tracer/meter providers e exportadores.
 func Init(ctx context.Context, cfg Config) (*Telemetry, error) {
-	res, err := resource.New(
-		ctx,
-		resource.WithFromEnv(),
-		resource.WithProcess(),
-		resource.WithOS(),
-		resource.WithTelemetrySDK(),
-		resource.WithAttributes(resourceAttributes(cfg)...),
-	)
+	res, err := buildResource(ctx, cfg)
 	if err != nil {
-		return nil, fmt.Errorf("build otel resource: %w", err)
+		return nil, err
 	}
 
 	promExporter, meterProvider, err := initPrometheusProvider(res)
@@ -183,4 +176,33 @@ func parseHeaders(raw string) map[string]string {
 		headers[strings.TrimSpace(parts[0])] = strings.TrimSpace(parts[1])
 	}
 	return headers
+}
+
+func buildResource(ctx context.Context, cfg Config) (*resource.Resource, error) {
+	res, err := resource.New(
+		ctx,
+		resource.WithFromEnv(),
+		resource.WithProcess(),
+		resource.WithOS(),
+		resource.WithTelemetrySDK(),
+		resource.WithAttributes(resourceAttributes(cfg)...),
+	)
+	if err == nil {
+		return res, nil
+	}
+
+	otel.Handle(fmt.Errorf("apply otel resource from environment: %w", err))
+
+	res, err = resource.New(
+		ctx,
+		resource.WithProcess(),
+		resource.WithOS(),
+		resource.WithTelemetrySDK(),
+		resource.WithAttributes(resourceAttributes(cfg)...),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("build otel resource: %w", err)
+	}
+
+	return res, nil
 }
