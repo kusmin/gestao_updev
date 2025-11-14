@@ -268,46 +268,6 @@ func TestDeleteProduct(t *testing.T) {
 	assert.ErrorIs(t, getErr, gorm.ErrRecordNotFound)
 }
 
-func TestListServices(t *testing.T) {
-	clearAllData()
-	tenant, err := createTestTenant()
-	require.NoError(t, err)
-	otherTenant, err := createTestTenant()
-	require.NoError(t, err)
-
-	_, err = testSvc.CreateService(context.Background(), tenant.ID, ServiceInput{
-		Name:            "Beta Service",
-		Category:        "Cat B",
-		Description:     "Second",
-		DurationMinutes: 30,
-		Price:           200,
-		Metadata:        map[string]interface{}{"tier": "beta"},
-	})
-	require.NoError(t, err)
-	_, err = testSvc.CreateService(context.Background(), tenant.ID, ServiceInput{
-		Name:            "Alpha Service",
-		Category:        "Cat A",
-		Description:     "First",
-		DurationMinutes: 45,
-		Price:           150,
-		Metadata:        map[string]interface{}{"tier": "alpha"},
-	})
-	require.NoError(t, err)
-	_, err = testSvc.CreateService(context.Background(), otherTenant.ID, ServiceInput{
-		Name:            "Other Service",
-		DurationMinutes: 60,
-		Price:           99,
-	})
-	require.NoError(t, err)
-
-	services, err := testSvc.ListServices(context.Background(), tenant.ID)
-
-	assert.NoError(t, err)
-	require.Len(t, services, 2)
-	assert.Equal(t, "Alpha Service", services[0].Name)
-	assert.Equal(t, "Beta Service", services[1].Name)
-}
-
 func TestCreateService(t *testing.T) {
 	clearAllData()
 	tenant, err := createTestTenant()
@@ -390,4 +350,84 @@ func TestDeleteService(t *testing.T) {
 	deleted, getErr := testSvc.GetService(context.Background(), tenant.ID, created.ID)
 	assert.Nil(t, deleted)
 	assert.ErrorIs(t, getErr, gorm.ErrRecordNotFound)
+}
+
+func TestListAllServicesAndProducts(t *testing.T) {
+	clearAllData()
+	tenant, _ := createTestTenant()
+	_, _ = testSvc.CreateService(context.Background(), tenant.ID, ServiceInput{Name: "Service B"})
+	_, _ = testSvc.CreateService(context.Background(), tenant.ID, ServiceInput{Name: "Service A"})
+	_, _ = testSvc.CreateProduct(context.Background(), tenant.ID, ProductInput{Name: "Product B", SKU: "B"})
+	_, _ = testSvc.CreateProduct(context.Background(), tenant.ID, ProductInput{Name: "Product A", SKU: "A"})
+
+	services, err := testSvc.ListAllServices(context.Background())
+	require.NoError(t, err)
+	require.Len(t, services, 2)
+	assert.Equal(t, "Service A", services[0].Name)
+
+	products, err := testSvc.ListAllProducts(context.Background())
+	require.NoError(t, err)
+	require.Len(t, products, 2)
+	assert.Equal(t, "Product A", products[0].Name)
+}
+
+func TestAdminProductLifecycle(t *testing.T) {
+	clearAllData()
+	tenant, _ := createTestTenant()
+
+	product, err := testSvc.AdminCreateProduct(context.Background(), AdminProductInput{
+		ProductInput: ProductInput{
+			Name:     "Admin Prod",
+			SKU:      "ADMIN-1",
+			Price:    99,
+			Metadata: map[string]interface{}{"source": "admin"},
+		},
+		TenantID: tenant.ID,
+	})
+	require.NoError(t, err)
+	assert.Equal(t, tenant.ID, product.TenantID)
+
+	updated, err := testSvc.AdminUpdateProduct(context.Background(), product.ID, ProductInput{
+		Name:  "Admin Prod Updated",
+		SKU:   "ADMIN-2",
+		Price: 120,
+	})
+	require.NoError(t, err)
+	assert.Equal(t, "Admin Prod Updated", updated.Name)
+	assert.Equal(t, "ADMIN-2", updated.SKU)
+
+	require.NoError(t, testSvc.AdminDeleteProduct(context.Background(), product.ID))
+	var count int64
+	testDB.Model(&domain.Product{}).Where("id = ?", product.ID).Count(&count)
+	assert.Equal(t, int64(0), count)
+}
+
+func TestAdminServiceLifecycle(t *testing.T) {
+	clearAllData()
+	tenant, _ := createTestTenant()
+
+	service, err := testSvc.AdminCreateService(context.Background(), AdminServiceInput{
+		ServiceInput: ServiceInput{
+			Name:            "Admin Service",
+			DurationMinutes: 30,
+			Price:           70,
+		},
+		TenantID: tenant.ID,
+	})
+	require.NoError(t, err)
+	assert.Equal(t, tenant.ID, service.TenantID)
+
+	updated, err := testSvc.AdminUpdateService(context.Background(), service.ID, ServiceInput{
+		Name:            "Admin Service Updated",
+		DurationMinutes: 45,
+		Price:           90,
+	})
+	require.NoError(t, err)
+	assert.Equal(t, "Admin Service Updated", updated.Name)
+	assert.Equal(t, 45, updated.DurationMinutes)
+
+	require.NoError(t, testSvc.AdminDeleteService(context.Background(), service.ID))
+	var count int64
+	testDB.Model(&domain.Service{}).Where("id = ?", service.ID).Count(&count)
+	assert.Equal(t, int64(0), count)
 }

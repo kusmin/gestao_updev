@@ -5,6 +5,17 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>backoffice</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      // A configuração será feita via JavaScript no main.tsx ou em um hook,
+      // usando a variável de ambiente VITE_GA4_MEASUREMENT_ID_BACKOFFICE.
+      // gtag('config', 'G-XXXXXXXXXX'); // Esta linha será gerenciada via JS
+    </script>
   </head>
   <body>
     <div id="root"></div>

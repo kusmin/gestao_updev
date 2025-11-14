@@ -6,9 +6,13 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"go.uber.org/zap"
 	gormLogger "gorm.io/gorm/logger"
+
+	"github.com/getsentry/sentry-go"
+	sentrygin "github.com/getsentry/sentry-go/gin"
 
 	"github.com/kusmin/gestao_updev/backend/internal/config"
 	"github.com/kusmin/gestao_updev/backend/internal/server"
@@ -44,6 +48,19 @@ func main() {
 		log.Fatalf("init logger: %v", err)
 	}
 	defer zapLogger.Sync()
+
+	if sentryDSN := os.Getenv("SENTRY_DSN_BACKEND"); sentryDSN != "" {
+		if err := sentry.Init(sentry.ClientOptions{
+			Dsn: sentryDSN,
+			TracesSampleRate: 1.0,
+			EnableTracing: true,
+		}); err != nil {
+			zapLogger.Fatal("sentry.Init: %v", zap.Error(err))
+		}
+		defer sentry.Flush(2 * time.Second)
+		zapLogger.Info("Sentry initialized for backend")
+	}
+
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
@@ -82,6 +99,20 @@ func main() {
 	defer sqlDB.Close()
 
 	srv := server.New(cfg, zapLogger, db, tel)
+
+	if sentry.CurrentHub().Client() != nil {
+		srv.Router.Use(sentrygin.New(sentrygin.Options{
+			Repanic: true,
+		}))
+		defer func() {
+			if r := recover(); r != nil {
+				sentry.CurrentHub().Recover(r)
+				sentry.Flush(2 * time.Second)
+				panic(r)
+			}
+		}()
+	}
+
 
 	if err := srv.Run(ctx); err != nil {
 		zapLogger.Fatal("server stopped with error", zap.Any("error", err))
