@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { CssBaseline, ThemeProvider } from '@mui/material';
-import * as Sentry from '@sentry/react';
-import { BrowserTracing } from '@sentry/tracing';
+// import * as Sentry from '@sentry/react';
+// import { BrowserTracing } from '@sentry/tracing'; // Reverter para importação direta
 
 import App from './App';
 import theme from './lib/theme';
@@ -13,19 +13,23 @@ import '@fontsource/roboto/700.css';
 
 const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN_FRONTEND;
 
-if (SENTRY_DSN) {
-  Sentry.init({
-    dsn: SENTRY_DSN,
-    integrations: [
-      new BrowserTracing({
-        tracePropagationTargets: ['localhost', /^\//],
-      }),
-    ],
-    tracesSampleRate: 1.0,
-    replaysSessionSampleRate: 0.1,
-    replaysOnErrorSampleRate: 1.0,
-  });
-}
+// if (SENTRY_DSN) {
+//   Sentry.init({
+//     dsn: SENTRY_DSN,
+//     integrations: [
+//       new BrowserTracing({ // Reverter para instanciação direta
+//         tracingOrigins: ['localhost', /^\//], // Manter tracingOrigins
+//       }),
+//       Sentry.replayIntegration({
+//         maskAllInputs: true,
+//         blockAllMedia: true,
+//       }),
+//     ],
+//     tracesSampleRate: 1.0,
+//     replaysSessionSampleRate: 0.1,
+//     replaysOnErrorSampleRate: 1.0,
+//   });
+// }
 
 const GA4_MEASUREMENT_ID = import.meta.env.VITE_GA4_MEASUREMENT_ID_FRONTEND;
 
