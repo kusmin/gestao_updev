@@ -93,12 +93,12 @@ func (s *Service) DashboardDaily(ctx context.Context, tenantID uuid.UUID, date t
 
 // OverallMetricsDTO estrutura retorno do endpoint.
 type OverallMetricsDTO struct {
-	TotalTenants  int64 `json:"total_tenants"`
-	TotalUsers    int64 `json:"total_users"`
-	TotalClients  int64 `json:"total_clients"`
-	TotalProducts int64 `json:"total_products"`
-	TotalServices int64 `json:"total_services"`
-	TotalBookings int64 `json:"total_bookings"`
+	TotalTenants  int64   `json:"total_tenants"`
+	TotalUsers    int64   `json:"total_users"`
+	TotalClients  int64   `json:"total_clients"`
+	TotalProducts int64   `json:"total_products"`
+	TotalServices int64   `json:"total_services"`
+	TotalBookings int64   `json:"total_bookings"`
 	TotalRevenue  float64 `json:"total_revenue"`
 }
 
@@ -152,4 +152,3 @@ func (s *Service) GetOverallMetrics(ctx context.Context) (*OverallMetricsDTO, er
 		TotalRevenue:  totalRevenue,
 	}, nil
 }
-

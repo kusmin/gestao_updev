@@ -23,7 +23,7 @@ jobs:
         # Pinning to 1.22 as golangci-lint dependencies are not yet compatible with Go 1.25
         uses: actions/setup-go@v5
         with:
-          go-version: '1.25'
+          go-version: '1.22'
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -31,12 +31,19 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
+      - name: Install Go dependencies
+        run: go mod tidy
+        working-directory: backend
+
       - name: Install golangci-lint
         run: |
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.59.1
 
       - name: Install pre-commit
         run: pip install pre-commit
+
+      - name: Install root Node.js dependencies
+        run: npm ci
 
       - name: Install frontend dependencies
         run: npm install --prefix frontend

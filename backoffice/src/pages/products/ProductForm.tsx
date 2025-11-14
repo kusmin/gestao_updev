@@ -27,12 +27,7 @@ interface ProductFormProps {
   product: Product | null;
 }
 
-const ProductForm: React.FC<ProductFormProps> = ({
-  open,
-  onClose,
-  onSave,
-  product,
-}) => {
+const ProductForm: React.FC<ProductFormProps> = ({ open, onClose, onSave, product }) => {
   const [formData, setFormData] = useState<Partial<Product>>({
     name: '',
     sku: '',

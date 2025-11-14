@@ -4,1518 +4,1518 @@
  */
 
 export interface paths {
-    "/auth/login": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Autentica usuário */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description Credenciais */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.LoginRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+  '/auth/login': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/auth/refresh": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    /** Autentica usuário */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      /** @description Credenciais */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['handler.LoginRequest'];
         };
-        get?: never;
-        put?: never;
-        /** Atualiza tokens de acesso */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description Refresh token */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.RefreshRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
     };
-    "/auth/signup": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Cria empresa e usuário administrador
-         * @description Fluxo inicial da plataforma: cria empresa, usuário admin e retorna tokens.
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description Dados do signup */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.SignupRequest"];
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/auth/refresh': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/bookings": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    /** Atualiza tokens de acesso */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      /** @description Refresh token */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['handler.RefreshRequest'];
         };
-        /** Lista agendamentos */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description Data (YYYY-MM-DD) */
-                    date?: string;
-                    /** @description Profissional */
-                    professional_id?: string;
-                    /** @description Status */
-                    status?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
         };
-        put?: never;
-        /** Cria agendamento */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description Agendamento */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.BookingRequest"];
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
     };
-    "/bookings/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Atualiza agendamento */
-        patch: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Booking ID */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            /** @description Campos editáveis */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.BookingUpdateRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/auth/signup': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/bookings/{id}/cancel": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Cria empresa e usuário administrador
+     * @description Fluxo inicial da plataforma: cria empresa, usuário admin e retorna tokens.
+     */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      /** @description Dados do signup */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['handler.SignupRequest'];
         };
-        get?: never;
-        put?: never;
-        /** Cancela agendamento */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Booking ID */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            /** @description Motivo */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.BookingCancelRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
+      };
+      responses: {
+        /** @description Created */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
     };
-    "/clients": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Lista clientes */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description Filtro por nome/email/telefone */
-                    search?: string;
-                    /** @description Lista de tags separadas por vírgula */
-                    tags?: string;
-                    /** @description Página */
-                    page?: number;
-                    /** @description Itens por página */
-                    per_page?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        /** Cria cliente */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: components["requestBodies"]["handler.ClientRequest"];
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/bookings': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/clients/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** Lista agendamentos */
+    get: {
+      parameters: {
+        query?: {
+          /** @description Data (YYYY-MM-DD) */
+          date?: string;
+          /** @description Profissional */
+          professional_id?: string;
+          /** @description Status */
+          status?: string;
         };
-        /** Busca cliente */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Client ID */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
         };
-        /** Atualiza cliente */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Client ID */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody: components["requestBodies"]["handler.ClientRequest"];
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        post?: never;
-        /** Remove cliente */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Client ID */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description No Content */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/companies/me": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    put?: never;
+    /** Cria agendamento */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      /** @description Agendamento */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['handler.BookingRequest'];
         };
-        /** Retorna dados da empresa atual */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
+      };
+      responses: {
+        /** @description Created */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
         };
-        /** Atualiza dados da empresa atual */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description Campos editáveis */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.CompanyUpdateRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/dashboard/daily": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** KPIs diários */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description Data (YYYY-MM-DD) */
-                    date?: string;
-                    /** @description Profissional */
-                    professional_id?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/bookings/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/inventory/movements": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /** Atualiza agendamento */
+    patch: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description Booking ID */
+          id: string;
         };
-        /** Lista movimentações de estoque */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description Filtro por produto */
-                    product_id?: string;
-                    /** @description Tipo (in|out|adjustment) */
-                    type?: string;
-                    /** @description Data inicial (RFC3339) */
-                    start_date?: string;
-                    /** @description Data final (RFC3339) */
-                    end_date?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
+        cookie?: never;
+      };
+      /** @description Campos editáveis */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['handler.BookingUpdateRequest'];
         };
-        put?: never;
-        /** Registra movimento de estoque */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description Movimentação */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.InventoryRequest"];
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/payments": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Lista pagamentos */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description Método */
-                    method?: string;
-                    /** @description Data inicial RFC3339 */
-                    start_date?: string;
-                    /** @description Data final RFC3339 */
-                    end_date?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    trace?: never;
+  };
+  '/bookings/{id}/cancel': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/products": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    /** Cancela agendamento */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description Booking ID */
+          id: string;
         };
-        /** Lista produtos */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
+        cookie?: never;
+      };
+      /** @description Motivo */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['handler.BookingCancelRequest'];
         };
-        put?: never;
-        /** Cria produto */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: components["requestBodies"]["handler.ProductRequest"];
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/products/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Busca produto por ID */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Product ID */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        /** Atualiza produto */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Product ID */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody: components["requestBodies"]["handler.ProductRequest"];
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        post?: never;
-        /** Remove produto */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Product ID */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description No Content */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/clients': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/professionals": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** Lista clientes */
+    get: {
+      parameters: {
+        query?: {
+          /** @description Filtro por nome/email/telefone */
+          search?: string;
+          /** @description Lista de tags separadas por vírgula */
+          tags?: string;
+          /** @description Página */
+          page?: number;
+          /** @description Itens por página */
+          per_page?: number;
         };
-        /** Lista profissionais ativos */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
         };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/sales/orders": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    put?: never;
+    /** Cria cliente */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: components['requestBodies']['handler.ClientRequest'];
+      responses: {
+        /** @description Created */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
         };
-        /** Lista pedidos/vendas */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description Status */
-                    status?: string;
-                    /** @description Cliente */
-                    client_id?: string;
-                    /** @description Data (YYYY-MM-DD) */
-                    date?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
         };
-        put?: never;
-        /** Cria pedido/venda */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description Pedido */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.SalesOrderRequest"];
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/sales/orders/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Atualiza pedido */
-        patch: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Order ID */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            /** @description Campos editáveis */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.SalesOrderUpdateRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/clients/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/sales/orders/{id}/payments": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** Busca cliente */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description Client ID */
+          id: string;
         };
-        get?: never;
-        put?: never;
-        /** Registra pagamento */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Order ID */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            /** @description Pagamento */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.PaymentRequest"];
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/services": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** Atualiza cliente */
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description Client ID */
+          id: string;
         };
-        /** Lista serviços */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
+        cookie?: never;
+      };
+      requestBody: components['requestBodies']['handler.ClientRequest'];
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
         };
-        put?: never;
-        /** Cria serviço */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: components["requestBodies"]["handler.ServiceRequest"];
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/services/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    post?: never;
+    /** Remove cliente */
+    delete: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description Client ID */
+          id: string;
         };
-        /** Busca serviço por ID */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Service ID */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description No Content */
+        204: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
         };
-        /** Atualiza serviço */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Service ID */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody: components["requestBodies"]["handler.ServiceRequest"];
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        post?: never;
-        /** Remove serviço */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Service ID */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description No Content */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/users": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Lista usuários do tenant */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description Filtro por role */
-                    role?: string;
-                    /** @description Página */
-                    page?: number;
-                    /** @description Itens por página */
-                    per_page?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        /** Cria um usuário */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description Novo usuário */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.CreateUserRequest"];
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/companies/me': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/users/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** Retorna dados da empresa atual */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
         };
-        /** Busca usuário por ID */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description User ID */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
         };
-        put?: never;
-        post?: never;
-        /** Remove (soft delete) um usuário */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description User ID */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description No Content */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        /** Atualiza parcialmente um usuário */
-        patch: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description User ID */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            /** @description Campos editáveis */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.UpdateUserRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        trace?: never;
+      };
     };
+    /** Atualiza dados da empresa atual */
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      /** @description Campos editáveis */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['handler.CompanyUpdateRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/dashboard/daily': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** KPIs diários */
+    get: {
+      parameters: {
+        query?: {
+          /** @description Data (YYYY-MM-DD) */
+          date?: string;
+          /** @description Profissional */
+          professional_id?: string;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/inventory/movements': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Lista movimentações de estoque */
+    get: {
+      parameters: {
+        query?: {
+          /** @description Filtro por produto */
+          product_id?: string;
+          /** @description Tipo (in|out|adjustment) */
+          type?: string;
+          /** @description Data inicial (RFC3339) */
+          start_date?: string;
+          /** @description Data final (RFC3339) */
+          end_date?: string;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    /** Registra movimento de estoque */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      /** @description Movimentação */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['handler.InventoryRequest'];
+        };
+      };
+      responses: {
+        /** @description Created */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/payments': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Lista pagamentos */
+    get: {
+      parameters: {
+        query?: {
+          /** @description Método */
+          method?: string;
+          /** @description Data inicial RFC3339 */
+          start_date?: string;
+          /** @description Data final RFC3339 */
+          end_date?: string;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/products': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Lista produtos */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    /** Cria produto */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: components['requestBodies']['handler.ProductRequest'];
+      responses: {
+        /** @description Created */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/products/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Busca produto por ID */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description Product ID */
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    /** Atualiza produto */
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description Product ID */
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody: components['requestBodies']['handler.ProductRequest'];
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    post?: never;
+    /** Remove produto */
+    delete: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description Product ID */
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description No Content */
+        204: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/professionals': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Lista profissionais ativos */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/sales/orders': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Lista pedidos/vendas */
+    get: {
+      parameters: {
+        query?: {
+          /** @description Status */
+          status?: string;
+          /** @description Cliente */
+          client_id?: string;
+          /** @description Data (YYYY-MM-DD) */
+          date?: string;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    /** Cria pedido/venda */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      /** @description Pedido */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['handler.SalesOrderRequest'];
+        };
+      };
+      responses: {
+        /** @description Created */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/sales/orders/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /** Atualiza pedido */
+    patch: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description Order ID */
+          id: string;
+        };
+        cookie?: never;
+      };
+      /** @description Campos editáveis */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['handler.SalesOrderUpdateRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    trace?: never;
+  };
+  '/sales/orders/{id}/payments': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Registra pagamento */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description Order ID */
+          id: string;
+        };
+        cookie?: never;
+      };
+      /** @description Pagamento */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['handler.PaymentRequest'];
+        };
+      };
+      responses: {
+        /** @description Created */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/services': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Lista serviços */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    /** Cria serviço */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: components['requestBodies']['handler.ServiceRequest'];
+      responses: {
+        /** @description Created */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/services/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Busca serviço por ID */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description Service ID */
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    /** Atualiza serviço */
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description Service ID */
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody: components['requestBodies']['handler.ServiceRequest'];
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    post?: never;
+    /** Remove serviço */
+    delete: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description Service ID */
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description No Content */
+        204: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/users': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Lista usuários do tenant */
+    get: {
+      parameters: {
+        query?: {
+          /** @description Filtro por role */
+          role?: string;
+          /** @description Página */
+          page?: number;
+          /** @description Itens por página */
+          per_page?: number;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    /** Cria um usuário */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      /** @description Novo usuário */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['handler.CreateUserRequest'];
+        };
+      };
+      responses: {
+        /** @description Created */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/users/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Busca usuário por ID */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description User ID */
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    /** Remove (soft delete) um usuário */
+    delete: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description User ID */
+          id: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description No Content */
+        204: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    options?: never;
+    head?: never;
+    /** Atualiza parcialmente um usuário */
+    patch: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description User ID */
+          id: string;
+        };
+        cookie?: never;
+      };
+      /** @description Campos editáveis */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['handler.UpdateUserRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['response.APIResponse'];
+          };
+        };
+      };
+    };
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: {
-        "handler.BookingCancelRequest": {
-            reason?: string;
-        };
-        "handler.BookingRequest": {
-            client_id: string;
-            end_at?: string;
-            notes?: string;
-            professional_id: string;
-            service_id: string;
-            start_at: string;
-            status?: string;
-        };
-        "handler.BookingUpdateRequest": {
-            end_at?: string;
-            notes?: string;
-            start_at?: string;
-            status?: string;
-        };
-        "handler.ClientRequest": {
-            contact?: {
-                [key: string]: unknown;
-            };
-            email?: string;
-            name: string;
-            notes?: string;
-            phone?: string;
-            tags?: string[];
-        };
-        "handler.CompanyUpdateRequest": {
-            email?: string;
-            name?: string;
-            phone?: string;
-            settings?: {
-                [key: string]: unknown;
-            };
-            timezone?: string;
-        };
-        "handler.CreateUserRequest": {
-            email: string;
-            name: string;
-            password: string;
-            phone?: string;
-            role: string;
-        };
-        "handler.InventoryRequest": {
-            order_id?: string;
-            product_id: string;
-            quantity: number;
-            reason?: string;
-            type: string;
-        };
-        "handler.LoginRequest": {
-            email: string;
-            password: string;
-        };
-        "handler.PaymentRequest": {
-            amount: number;
-            details?: {
-                [key: string]: unknown;
-            };
-            method: string;
-            paid_at: string;
-        };
-        "handler.ProductRequest": {
-            cost?: number;
-            description?: string;
-            metadata?: {
-                [key: string]: unknown;
-            };
-            min_stock?: number;
-            name: string;
-            price: number;
-            sku: string;
-            stock_qty?: number;
-        };
-        "handler.RefreshRequest": {
-            refresh_token: string;
-        };
-        "handler.SalesOrderItemRequest": {
-            quantity: number;
-            ref_id: string;
-            type: string;
-            unit_price: number;
-        };
-        "handler.SalesOrderRequest": {
-            booking_id?: string;
-            client_id: string;
-            discount?: number;
-            items: components["schemas"]["handler.SalesOrderItemRequest"][];
-            notes?: string;
-        };
-        "handler.SalesOrderUpdateRequest": {
-            notes?: string;
-            status?: string;
-        };
-        "handler.ServiceRequest": {
-            category?: string;
-            color?: string;
-            description?: string;
-            duration_minutes: number;
-            metadata?: {
-                [key: string]: unknown;
-            };
-            name: string;
-            price: number;
-        };
-        "handler.SignupRequest": {
-            company: {
-                document?: string;
-                name: string;
-                phone?: string;
-            };
-            user: {
-                email: string;
-                name: string;
-                password: string;
-                phone?: string;
-            };
-        };
-        "handler.UpdateUserRequest": {
-            active?: boolean;
-            name?: string;
-            password?: string;
-            phone?: string;
-            role?: string;
-        };
-        "response.APIResponse": {
-            data?: unknown;
-            error?: unknown;
-            meta?: unknown;
-        };
+  schemas: {
+    'handler.BookingCancelRequest': {
+      reason?: string;
     };
-    responses: never;
-    parameters: never;
-    requestBodies: {
-        /** @description Cliente */
-        "handler.ClientRequest": {
-            content: {
-                "application/json": components["schemas"]["handler.ClientRequest"];
-            };
-        };
-        /** @description Produto */
-        "handler.ProductRequest": {
-            content: {
-                "application/json": components["schemas"]["handler.ProductRequest"];
-            };
-        };
-        /** @description Serviço */
-        "handler.ServiceRequest": {
-            content: {
-                "application/json": components["schemas"]["handler.ServiceRequest"];
-            };
-        };
+    'handler.BookingRequest': {
+      client_id: string;
+      end_at?: string;
+      notes?: string;
+      professional_id: string;
+      service_id: string;
+      start_at: string;
+      status?: string;
     };
-    headers: never;
-    pathItems: never;
+    'handler.BookingUpdateRequest': {
+      end_at?: string;
+      notes?: string;
+      start_at?: string;
+      status?: string;
+    };
+    'handler.ClientRequest': {
+      contact?: {
+        [key: string]: unknown;
+      };
+      email?: string;
+      name: string;
+      notes?: string;
+      phone?: string;
+      tags?: string[];
+    };
+    'handler.CompanyUpdateRequest': {
+      email?: string;
+      name?: string;
+      phone?: string;
+      settings?: {
+        [key: string]: unknown;
+      };
+      timezone?: string;
+    };
+    'handler.CreateUserRequest': {
+      email: string;
+      name: string;
+      password: string;
+      phone?: string;
+      role: string;
+    };
+    'handler.InventoryRequest': {
+      order_id?: string;
+      product_id: string;
+      quantity: number;
+      reason?: string;
+      type: string;
+    };
+    'handler.LoginRequest': {
+      email: string;
+      password: string;
+    };
+    'handler.PaymentRequest': {
+      amount: number;
+      details?: {
+        [key: string]: unknown;
+      };
+      method: string;
+      paid_at: string;
+    };
+    'handler.ProductRequest': {
+      cost?: number;
+      description?: string;
+      metadata?: {
+        [key: string]: unknown;
+      };
+      min_stock?: number;
+      name: string;
+      price: number;
+      sku: string;
+      stock_qty?: number;
+    };
+    'handler.RefreshRequest': {
+      refresh_token: string;
+    };
+    'handler.SalesOrderItemRequest': {
+      quantity: number;
+      ref_id: string;
+      type: string;
+      unit_price: number;
+    };
+    'handler.SalesOrderRequest': {
+      booking_id?: string;
+      client_id: string;
+      discount?: number;
+      items: components['schemas']['handler.SalesOrderItemRequest'][];
+      notes?: string;
+    };
+    'handler.SalesOrderUpdateRequest': {
+      notes?: string;
+      status?: string;
+    };
+    'handler.ServiceRequest': {
+      category?: string;
+      color?: string;
+      description?: string;
+      duration_minutes: number;
+      metadata?: {
+        [key: string]: unknown;
+      };
+      name: string;
+      price: number;
+    };
+    'handler.SignupRequest': {
+      company: {
+        document?: string;
+        name: string;
+        phone?: string;
+      };
+      user: {
+        email: string;
+        name: string;
+        password: string;
+        phone?: string;
+      };
+    };
+    'handler.UpdateUserRequest': {
+      active?: boolean;
+      name?: string;
+      password?: string;
+      phone?: string;
+      role?: string;
+    };
+    'response.APIResponse': {
+      data?: unknown;
+      error?: unknown;
+      meta?: unknown;
+    };
+  };
+  responses: never;
+  parameters: never;
+  requestBodies: {
+    /** @description Cliente */
+    'handler.ClientRequest': {
+      content: {
+        'application/json': components['schemas']['handler.ClientRequest'];
+      };
+    };
+    /** @description Produto */
+    'handler.ProductRequest': {
+      content: {
+        'application/json': components['schemas']['handler.ProductRequest'];
+      };
+    };
+    /** @description Serviço */
+    'handler.ServiceRequest': {
+      content: {
+        'application/json': components['schemas']['handler.ServiceRequest'];
+      };
+    };
+  };
+  headers: never;
+  pathItems: never;
 }
 export type $defs = Record<string, never>;
 export type operations = Record<string, never>;

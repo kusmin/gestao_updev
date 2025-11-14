@@ -33,7 +33,7 @@ func TestValidateAccessToken(t *testing.T) {
 	require.Equal(t, "user-123", claims.UserID)
 	require.Equal(t, "tenant-abc", claims.TenantID)
 	require.Equal(t, "admin", claims.Role)
-	require.WithinDuration(t, time.Now().Add(time.Minute), claims.ExpiresAt.Time, 5*time.Second)
+	require.WithinDuration(t, time.Now().Add(time.Minute), claims.RegisteredClaims.ExpiresAt.Time, 5*time.Second)
 }
 
 func TestValidateRefreshTokenRequiresMatchingSecret(t *testing.T) {

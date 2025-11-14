@@ -25,12 +25,7 @@ interface UserFormProps {
   user: User | null;
 }
 
-const UserForm: React.FC<UserFormProps> = ({
-  open,
-  onClose,
-  onSave,
-  user,
-}) => {
+const UserForm: React.FC<UserFormProps> = ({ open, onClose, onSave, user }) => {
   const [formData, setFormData] = useState<Partial<User>>({
     name: '',
     email: '',

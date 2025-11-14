@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Container,
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Paper,
-} from '@mui/material';
+import { Container, Box, TextField, Button, Typography, Paper } from '@mui/material';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -56,12 +49,7 @@ const LoginPage: React.FC = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
+            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
               Sign In
             </Button>
           </Box>

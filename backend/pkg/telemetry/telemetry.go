@@ -212,4 +212,3 @@ func buildResource(ctx context.Context, cfg Config) (*resource.Resource, error) 
 
 	return merged, nil
 }
-

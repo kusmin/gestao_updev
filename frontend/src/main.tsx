@@ -18,7 +18,7 @@ if (SENTRY_DSN) {
     dsn: SENTRY_DSN,
     integrations: [
       new BrowserTracing({
-        tracePropagationTargets: ["localhost", /^\//],
+        tracePropagationTargets: ['localhost', /^\//],
       }),
     ],
     tracesSampleRate: 1.0,
@@ -34,7 +34,6 @@ if (GA4_MEASUREMENT_ID && typeof window.gtag === 'function') {
     send_page_view: false,
   });
 }
-
 
 const queryClient = new QueryClient();
 

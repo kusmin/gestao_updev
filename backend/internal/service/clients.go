@@ -279,7 +279,6 @@ func (s *Service) AdminDeleteClient(ctx context.Context, clientID uuid.UUID) err
 		Delete(&domain.Client{}, "id = ?", clientID).Error
 }
 
-
 func marshalTags(tags []string) datatypes.JSON {
 	if tags == nil {
 		return datatypes.JSON([]byte("[]"))

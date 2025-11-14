@@ -10,10 +10,7 @@ interface ApiClientOptions extends RequestInit {
   tenantId?: string;
 }
 
-const apiClient = async <T>(
-  endpoint: string,
-  options: ApiClientOptions = {}
-): Promise<T> => {
+const apiClient = async <T>(endpoint: string, options: ApiClientOptions = {}): Promise<T> => {
   const { headers, tenantId, ...rest } = options;
 
   const defaultHeaders: Record<string, string> = {

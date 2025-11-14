@@ -88,11 +88,7 @@ const AppointmentListPage: React.FC = () => {
         <Typography variant="h4" component="h1" gutterBottom>
           Agendamentos
         </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleOpenForm()}
-        >
+        <Button variant="contained" color="primary" onClick={() => handleOpenForm()}>
           Adicionar Agendamento
         </Button>
       </Box>

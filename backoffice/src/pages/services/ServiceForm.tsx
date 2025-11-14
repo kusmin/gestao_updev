@@ -26,12 +26,7 @@ interface ServiceFormProps {
   service: Service | null;
 }
 
-const ServiceForm: React.FC<ServiceFormProps> = ({
-  open,
-  onClose,
-  onSave,
-  service,
-}) => {
+const ServiceForm: React.FC<ServiceFormProps> = ({ open, onClose, onSave, service }) => {
   const [formData, setFormData] = useState<Partial<Service>>({
     name: '',
     category: '',

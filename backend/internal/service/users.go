@@ -97,7 +97,6 @@ func (s *Service) ListAllUsers(ctx context.Context, filter UsersFilter) ([]domai
 	return users, total, nil
 }
 
-
 // GetUser busca um usuário por ID.
 func (s *Service) GetUser(ctx context.Context, tenantID, userID uuid.UUID) (*domain.User, error) {
 	var user domain.User
@@ -266,4 +265,3 @@ func (s *Service) AdminUpdateUser(ctx context.Context, userID uuid.UUID, input U
 func (s *Service) AdminDeleteUser(ctx context.Context, userID uuid.UUID) error {
 	return s.dbWithContext(ctx).Delete(&domain.User{}, "id = ?", userID).Error
 }
-

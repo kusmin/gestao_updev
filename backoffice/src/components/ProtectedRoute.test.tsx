@@ -46,8 +46,6 @@ describe('ProtectedRoute', () => {
     renderWithRoutes();
 
     expect(screen.getByText('Protected Content')).toBeInTheDocument();
-    expect(
-      screen.getByText(/gestão updev - backoffice/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/gestão updev - backoffice/i)).toBeInTheDocument();
   });
 });

@@ -86,11 +86,7 @@ const ProductListPage: React.FC = () => {
         <Typography variant="h4" component="h1" gutterBottom>
           Products
         </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleOpenForm()}
-        >
+        <Button variant="contained" color="primary" onClick={() => handleOpenForm()}>
           Adicionar Produto
         </Button>
       </Box>

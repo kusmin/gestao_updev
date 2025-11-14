@@ -1,20 +1,6 @@
 import React from 'react';
-import {
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material';
-import {
-  Dashboard,
-  People,
-  Business,
-  Inventory,
-  Receipt,
-  Event,
-  Group,
-} from '@mui/icons-material';
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Dashboard, People, Business, Inventory, Receipt, Event, Group } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
 const menuItems = [

@@ -46,4 +46,3 @@ Com base na análise da estrutura atual do projeto, dos módulos implementados e
 
 *   **Backend Docker (`publish-docker.yml`):** O workflow de publicação da imagem Docker já existe. O próximo passo seria integrar essa imagem em um pipeline de deploy contínuo para ambientes de staging e produção, automatizando a entrega de novas versões.
 *   **Frontends (Aplicação Cliente e Painel Administrativo):** Implementar pipelines de deploy contínuo para ambos os frontends, garantindo que as atualizações sejam entregues de forma rápida e confiável.
-

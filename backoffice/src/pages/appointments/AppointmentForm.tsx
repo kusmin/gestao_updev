@@ -26,12 +26,7 @@ interface AppointmentFormProps {
   booking: Booking | null;
 }
 
-const AppointmentForm: React.FC<AppointmentFormProps> = ({
-  open,
-  onClose,
-  onSave,
-  booking,
-}) => {
+const AppointmentForm: React.FC<AppointmentFormProps> = ({ open, onClose, onSave, booking }) => {
   const [formData, setFormData] = useState<Partial<Booking>>({
     client_id: '',
     professional_id: '',

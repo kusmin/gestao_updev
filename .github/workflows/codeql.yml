@@ -37,6 +37,7 @@ jobs:
     - name: Build backend
       working-directory: backend
       run: |
+        go mod tidy
         go build ./...
 
     - name: Perform CodeQL Analysis

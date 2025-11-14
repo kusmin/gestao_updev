@@ -85,11 +85,7 @@ const TenantListPage: React.FC = () => {
         <Typography variant="h4" component="h1" gutterBottom>
           Tenants
         </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleOpenForm()}
-        >
+        <Button variant="contained" color="primary" onClick={() => handleOpenForm()}>
           Adicionar Tenant
         </Button>
       </Box>

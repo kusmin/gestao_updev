@@ -18,9 +18,7 @@ const DashboardPage: React.FC = () => {
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
-        const response = await apiClient<{ data: OverallMetrics }>(
-          '/admin/dashboard/metrics'
-        );
+        const response = await apiClient<{ data: OverallMetrics }>('/admin/dashboard/metrics');
         setMetrics(response.data);
       } catch (error) {
         console.error('Error fetching overall metrics:', error);

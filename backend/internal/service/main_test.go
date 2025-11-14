@@ -15,8 +15,8 @@ import (
 )
 
 var (
-	testDB  *gorm.DB
-	testSvc *Service
+	testDB       *gorm.DB
+	testSvc      *Service
 	schemaModels = []interface{}{
 		&domain.Company{},
 		&domain.User{},

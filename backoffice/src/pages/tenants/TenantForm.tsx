@@ -23,12 +23,7 @@ interface TenantFormProps {
   tenant: Tenant | null;
 }
 
-const TenantForm: React.FC<TenantFormProps> = ({
-  open,
-  onClose,
-  onSave,
-  tenant,
-}) => {
+const TenantForm: React.FC<TenantFormProps> = ({ open, onClose, onSave, tenant }) => {
   const [formData, setFormData] = useState<Partial<Tenant>>({
     name: '',
     document: '',

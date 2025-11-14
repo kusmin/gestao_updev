@@ -34,10 +34,7 @@ describe('Sidebar', () => {
     renderSidebar();
 
     MENU_ITEMS.forEach(({ label, path }) => {
-      expect(screen.getByRole('link', { name: label })).toHaveAttribute(
-        'href',
-        path,
-      );
+      expect(screen.getByRole('link', { name: label })).toHaveAttribute('href', path);
     });
   });
 });

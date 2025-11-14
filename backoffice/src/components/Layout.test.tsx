@@ -14,9 +14,7 @@ describe('Layout', () => {
   it('renders the application header', () => {
     renderLayout(<div />);
 
-    expect(
-      screen.getByText(/gestão updev - backoffice/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/gestão updev - backoffice/i)).toBeInTheDocument();
   });
 
   it('renders provided children inside the main content area', () => {

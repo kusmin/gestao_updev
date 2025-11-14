@@ -100,11 +100,7 @@ const UserListPage: React.FC = () => {
         <Typography variant="h4" component="h1" gutterBottom>
           Users
         </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleOpenForm()}
-        >
+        <Button variant="contained" color="primary" onClick={() => handleOpenForm()}>
           Adicionar Usuário
         </Button>
       </Box>
@@ -128,10 +124,7 @@ const UserListPage: React.FC = () => {
                 <TableCell>{user.phone}</TableCell>
                 <TableCell>{user.role}</TableCell>
                 <TableCell>
-                  <Switch
-                    checked={user.active}
-                    onChange={() => handleToggleActive(user)}
-                  />
+                  <Switch checked={user.active} onChange={() => handleToggleActive(user)} />
                 </TableCell>
                 <TableCell>
                   <Button onClick={() => handleOpenForm(user)}>Editar</Button>

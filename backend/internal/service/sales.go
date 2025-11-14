@@ -286,4 +286,3 @@ func (s *Service) AdminUpdateSalesOrder(ctx context.Context, orderID uuid.UUID, 
 func (s *Service) AdminDeleteSalesOrder(ctx context.Context, orderID uuid.UUID) error {
 	return s.dbWithContext(ctx).Delete(&domain.SalesOrder{}, "id = ?", orderID).Error
 }
-

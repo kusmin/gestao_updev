@@ -333,5 +333,3 @@ func (s *Service) AdminDeleteService(ctx context.Context, serviceID uuid.UUID) e
 	return s.dbWithContext(ctx).
 		Delete(&domain.Service{}, "id = ?", serviceID).Error
 }
-
-

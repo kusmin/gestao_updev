@@ -260,4 +260,3 @@ func (s *Service) AdminUpdateBooking(ctx context.Context, bookingID uuid.UUID, i
 func (s *Service) AdminDeleteBooking(ctx context.Context, bookingID uuid.UUID) error {
 	return s.dbWithContext(ctx).Delete(&domain.Booking{}, "id = ?", bookingID).Error
 }
-

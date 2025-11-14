@@ -32,12 +32,7 @@ interface SaleFormProps {
   sale: SalesOrder | null;
 }
 
-const SaleForm: React.FC<SaleFormProps> = ({
-  open,
-  onClose,
-  onSave,
-  sale,
-}) => {
+const SaleForm: React.FC<SaleFormProps> = ({ open, onClose, onSave, sale }) => {
   const [formData, setFormData] = useState<Partial<SalesOrder>>({
     client_id: '',
     items: [],

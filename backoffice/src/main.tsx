@@ -12,7 +12,7 @@ if (SENTRY_DSN) {
     dsn: SENTRY_DSN,
     integrations: [
       new BrowserTracing({
-        tracePropagationTargets: ["localhost", /^\//],
+        tracePropagationTargets: ['localhost', /^\//],
       }),
     ],
     tracesSampleRate: 1.0,

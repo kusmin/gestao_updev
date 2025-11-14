@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  AppBar,
-  Box,
-  CssBaseline,
-  Drawer,
-  Toolbar,
-  Typography,
-} from '@mui/material';
+import { AppBar, Box, CssBaseline, Drawer, Toolbar, Typography } from '@mui/material';
 import Sidebar from './Sidebar';
 
 const drawerWidth = 240;
@@ -19,10 +12,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      >
+      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
           <Typography variant="h6" noWrap component="div">
             Gestão UpDev - Backoffice

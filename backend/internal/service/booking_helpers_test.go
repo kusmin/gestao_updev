@@ -36,7 +36,5 @@ func seedProfessionalRecord(t *testing.T, tenantID uuid.UUID, name string) *doma
 
 func ensureTable(t *testing.T, model interface{}) {
 	t.Helper()
-	if !testDB.Migrator().HasTable(model) {
-		require.NoError(t, testDB.AutoMigrate(model))
-	}
+	require.NoError(t, testDB.AutoMigrate(model))
 }
