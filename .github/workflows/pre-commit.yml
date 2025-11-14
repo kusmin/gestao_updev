@@ -49,14 +49,13 @@ jobs:
       - name: Install pre-commit
         run: pip install pre-commit
 
-      - name: Install root Node.js dependencies
-        run: npm ci
-
       - name: Install frontend dependencies
-        run: npm install --prefix frontend
+        run: npm ci
+        working-directory: frontend
 
       - name: Install backoffice dependencies
-        run: npm install --prefix backoffice
+        run: npm ci
+        working-directory: backoffice
 
       - name: Run pre-commit checks
         run: pre-commit run --all-files --show-diff-on-failure
