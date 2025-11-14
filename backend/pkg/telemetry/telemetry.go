@@ -179,30 +179,37 @@ func parseHeaders(raw string) map[string]string {
 }
 
 func buildResource(ctx context.Context, cfg Config) (*resource.Resource, error) {
-	res, err := resource.New(
-		ctx,
-		resource.WithFromEnv(),
-		resource.WithProcess(),
-		resource.WithOS(),
-		resource.WithTelemetrySDK(),
-		resource.WithAttributes(resourceAttributes(cfg)...),
+	base := resource.NewWithAttributes(
+		semconv.SchemaURL,
+		resourceAttributes(cfg)...,
 	)
-	if err == nil {
-		return res, nil
+
+	envRes, err := resource.New(ctx, resource.WithFromEnv())
+	if err != nil {
+		otel.Handle(fmt.Errorf("apply otel resource from environment: %w", err))
+	} else if envRes != nil {
+		if merged, mergeErr := resource.Merge(base, envRes); mergeErr == nil {
+			base = merged
+		} else {
+			otel.Handle(fmt.Errorf("merge otel resource from environment: %w", mergeErr))
+		}
 	}
 
-	otel.Handle(fmt.Errorf("apply otel resource from environment: %w", err))
-
-	res, err = resource.New(
+	sysRes, err := resource.New(
 		ctx,
 		resource.WithProcess(),
 		resource.WithOS(),
 		resource.WithTelemetrySDK(),
-		resource.WithAttributes(resourceAttributes(cfg)...),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("build otel resource: %w", err)
 	}
 
-	return res, nil
+	merged, err := resource.Merge(base, sysRes)
+	if err != nil {
+		return nil, fmt.Errorf("merge otel resource: %w", err)
+	}
+
+	return merged, nil
 }
+
