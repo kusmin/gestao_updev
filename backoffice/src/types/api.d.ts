@@ -262,7 +262,10 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    /** @description Booking ID */
+                    /**
+                     * @description Booking ID
+                     * @example book_123456
+                     */
                     id: string;
                 };
                 cookie?: never;
@@ -302,7 +305,10 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    /** @description Booking ID */
+                    /**
+                     * @description Booking ID
+                     * @example book_123456
+                     */
                     id: string;
                 };
                 cookie?: never;
@@ -418,7 +424,10 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    /** @description Client ID */
+                    /**
+                     * @description Client ID
+                     * @example client_123456
+                     */
                     id: string;
                 };
                 cookie?: never;
@@ -442,7 +451,10 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    /** @description Client ID */
+                    /**
+                     * @description Client ID
+                     * @example client_123456
+                     */
                     id: string;
                 };
                 cookie?: never;
@@ -467,7 +479,10 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    /** @description Client ID */
+                    /**
+                     * @description Client ID
+                     * @example client_123456
+                     */
                     id: string;
                 };
                 cookie?: never;
@@ -790,7 +805,10 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    /** @description Product ID */
+                    /**
+                     * @description Product ID
+                     * @example product_123456
+                     */
                     id: string;
                 };
                 cookie?: never;
@@ -814,7 +832,10 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    /** @description Product ID */
+                    /**
+                     * @description Product ID
+                     * @example product_123456
+                     */
                     id: string;
                 };
                 cookie?: never;
@@ -839,7 +860,10 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    /** @description Product ID */
+                    /**
+                     * @description Product ID
+                     * @example product_123456
+                     */
                     id: string;
                 };
                 cookie?: never;
@@ -983,7 +1007,10 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    /** @description Order ID */
+                    /**
+                     * @description Order ID
+                     * @example order_123456
+                     */
                     id: string;
                 };
                 cookie?: never;
@@ -1023,7 +1050,10 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    /** @description Order ID */
+                    /**
+                     * @description Order ID
+                     * @example order_123456
+                     */
                     id: string;
                 };
                 cookie?: never;
@@ -1121,7 +1151,10 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    /** @description Service ID */
+                    /**
+                     * @description Service ID
+                     * @example service_123456
+                     */
                     id: string;
                 };
                 cookie?: never;
@@ -1145,7 +1178,10 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    /** @description Service ID */
+                    /**
+                     * @description Service ID
+                     * @example service_123456
+                     */
                     id: string;
                 };
                 cookie?: never;
@@ -1170,7 +1206,10 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    /** @description Service ID */
+                    /**
+                     * @description Service ID
+                     * @example service_123456
+                     */
                     id: string;
                 };
                 cookie?: never;
@@ -1281,7 +1320,10 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    /** @description User ID */
+                    /**
+                     * @description User ID
+                     * @example user_123456
+                     */
                     id: string;
                 };
                 cookie?: never;
@@ -1307,7 +1349,10 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    /** @description User ID */
+                    /**
+                     * @description User ID
+                     * @example user_123456
+                     */
                     id: string;
                 };
                 cookie?: never;
@@ -1331,7 +1376,10 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    /** @description User ID */
+                    /**
+                     * @description User ID
+                     * @example user_123456
+                     */
                     id: string;
                 };
                 cookie?: never;

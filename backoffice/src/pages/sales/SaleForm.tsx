@@ -29,11 +29,13 @@ const SaleForm: React.FC<SaleFormProps> = ({ open, onClose, onSave, sale }) => {
 
   useEffect(() => {
     if (open) {
-      reset(sale || {
-        client_id: '',
-        items: [],
-        tenant_id: '',
-      });
+      reset(
+        sale || {
+          client_id: '',
+          items: [],
+          tenant_id: '',
+        },
+      );
     }
   }, [sale, open, reset]);
 
@@ -52,21 +54,43 @@ const SaleForm: React.FC<SaleFormProps> = ({ open, onClose, onSave, sale }) => {
             name="client_id"
             control={control}
             render={({ field }) => (
-              <TextField {...field} autoFocus margin="dense" label="Client ID" type="text" fullWidth variant="standard" />
+              <TextField
+                {...field}
+                autoFocus
+                margin="dense"
+                label="Client ID"
+                type="text"
+                fullWidth
+                variant="standard"
+              />
             )}
           />
           <Controller
             name="booking_id"
             control={control}
             render={({ field }) => (
-              <TextField {...field} margin="dense" label="Booking ID" type="text" fullWidth variant="standard" />
+              <TextField
+                {...field}
+                margin="dense"
+                label="Booking ID"
+                type="text"
+                fullWidth
+                variant="standard"
+              />
             )}
           />
           <Controller
             name="discount"
             control={control}
             render={({ field }) => (
-              <TextField {...field} margin="dense" label="Desconto" type="number" fullWidth variant="standard" />
+              <TextField
+                {...field}
+                margin="dense"
+                label="Desconto"
+                type="number"
+                fullWidth
+                variant="standard"
+              />
             )}
           />
           <Controller
@@ -107,7 +131,14 @@ const SaleForm: React.FC<SaleFormProps> = ({ open, onClose, onSave, sale }) => {
             name="tenant_id"
             control={control}
             render={({ field }) => (
-              <TextField {...field} margin="dense" label="Tenant ID" type="text" fullWidth variant="standard" />
+              <TextField
+                {...field}
+                margin="dense"
+                label="Tenant ID"
+                type="text"
+                fullWidth
+                variant="standard"
+              />
             )}
           />
         </DialogContent>

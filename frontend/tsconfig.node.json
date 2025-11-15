@@ -4,7 +4,9 @@
     "composite": true,
     "lib": ["ESNext"],
     "types": ["node"],
-    "tsBuildInfoFile": "./node_modules/.tsbuildinfo.node"
+    "tsBuildInfoFile": "./node_modules/.tsbuildinfo.node",
+    "declaration": true,
+    "declarationMap": true
   },
   "include": ["vite.config.ts", "eslint.config.js"]
 }

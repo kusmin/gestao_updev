@@ -15,7 +15,7 @@ const apiClient = async <T>(endpoint: string, options: ApiClientOptions = {}): P
 
   const defaultHeaders: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...(headers as Record<string, string> || {}),
+    ...((headers as Record<string, string>) || {}),
   };
 
   if (authToken) {

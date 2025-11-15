@@ -7,7 +7,7 @@ import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
   {
-    ignores: ['dist', 'node_modules'],
+    ignores: ['dist', 'node_modules', 'coverage', 'src/**/*.d.ts'],
   },
   {
     files: ['**/*.{ts,tsx}'],
@@ -24,6 +24,20 @@ export default defineConfig([
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
+    },
+  },
+  {
+    files: ['src/**/*.test.{ts,tsx,js}'],
+    languageOptions: {
+      globals: {
+        ...globals.vitest,
+      },
+    },
+    rules: {
+      'no-undef': 'off', // Vitest handles these globals
+      '@typescript-eslint/no-unused-expressions': 'off', // Allow expect().toBeInTheDocument()
+      '@typescript-eslint/no-require-imports': 'off', // Allow require in test files if needed
+      '@typescript-eslint/no-unused-vars': 'off', // Allow unused vars in test files
     },
   },
   {

@@ -60,7 +60,10 @@ api-contract-test:
 	    echo ".env.test not found – continuing without injecting extra env vars"; \
 	  fi; \
 	  $(MAKE) backend-migrate; \
-	  npx dredd@14 --config tests/dredd/dredd.yml \
+	  npx dredd@14 docs/api.yaml http://127.0.0.1:8080 \
+	    --hookfiles ./tests/dredd/hooks/basic-flow.js \
+	    --server ./scripts/run_dredd_server.sh \
+	    --server-wait 5 \
 	)
 
 frontend-install:

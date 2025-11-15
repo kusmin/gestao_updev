@@ -2,8 +2,11 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "composite": true,
-    "types": ["vite/client", "vitest"],
-    "tsBuildInfoFile": "./node_modules/.tsbuildinfo.app"
+    "types": ["vite/client"],
+    "tsBuildInfoFile": "./node_modules/.tsbuildinfo.app",
+    "declaration": true,
+    "declarationMap": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["**/*.test.ts", "**/*.test.tsx"]
 }

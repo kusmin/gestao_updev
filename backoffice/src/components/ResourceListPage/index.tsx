@@ -1,4 +1,4 @@
-import React, { useEffect, useState, ReactNode } from 'react';
+import React, { useEffect, useState, ReactNode, useCallback } from 'react';
 import {
   Box,
   Button,
@@ -16,6 +16,7 @@ import apiClient from '@/lib/apiClient';
 
 interface Resource {
   id: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
@@ -44,18 +45,18 @@ const ResourceListPage = <T extends Resource>({
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<T | null>(null);
 
-  const fetchItems = async () => {
+  const fetchItems = useCallback(async () => {
     try {
       const response = await apiClient<{ data: T[] }>(endpoint);
       setItems(response.data);
     } catch (error) {
       console.error(`Error fetching ${title}:`, error);
     }
-  };
+  }, [endpoint, title]);
 
   useEffect(() => {
     fetchItems();
-  }, []);
+  }, [fetchItems]);
 
   const handleOpenForm = (item: T | null = null) => {
     setEditingItem(item);

@@ -57,7 +57,10 @@ describe('ResourceListPage', () => {
 
   it('lists, creates, edits and deletes resources', async () => {
     const initialItems: ClientResource[] = [{ id: '1', name: 'Alice', email: 'alice@example.com' }];
-    const afterCreate = [...initialItems, { id: '2', name: 'New Client', email: 'new@example.com' }];
+    const afterCreate = [
+      ...initialItems,
+      { id: '2', name: 'New Client', email: 'new@example.com' },
+    ];
     const afterUpdate = [
       { id: '1', name: 'Alice Updated', email: 'alice@example.com' },
       afterCreate[1],

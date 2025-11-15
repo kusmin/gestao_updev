@@ -33,15 +33,17 @@ const ServiceForm: React.FC<ServiceFormProps> = ({ open, onClose, onSave, servic
 
   useEffect(() => {
     if (open) {
-      reset(service || {
-        name: '',
-        category: '',
-        description: '',
-        duration_minutes: 30,
-        price: 0,
-        color: '#FFFFFF',
-        tenant_id: '',
-      });
+      reset(
+        service || {
+          name: '',
+          category: '',
+          description: '',
+          duration_minutes: 30,
+          price: 0,
+          color: '#FFFFFF',
+          tenant_id: '',
+        },
+      );
     }
   }, [service, open, reset]);
 
@@ -60,14 +62,29 @@ const ServiceForm: React.FC<ServiceFormProps> = ({ open, onClose, onSave, servic
             name="name"
             control={control}
             render={({ field }) => (
-              <TextField {...field} autoFocus margin="dense" label="Nome" type="text" fullWidth variant="standard" />
+              <TextField
+                {...field}
+                autoFocus
+                margin="dense"
+                label="Nome"
+                type="text"
+                fullWidth
+                variant="standard"
+              />
             )}
           />
           <Controller
             name="category"
             control={control}
             render={({ field }) => (
-              <TextField {...field} margin="dense" label="Categoria" type="text" fullWidth variant="standard" />
+              <TextField
+                {...field}
+                margin="dense"
+                label="Categoria"
+                type="text"
+                fullWidth
+                variant="standard"
+              />
             )}
           />
           <Controller
@@ -104,21 +121,42 @@ const ServiceForm: React.FC<ServiceFormProps> = ({ open, onClose, onSave, servic
             name="price"
             control={control}
             render={({ field }) => (
-              <TextField {...field} margin="dense" label="Preço" type="number" fullWidth variant="standard" />
+              <TextField
+                {...field}
+                margin="dense"
+                label="Preço"
+                type="number"
+                fullWidth
+                variant="standard"
+              />
             )}
           />
           <Controller
             name="color"
             control={control}
             render={({ field }) => (
-              <TextField {...field} margin="dense" label="Cor" type="color" fullWidth variant="standard" />
+              <TextField
+                {...field}
+                margin="dense"
+                label="Cor"
+                type="color"
+                fullWidth
+                variant="standard"
+              />
             )}
           />
           <Controller
             name="tenant_id"
             control={control}
             render={({ field }) => (
-              <TextField {...field} margin="dense" label="Tenant ID" type="text" fullWidth variant="standard" />
+              <TextField
+                {...field}
+                margin="dense"
+                label="Tenant ID"
+                type="text"
+                fullWidth
+                variant="standard"
+              />
             )}
           />
         </DialogContent>

@@ -18,6 +18,11 @@ Plataforma de gestão para negócios locais (barbearias, lojas de roupa e comér
 - Multi-tenancy: `docs/multi-tenancy.md`.
 - Operação & DevOps: `docs/operacao-devops.md`.
 - Análise de Workflows: `docs/workflow-analysis-and-suggestions.md`.
+- Guia de Testes: `docs/testing-guide.md`.
+- Análise de Cache: `docs/cache-analysis.md`.
+- Plano de Integração Redis: `docs/redis-integration-plan.md`.
+- Análise de Sistema de Notificação: `docs/notification-system-analysis.md`.
+- Comparativo de Sistemas de Notificação: `docs/notification-system-comparison.md`.
 - Guia Docker/Compose: `docs/docker.md`.
 - API (referência + spec + changelog):
   - Resumo textual: `docs/api-reference.md`.

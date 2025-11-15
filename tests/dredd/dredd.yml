@@ -1,8 +1,9 @@
 color: true
 dry-run: false
 language: nodejs
-hookfiles: ./tests/dredd/hooks/*.js
+hookfiles:
+  - tests/dredd/hooks/basic-flow.js
 server: ./scripts/run_dredd_server.sh
 server-wait: 5
-endpoint: http://127.0.0.1:8080/v1
+endpoint: http://127.0.0.1:8080
 blueprint: docs/api.yaml

@@ -34,16 +34,18 @@ const ProductForm: React.FC<ProductFormProps> = ({ open, onClose, onSave, produc
 
   useEffect(() => {
     if (open) {
-      reset(product || {
-        name: '',
-        sku: '',
-        price: 0,
-        cost: 0,
-        stock_qty: 0,
-        min_stock: 0,
-        description: '',
-        tenant_id: '',
-      });
+      reset(
+        product || {
+          name: '',
+          sku: '',
+          price: 0,
+          cost: 0,
+          stock_qty: 0,
+          min_stock: 0,
+          description: '',
+          tenant_id: '',
+        },
+      );
     }
   }, [product, open, reset]);
 
@@ -62,42 +64,85 @@ const ProductForm: React.FC<ProductFormProps> = ({ open, onClose, onSave, produc
             name="name"
             control={control}
             render={({ field }) => (
-              <TextField {...field} autoFocus margin="dense" label="Nome" type="text" fullWidth variant="standard" />
+              <TextField
+                {...field}
+                autoFocus
+                margin="dense"
+                label="Nome"
+                type="text"
+                fullWidth
+                variant="standard"
+              />
             )}
           />
           <Controller
             name="sku"
             control={control}
             render={({ field }) => (
-              <TextField {...field} margin="dense" label="SKU" type="text" fullWidth variant="standard" />
+              <TextField
+                {...field}
+                margin="dense"
+                label="SKU"
+                type="text"
+                fullWidth
+                variant="standard"
+              />
             )}
           />
           <Controller
             name="price"
             control={control}
             render={({ field }) => (
-              <TextField {...field} margin="dense" label="Preço" type="number" fullWidth variant="standard" />
+              <TextField
+                {...field}
+                margin="dense"
+                label="Preço"
+                type="number"
+                fullWidth
+                variant="standard"
+              />
             )}
           />
           <Controller
             name="cost"
             control={control}
             render={({ field }) => (
-              <TextField {...field} margin="dense" label="Custo" type="number" fullWidth variant="standard" />
+              <TextField
+                {...field}
+                margin="dense"
+                label="Custo"
+                type="number"
+                fullWidth
+                variant="standard"
+              />
             )}
           />
           <Controller
             name="stock_qty"
             control={control}
             render={({ field }) => (
-              <TextField {...field} margin="dense" label="Estoque" type="number" fullWidth variant="standard" />
+              <TextField
+                {...field}
+                margin="dense"
+                label="Estoque"
+                type="number"
+                fullWidth
+                variant="standard"
+              />
             )}
           />
           <Controller
             name="min_stock"
             control={control}
             render={({ field }) => (
-              <TextField {...field} margin="dense" label="Estoque Mínimo" type="number" fullWidth variant="standard" />
+              <TextField
+                {...field}
+                margin="dense"
+                label="Estoque Mínimo"
+                type="number"
+                fullWidth
+                variant="standard"
+              />
             )}
           />
           <Controller
@@ -120,7 +165,14 @@ const ProductForm: React.FC<ProductFormProps> = ({ open, onClose, onSave, produc
             name="tenant_id"
             control={control}
             render={({ field }) => (
-              <TextField {...field} margin="dense" label="Tenant ID" type="text" fullWidth variant="standard" />
+              <TextField
+                {...field}
+                margin="dense"
+                label="Tenant ID"
+                type="text"
+                fullWidth
+                variant="standard"
+              />
             )}
           />
         </DialogContent>

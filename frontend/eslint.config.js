@@ -24,6 +24,20 @@ export default tseslint.config(
     },
   },
   {
+    files: ['src/**/*.test.{ts,tsx,js}'],
+    languageOptions: {
+      globals: {
+        ...globals.vitest,
+      },
+    },
+    rules: {
+      'no-undef': 'off', // Vitest handles these globals
+      '@typescript-eslint/no-unused-expressions': 'off', // Allow expect().toBeInTheDocument()
+      '@typescript-eslint/no-require-imports': 'off', // Allow require in test files if needed
+      '@typescript-eslint/no-unused-vars': 'off', // Allow unused vars in test files
+    },
+  },
+  {
     files: ['vite.config.ts', 'eslint.config.js', 'scripts/**/*.mjs'],
     languageOptions: {
       globals: {
