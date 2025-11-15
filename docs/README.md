@@ -57,4 +57,5 @@
 - Validar tecnologia frontend e componentes UI.
 - Definir modelo de dados físico (diagramas) e convenções de multi-tenancy.
 - Preparar repositório backend (Go module, configs, migrações iniciais).
-- Criar guias de contribuição e padrões de código para acelerar o time.
+- Padrões de código: `docs/padroes-codigo.md`.
+- Multi-tenancy: `docs/multi-tenancy.md`.

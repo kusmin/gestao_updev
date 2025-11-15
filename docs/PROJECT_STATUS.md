@@ -113,7 +113,8 @@ O diretório `docs` é um ponto forte do projeto, sendo extremamente completo e 
     *   `arquitetura-backend.md`: Detalhes sobre a arquitetura do backend.
     *   `FRONTEND_ARCHITECTURE.md`: Detalhes sobre a arquitetura do frontend.
 *   **Padrões e Convenções:**
-    *   `CODE_STANDARDS.md`, `padroes-codigo.md`: Diretrizes claras para padrões de código.
+    *   `padroes-codigo.md`: Diretrizes claras para padrões de código.
+    *   `multi-tenancy.md`: Detalhes sobre a implementação da arquitetura multi-tenant.
 *   **Guias de Desenvolvimento:**
     *   `DEVELOPMENT.md`, `backend-setup.md`, `docker.md`, `USANDO_IMAGENS_DOCKER.md`: Informações para configurar e desenvolver o projeto, incluindo o uso de Docker.
 *   **Funcionalidades do Backoffice:**
