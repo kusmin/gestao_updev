@@ -11,7 +11,7 @@ import (
 	"go.uber.org/zap"
 	gormLogger "gorm.io/gorm/logger"
 
-	"github.com/getsentry/sentry-go"
+	sentry "github.com/getsentry/sentry-go"
 	sentrygin "github.com/getsentry/sentry-go/gin"
 
 	"github.com/kusmin/gestao_updev/backend/internal/config"

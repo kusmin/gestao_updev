@@ -2,7 +2,7 @@ color: true
 dry-run: false
 language: nodejs
 hookfiles: ./tests/dredd/hooks/*.js
-server: sh -c 'OTEL_ENABLED=false OTEL_RESOURCE_ATTRIBUTES="" make -C backend run'
+server: sh -c 'cd backend && OTEL_ENABLED=false OTEL_RESOURCE_ATTRIBUTES="" go run cmd/api/main.go'
 server-wait: 5
 endpoint: http://127.0.0.1:8080/v1
 blueprint: docs/api.yaml
