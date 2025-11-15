@@ -6,7 +6,6 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/kusmin/gestao_updev/backend/internal/domain"
-	"github.com/kusmin/gestao_updev/backend/internal/repository"
 )
 
 type CompanyRepository interface {

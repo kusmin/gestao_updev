@@ -16,7 +16,7 @@ Este documento apresenta uma análise detalhada dos workflows de GitHub Actions 
 10. `pre-commit.yml`: Execução de hooks de pre-commit em CI.
 11. `publish-docker.yml`: Build e publicação da imagem Docker do backend.
 12. `release-please.yml`: Automação do processo de release.
-13. `snyk.yml`: Varredura de segurança de dependências com Snyk.
+13. (Removido) `snyk.yml`: Varredura de segurança de dependências com Snyk.
 
 ---
 
@@ -120,15 +120,13 @@ Este documento apresenta uma análise detalhada dos workflows de GitHub Actions 
     *   **Revisão da Configuração Monorepo:** Garantir que `.release-please-config.json` esteja otimizado para releases independentes de pacotes no monorepo.
     *   **Integração com Deploy:** Assegurar um ponto de integração claro com workflows de deploy, que seriam acionados pela criação de novas tags de release.
 
-### 13. `snyk.yml` - Varredura de Segurança com Snyk
+### 13. (Removido) `snyk.yml` - Varredura de Segurança com Snyk
 
-*   **Propósito:** Realiza varreduras de segurança de dependências (SCA) com Snyk em todo o monorepo.
-*   **Análise:** Cobertura abrangente de dependências e uso eficaz do Snyk.
-*   **Sugestões de Evolução:**
-    *   **Snyk Code (SAST):** Integrar Snyk Code para varredura de vulnerabilidades no código customizado.
-    *   **Snyk Container:** Integrar Snyk Container para varredura de imagens Docker.
-    *   **Fix Pull Requests:** Explorar a configuração do Snyk para criar automaticamente PRs de correção para vulnerabilidades de dependência.
-    *   **Varreduras Agendadas:** Adicionar um gatilho agendado para varreduras periódicas.
+*   **Status Atual:** Workflow descontinuado em favor da stack 100% open source descrita em `docs/security-scan.md`.
+*   **Substituição:** As verificações de segurança passaram a ser executadas diretamente nos pipelines específicos:
+    *   `backend-ci.yml`: `govulncheck` + `gosec`.
+    *   `frontend-ci.yml` e `backoffice-ci.yml`: `Trivy` (SCA) + ESLint com regras de segurança.
+*   **Benefícios:** Menos dependência de tokens externos, custos reduzidos e integração mais próxima do ciclo de CI existente.
 
 ## Recomendações Chave para Evolução dos Workflows
 
@@ -140,7 +138,7 @@ Este documento apresenta uma análise detalhada dos workflows de GitHub Actions 
 
 3.  **Aprimorar a Segurança:**
     *   Habilitar o upload de resultados do CodeQL para o GitHub Code Scanning.
-    *   Integrar Snyk Code (SAST) e Snyk Container (varredura de imagens) para uma análise de segurança mais abrangente.
+    *   Expandir o uso do stack open source (govulncheck/gosec/Trivy) com varreduras agendadas e relatórios agregados.
 
 4.  **Otimizar Performance:**
     *   Melhorar o caching de dependências Node.js e Python.

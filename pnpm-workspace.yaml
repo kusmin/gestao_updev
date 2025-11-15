@@ -1,0 +1,5 @@
+packages:
+  - 'frontend'
+  - 'backoffice'
+  - 'tests/e2e'
+  - 'tests/postman'

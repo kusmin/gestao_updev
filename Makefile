@@ -11,26 +11,26 @@ TEST_DATABASE_URL ?= postgres://testuser:testpassword@localhost:5433/testdb?sslm
 	compose-restart pre-commit-install pre-commit-run pre-commit-update \
 	coverage coverage-backend coverage-frontend coverage-backoffice \
 	update-deps update-backend-deps update-frontend-deps update-backoffice-deps update-workflow-deps update-tests-deps \
-	snyk-scan snyk-backend snyk-frontend snyk-backoffice snyk-tests snyk-e2e snyk-postman \
 	backend-deps-check backoffice-install backoffice-deps-check backoffice-deps-update backoffice-validate backoffice-lint backoffice-build \
 	frontend-deps-check frontend-deps-update frontend-validate \
-	deps-check-all deps-update-all validate-all
+	deps-check-all deps-update-all validate-all \
+	security backend-security frontend-security backoffice-security
 
 .PHONY: swagger
 swagger:
 	$(MAKE) -C $(BACKEND_DIR) swagger
 
 api-lint:
-	npx @stoplight/spectral-cli lint $(API_SPEC)
+	pnpm dlx @stoplight/spectral-cli lint $(API_SPEC)
 
 api-preview:
-	npx @redocly/cli preview-docs $(API_SPEC)
+	pnpm dlx @redocly/cli preview-docs $(API_SPEC)
 
 api-types:
 	mkdir -p $(FRONTEND_DIR)/src/types
-	npx openapi-typescript $(API_SPEC) -o $(FRONTEND_DIR)/src/types/api.d.ts
+	pnpm dlx openapi-typescript $(API_SPEC) -o $(FRONTEND_DIR)/src/types/api.d.ts
 	mkdir -p $(BACKOFFICE_DIR)/src/types
-	npx openapi-typescript $(API_SPEC) -o $(BACKOFFICE_DIR)/src/types/api.d.ts
+	pnpm dlx openapi-typescript $(API_SPEC) -o $(BACKOFFICE_DIR)/src/types/api.d.ts
 
 backend-run:
 	$(MAKE) -C $(BACKEND_DIR) run
@@ -63,29 +63,29 @@ api-contract-test:
 	    echo ".env.test not found – continuing without injecting extra env vars"; \
 	  fi; \
 	  $(MAKE) backend-migrate; \
-	  npx dredd@14 docs/api.yaml http://127.0.0.1:8080 \
+	  pnpm dlx dredd@14 docs/api.yaml http://127.0.0.1:8080 \
 	    --hookfiles ./tests/dredd/hooks/basic-flow.js \
 	    --server ./scripts/run_dredd_server.sh \
 	    --server-wait 5 \
 	)
 
 frontend-install:
-	npm --prefix $(FRONTEND_DIR) install
+	pnpm --dir $(FRONTEND_DIR) install
 
 frontend-dev:
-	npm --prefix $(FRONTEND_DIR) run dev
+	pnpm --dir $(FRONTEND_DIR) run dev
 
 frontend-build:
-	npm --prefix $(FRONTEND_DIR) run build
+	pnpm --dir $(FRONTEND_DIR) run build
 
 frontend-preview:
-	npm --prefix $(FRONTEND_DIR) run preview
+	pnpm --dir $(FRONTEND_DIR) run preview
 
 frontend-lint:
-	npm --prefix $(FRONTEND_DIR) run lint
+	pnpm --dir $(FRONTEND_DIR) run lint
 
 frontend-test:
-	npm --prefix $(FRONTEND_DIR) run test
+	pnpm --dir $(FRONTEND_DIR) run test
 
 coverage: coverage-backend coverage-frontend coverage-backoffice
 
@@ -94,10 +94,10 @@ coverage-backend:
 	SKIP_AUTO_MIGRATE=1 DATABASE_URL=$(TEST_DATABASE_URL) $(MAKE) -C $(BACKEND_DIR) coverage
 
 coverage-frontend:
-	npm --prefix $(FRONTEND_DIR) run test -- --coverage.enabled true --coverage.reporter=text-summary --coverage.reporter=lcov --coverage.include='src/**/*.{ts,tsx}' --passWithNoTests
+	pnpm --dir $(FRONTEND_DIR) run test -- --coverage.enabled true --coverage.reporter=text-summary --coverage.reporter=lcov --coverage.include='src/**/*.{ts,tsx}' --passWithNoTests
 
 coverage-backoffice:
-	npm --prefix $(BACKOFFICE_DIR) run test -- --coverage.enabled true --coverage.reporter=text-summary --coverage.reporter=lcov --coverage.include='src/**/*.{ts,tsx}' --passWithNoTests
+	pnpm --dir $(BACKOFFICE_DIR) run test -- --coverage.enabled true --coverage.reporter=text-summary --coverage.reporter=lcov --coverage.include='src/**/*.{ts,tsx}' --passWithNoTests
 
 compose-up:
 	docker compose up --build
@@ -128,46 +128,46 @@ update-backend-deps:
 	cd $(BACKEND_DIR) && go get -u ./... && go mod tidy
 
 update-frontend-deps:
-	npm --prefix $(FRONTEND_DIR) update
-	npm --prefix $(FRONTEND_DIR) install
+	pnpm --dir $(FRONTEND_DIR) update
+	pnpm --dir $(FRONTEND_DIR) install
 
 update-backoffice-deps:
-	npm --prefix $(BACKOFFICE_DIR) update
-	npm --prefix $(BACKOFFICE_DIR) install
+	pnpm --dir $(BACKOFFICE_DIR) update
+	pnpm --dir $(BACKOFFICE_DIR) install
 
 update-workflow-deps:
-	npm update
+	pnpm update
 
 update-tests-deps:
-	npm --prefix tests/e2e update
-	npm --prefix tests/e2e install
-	npm --prefix tests/postman update
-	npm --prefix tests/postman install
+	pnpm --dir tests/e2e update
+	pnpm --dir tests/e2e install
+	pnpm --dir tests/postman update
+	pnpm --dir tests/postman install
 
-snyk-scan: snyk-backend snyk-frontend snyk-backoffice snyk-tests
+.PHONY: security backend-security frontend-security backoffice-security
+security: backend-security frontend-security backoffice-security ## Run all security scanners
 
-snyk-backend:
-	cd $(BACKEND_DIR) && snyk test --file=go.mod --package-manager=gomod --severity-threshold=medium
+backend-security:
+	@echo ">>> Running govulncheck..."
+	cd $(BACKEND_DIR) && go install golang.org/x/vuln/cmd/govulncheck@latest
+	cd $(BACKEND_DIR) && govulncheck ./...
+	@echo ">>> Running gosec..."
+	cd $(BACKEND_DIR) && go install github.com/securego/gosec/v2/cmd/gosec@latest
+	cd $(BACKEND_DIR) && gosec ./...
 
-snyk-frontend:
-	cd $(FRONTEND_DIR) && snyk test --file=package.json --package-manager=npm --severity-threshold=medium
+frontend-security:
+	@echo ">>> Running Trivy (frontend)..."
+	pnpm dlx --package=trivy trivy fs --exit-code 1 --severity HIGH,CRITICAL $(FRONTEND_DIR)
 
-snyk-backoffice:
-	cd $(BACKOFFICE_DIR) && snyk test --file=package.json --package-manager=npm --severity-threshold=medium
-
-snyk-tests: snyk-e2e snyk-postman
-
-snyk-e2e:
-	cd tests/e2e && snyk test --file=package.json --package-manager=npm --severity-threshold=medium
-
-snyk-postman:
-	cd tests/postman && snyk test --file=package.json --package-manager=npm --severity-threshold=medium
+backoffice-security:
+	@echo ">>> Running Trivy (backoffice)..."
+	pnpm dlx --package=trivy trivy fs --exit-code 1 --severity HIGH,CRITICAL $(BACKOFFICE_DIR)
 
 ##@ Dependencies & Validation
 .PHONY: backoffice-install
 backoffice-install: ## Install backoffice dependencies
 	@echo ">>> Installing backoffice dependencies..."
-	npm --prefix $(BACKOFFICE_DIR) install
+	pnpm --dir $(BACKOFFICE_DIR) install
 
 .PHONY: backend-deps-check
 backend-deps-check: ## Check for backend dependency updates
@@ -177,12 +177,12 @@ backend-deps-check: ## Check for backend dependency updates
 .PHONY: backoffice-deps-check
 backoffice-deps-check: ## Interactively check for backoffice dependency updates
 	@echo ">>> Checking for backoffice dependency updates..."
-	npx --prefix $(BACKOFFICE_DIR) ncu
+	pnpm dlx --prefix $(BACKOFFICE_DIR) ncu
 
 .PHONY: backoffice-deps-update
 backoffice-deps-update: ## Update backoffice dependencies
 	@echo ">>> Updating backoffice dependencies..."
-	npx --prefix $(BACKOFFICE_DIR) ncu -u
+	pnpm dlx --prefix $(BACKOFFICE_DIR) ncu -u
 	$(MAKE) backoffice-install
 
 .PHONY: backoffice-validate
@@ -191,22 +191,22 @@ backoffice-validate: backoffice-lint backoffice-build ## Validate backoffice pro
 .PHONY: backoffice-lint
 backoffice-lint: ## Lint backoffice project
 	@echo ">>> Linting backoffice project..."
-	npm --prefix $(BACKOFFICE_DIR) run lint
+	pnpm --dir $(BACKOFFICE_DIR) run lint
 
 .PHONY: backoffice-build
 backoffice-build: ## Build backoffice project
 	@echo ">>> Building backoffice project..."
-	npm --prefix $(BACKOFFICE_DIR) run build
+	pnpm --dir $(BACKOFFICE_DIR) run build
 
 .PHONY: frontend-deps-check
 frontend-deps-check: ## Interactively check for frontend dependency updates
 	@echo ">>> Checking for frontend dependency updates..."
-	npx --prefix $(FRONTEND_DIR) ncu
+	pnpm dlx --prefix $(FRONTEND_DIR) ncu
 
 .PHONY: frontend-deps-update
 frontend-deps-update: ## Update frontend dependencies
 	@echo ">>> Updating frontend dependencies..."
-	npx --prefix $(FRONTEND_DIR) ncu -u
+	pnpm dlx --prefix $(FRONTEND_DIR) ncu -u
 	$(MAKE) frontend-install
 
 .PHONY: frontend-validate
