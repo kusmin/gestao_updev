@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.1](https://github.com/kusmin/gestao_updev/compare/backoffice-v1.4.0...backoffice-v1.4.1) (2025-11-15)
+
+
+### Bug Fixes
+
+* **pre-commit:** Ajusta hooks e gitignore para backoffice e frontend ([af68e98](https://github.com/kusmin/gestao_updev/commit/af68e9875df33e99d53f2ab1bfc9168a5011e919))
+* **pre-commit:** Corrige hooks do backoffice e frontend ([5967960](https://github.com/kusmin/gestao_updev/commit/596796083805998d169dea601cbce010e8bb233a))
+
 ## [1.4.0](https://github.com/kusmin/gestao_updev/compare/backoffice-v1.3.0...backoffice-v1.4.0) (2025-11-15)
 
 ### Features

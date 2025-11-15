@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/kusmin/gestao_updev/compare/frontend-v0.6.0...frontend-v0.6.1) (2025-11-15)
+
+
+### Bug Fixes
+
+* **pre-commit:** Ajusta hooks e gitignore para backoffice e frontend ([af68e98](https://github.com/kusmin/gestao_updev/commit/af68e9875df33e99d53f2ab1bfc9168a5011e919))
+
 ## [0.6.0](https://github.com/kusmin/gestao_updev/compare/frontend-v0.5.0...frontend-v0.6.0) (2025-11-15)
 
 
