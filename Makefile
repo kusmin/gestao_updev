@@ -9,7 +9,8 @@ TEST_DATABASE_URL ?= postgres://testuser:testpassword@localhost:5433/testdb?sslm
 	frontend-install frontend-dev frontend-build frontend-preview \
 	frontend-lint frontend-test compose-up compose-down compose-logs \
 	compose-restart pre-commit-install pre-commit-run pre-commit-update \
-	coverage coverage-backend coverage-frontend coverage-backoffice
+	coverage coverage-backend coverage-frontend coverage-backoffice \
+	update-deps update-backend-deps update-frontend-deps update-backoffice-deps update-workflow-deps update-tests-deps
 
 .PHONY: swagger
 swagger:
@@ -117,3 +118,26 @@ pre-commit-run:
 
 pre-commit-update:
 	pre-commit autoupdate
+
+update-deps: update-backend-deps update-frontend-deps update-backoffice-deps update-workflow-deps update-tests-deps
+
+update-backend-deps:
+	$(MAKE) -C $(BACKEND_DIR) tidy
+	cd $(BACKEND_DIR) && go get -u ./... && go mod tidy
+
+update-frontend-deps:
+	npm --prefix $(FRONTEND_DIR) update
+	npm --prefix $(FRONTEND_DIR) install
+
+update-backoffice-deps:
+	npm --prefix $(BACKOFFICE_DIR) update
+	npm --prefix $(BACKOFFICE_DIR) install
+
+update-workflow-deps:
+	npm update
+
+update-tests-deps:
+	npm --prefix tests/e2e update
+	npm --prefix tests/e2e install
+	npm --prefix tests/postman update
+	npm --prefix tests/postman install
