@@ -36,8 +36,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        if: steps.cache-npm.outputs.cache-hit != 'true'
-        run: npm install
+        run: npm ci
 
       - name: Run linter
         run: npm run lint -w frontend
@@ -61,8 +60,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        if: steps.cache-npm.outputs.cache-hit != 'true'
-        run: npm install
+        run: npm ci
 
       - name: Run tests and generate coverage report
         run: npm run test -w frontend -- --coverage
@@ -94,8 +92,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        if: steps.cache-npm.outputs.cache-hit != 'true'
-        run: npm install
+        run: npm ci
 
       - name: Build application
         run: npm run build -w frontend
