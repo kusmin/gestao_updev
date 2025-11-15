@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/kusmin/gestao_updev/compare/backend-v0.5.0...backend-v0.6.0) (2025-11-15)
+
+
+### Features
+
+* expandir os testes ([20ebf85](https://github.com/kusmin/gestao_updev/commit/20ebf857e7aa795ce3ea47a1b0c26fa2145891f7))
+
 ## [0.5.0](https://github.com/kusmin/gestao_updev/compare/backend-v0.4.0...backend-v0.5.0) (2025-11-15)
 
 
