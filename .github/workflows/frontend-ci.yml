@@ -107,4 +107,3 @@ jobs:
           output: 'trivy-results.txt'
           # Adicione um token se necessário para limites de API ou varreduras privadas
           # token: ${{ secrets.TRIVY_TOKEN }}
-        working-directory: frontend

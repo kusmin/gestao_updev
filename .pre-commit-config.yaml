@@ -60,7 +60,7 @@ repos:
       - id: backoffice-eslint
         name: eslint (backoffice)
         entry: scripts/hooks/npm-run-if-package.sh
-        args: ['backoffice', 'lint']
+        args: ['backoffice', 'lint', '--fix']
         language: system
         pass_filenames: false
         files: ^backoffice/.*\.(ts|tsx|js|jsx)$
