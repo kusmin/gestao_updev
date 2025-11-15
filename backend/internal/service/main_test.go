@@ -24,6 +24,7 @@ var (
 		&domain.Client{},
 		&domain.Service{},
 		&domain.Product{},
+		&domain.AvailabilityRule{},
 		&domain.Booking{},
 		&domain.SalesOrder{},
 		&domain.SalesItem{},
