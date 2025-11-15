@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/kusmin/gestao_updev/compare/backend-v0.2.0...backend-v0.3.0) (2025-11-15)
+
+
+### Features
+
+* add teste aumentar o coverage ([6608b9d](https://github.com/kusmin/gestao_updev/commit/6608b9dd3dc9aa119073e20e2cf31a1c783e6118))
+
 ## [0.2.0](https://github.com/kusmin/gestao_updev/compare/backend-v0.1.0...backend-v0.2.0) (2025-11-15)
 
 
