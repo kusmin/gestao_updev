@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/kusmin/gestao_updev/compare/backend-v0.3.0...backend-v0.4.0) (2025-11-15)
+
+
+### Features
+
+* melhorias no workflows ([24c230d](https://github.com/kusmin/gestao_updev/commit/24c230d6b9f175a16050fb4c0bdd4240b3e65ee2))
+
 ## [0.3.0](https://github.com/kusmin/gestao_updev/compare/backend-v0.2.0...backend-v0.3.0) (2025-11-15)
 
 

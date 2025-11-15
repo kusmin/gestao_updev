@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.0](https://github.com/kusmin/gestao_updev/compare/frontend-v0.3.0...frontend-v0.4.0) (2025-11-15)
+
+
+### Features
+
+* melhorias no workflows ([4b0eca4](https://github.com/kusmin/gestao_updev/commit/4b0eca435cc321d805aa3103a5d40660a78630d8))
+
+
+### Bug Fixes
+
+* frontend/Dockerfile to reduce vulnerabilities ([21eb203](https://github.com/kusmin/gestao_updev/commit/21eb203e466cd0b8a0a4cf8521d96c76abb0b7e5))
+
 ## [0.3.0](https://github.com/kusmin/gestao_updev/compare/frontend-v0.2.1...frontend-v0.3.0) (2025-11-15)
 
 
