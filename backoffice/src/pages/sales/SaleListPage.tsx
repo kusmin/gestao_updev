@@ -13,9 +13,8 @@ import {
   Typography,
 } from '@mui/material';
 import SaleForm from './SaleForm';
-import apiClient from '../../lib/apiClient';
-
-import { SalesOrder } from '../../types/sales';
+import apiClient from '@/lib/apiClient';
+import { SalesOrder } from '@/types/sales';
 
 const SaleListPage: React.FC = () => {
   const [sales, setSales] = useState<SalesOrder[]>([]);

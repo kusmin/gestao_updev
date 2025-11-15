@@ -13,9 +13,8 @@ import {
   Typography,
 } from '@mui/material';
 import ProductForm from './ProductForm';
-import apiClient from '../../lib/apiClient';
-
-import { Product } from '../../types/product';
+import apiClient from '@/lib/apiClient';
+import { Product } from '@/types/product';
 
 const ProductListPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);

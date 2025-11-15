@@ -38,6 +38,7 @@ func TestCreateInventoryMovementReferencesOrderAndProduct(t *testing.T) {
 	product := seedProductRecord(t, tenant.ID, "Product", "INV-001")
 	service := seedServiceRecord(t, tenant.ID, "Service", 30)
 	client := seedClientRecord(t, tenant.ID, "Order Client", "order@example.com", nil)
+	seedInventoryStock(t, tenant.ID, product.ID, 5)
 
 	order := &domain.SalesOrder{
 		TenantModel: domain.TenantModel{TenantID: tenant.ID},
@@ -67,6 +68,7 @@ func TestListInventoryMovementsFilters(t *testing.T) {
 	tenant, _ := createTestTenant()
 	product := seedProductRecord(t, tenant.ID, "Product F", "INV-002")
 	otherProduct := seedProductRecord(t, tenant.ID, "Product G", "INV-003")
+	seedInventoryStock(t, tenant.ID, otherProduct.ID, 2)
 
 	moveIn := &domain.InventoryMovement{
 		TenantModel: domain.TenantModel{TenantID: tenant.ID},
@@ -112,4 +114,16 @@ func seedProductRecord(t *testing.T, tenantID uuid.UUID, name, sku string) *doma
 	}
 	require.NoError(t, testDB.Create(product).Error)
 	return product
+}
+
+func seedInventoryStock(t *testing.T, tenantID, productID uuid.UUID, quantity int) {
+	t.Helper()
+	in := &domain.InventoryMovement{
+		TenantModel: domain.TenantModel{TenantID: tenantID},
+		ProductID:   productID,
+		Type:        domain.InventoryMovementIn,
+		Quantity:    quantity,
+		Reason:      "seed stock",
+	}
+	require.NoError(t, testDB.Create(in).Error)
 }

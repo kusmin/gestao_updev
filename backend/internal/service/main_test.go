@@ -40,6 +40,9 @@ func TestMain(m *testing.M) {
 	}
 	testDB = db
 
+	if err := ensureCompanyDocumentConstraint(db); err != nil {
+		log.Fatalf("could not adjust company constraint: %v", err)
+	}
 	if err := autoMigrateIfNeeded(db); err != nil {
 		log.Fatalf("could not run migrations: %v", err)
 	}
@@ -124,4 +127,32 @@ func schemaAlreadyPresent(db *gorm.DB) bool {
 		}
 	}
 	return true
+}
+
+func ensureCompanyDocumentConstraint(db *gorm.DB) error {
+	const stmt = `
+DO $$
+BEGIN
+	IF to_regclass('public.companies') IS NULL THEN
+		RETURN;
+	END IF;
+
+	IF EXISTS (
+		SELECT 1 FROM pg_constraint
+		WHERE conname = 'companies_document_key'
+		  AND conrelid = 'public.companies'::regclass
+	) THEN
+		ALTER TABLE companies RENAME CONSTRAINT companies_document_key TO uni_companies_document;
+	END IF;
+
+	IF NOT EXISTS (
+		SELECT 1 FROM pg_constraint
+		WHERE conname = 'uni_companies_document'
+		  AND conrelid = 'public.companies'::regclass
+	) THEN
+		ALTER TABLE companies ADD CONSTRAINT uni_companies_document UNIQUE (document);
+	END IF;
+END $$;
+`
+	return db.Exec(stmt).Error
 }

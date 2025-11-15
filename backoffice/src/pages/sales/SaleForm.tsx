@@ -8,7 +8,7 @@ import {
   TextField,
 } from '@mui/material';
 
-import { SalesItem, SalesOrder } from '../../types/sales';
+import { SalesItem, SalesOrder } from '@/types/sales';
 
 interface SaleFormProps {
   open: boolean;

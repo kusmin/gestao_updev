@@ -13,9 +13,8 @@ import {
   Typography,
 } from '@mui/material';
 import ServiceForm from './ServiceForm';
-import apiClient from '../../lib/apiClient';
-
-import { Service } from '../../types/service';
+import apiClient from '@/lib/apiClient';
+import { Service } from '@/types/service';
 
 const ServiceListPage: React.FC = () => {
   const [services, setServices] = useState<Service[]>([]);

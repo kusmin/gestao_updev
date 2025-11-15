@@ -8,7 +8,7 @@ import {
   TextField,
 } from '@mui/material';
 
-import { Service } from '../../types/service';
+import { Service } from '@/types/service';
 
 interface ServiceFormProps {
   open: boolean;
