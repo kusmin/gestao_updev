@@ -5,3 +5,5 @@ backoffice/dist
 coverage
 *.log
 *.lock
+backoffice/src/types/api.d.ts
+frontend/src/types/api.d.ts

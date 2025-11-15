@@ -1,21 +1,16 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { type ComponentType } from 'react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const useAuthMock = vi.fn();
+const useAuthMock = vi.hoisted(() => vi.fn());
 
 vi.mock('../contexts/AuthContext', () => ({
   useAuth: useAuthMock,
 }));
 
-let ProtectedRoute: ComponentType;
+import ProtectedRoute from './ProtectedRoute';
 
 describe('ProtectedRoute', () => {
-  beforeAll(async () => {
-    ({ default: ProtectedRoute } = await import('./ProtectedRoute'));
-  });
-
   beforeEach(() => {
     useAuthMock.mockReset();
   });
