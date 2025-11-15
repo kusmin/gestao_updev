@@ -41,7 +41,7 @@ func TestTenantEnforcer_PrivateRoute_NoHeader(t *testing.T) {
 
 	// assert
 	assert.Equal(t, http.StatusBadRequest, w.Code)
-	assert.JSONEq(t, `{"data":null,"error":{"code":"TENANT_ID_REQUIRED","message":"Cabeçalho de tenant ausente"}}`, w.Body.String())
+	assert.JSONEq(t, `{"data":{},"meta":{},"error":{"code":"TENANT_ID_REQUIRED","message":"Cabeçalho de tenant ausente"}}`, w.Body.String())
 }
 
 func TestTenantEnforcer_PrivateRoute_WithHeader(t *testing.T) {

@@ -76,11 +76,11 @@ func TestCompanyServiceUpdateCompany(t *testing.T) {
 	originalID := uuid.New()
 	repo := &fakeCompanyRepo{
 		findResp: &domain.Company{
-			ID:       originalID,
-			Name:     "Original",
-			Document: "DOC",
-			Phone:    "1111",
-			Email:    "old@example.com",
+			BaseModel: domain.BaseModel{ID: originalID},
+			Name:      "Original",
+			Document:  "DOC",
+			Phone:     "1111",
+			Email:     "old@example.com",
 		},
 	}
 	svc := NewCompanyService(repo)
