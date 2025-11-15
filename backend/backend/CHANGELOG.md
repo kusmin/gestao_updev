@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.1](https://github.com/kusmin/gestao_updev/compare/backend-v0.6.0...backend-v0.6.1) (2025-11-15)
+
+
+### Bug Fixes
+
+* correção ([164e830](https://github.com/kusmin/gestao_updev/commit/164e830e32384f1f72152ea085080911ee0e4277))
+* correção de testes ([d32af23](https://github.com/kusmin/gestao_updev/commit/d32af23abdef494ae66f4e64b9f0e9c49f652ae1))
+
 ## [0.6.0](https://github.com/kusmin/gestao_updev/compare/backend-v0.5.0...backend-v0.6.0) (2025-11-15)
 
 
