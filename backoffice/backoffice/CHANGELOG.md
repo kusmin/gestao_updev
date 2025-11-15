@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0](https://github.com/kusmin/gestao_updev/compare/backoffice-v1.1.0...backoffice-v1.2.0) (2025-11-15)
+
+
+### Features
+
+* melhorias no workflows ([24c230d](https://github.com/kusmin/gestao_updev/commit/24c230d6b9f175a16050fb4c0bdd4240b3e65ee2))
+* melhorias no workflows ([4b0eca4](https://github.com/kusmin/gestao_updev/commit/4b0eca435cc321d805aa3103a5d40660a78630d8))
+
 ## [1.1.0](https://github.com/kusmin/gestao_updev/compare/backoffice-v1.0.1...backoffice-v1.1.0) (2025-11-15)
 
 
