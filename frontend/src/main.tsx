@@ -11,7 +11,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN_FRONTEND;
+// const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN_FRONTEND;
 
 // if (SENTRY_DSN) {
 //   Sentry.init({
