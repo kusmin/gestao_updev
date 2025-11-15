@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/kusmin/gestao_updev/compare/backoffice-v1.3.0...backoffice-v1.4.0) (2025-11-15)
+
+
+### Features
+
+* expandir os testes ([20ebf85](https://github.com/kusmin/gestao_updev/commit/20ebf857e7aa795ce3ea47a1b0c26fa2145891f7))
+
 ## [1.3.0](https://github.com/kusmin/gestao_updev/compare/backoffice-v1.2.0...backoffice-v1.3.0) (2025-11-15)
 
 
