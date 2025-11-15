@@ -26,7 +26,7 @@ jobs:
 
       - name: Scan backend (Go modules)
         working-directory: backend
-        run: snyk test --file=go.mod --package-manager=gomod --severity-threshold=medium
+        run: snyk test --file=go.mod --package-manager=gomodules --severity-threshold=medium
 
       - name: Scan frontend dependencies
         working-directory: frontend

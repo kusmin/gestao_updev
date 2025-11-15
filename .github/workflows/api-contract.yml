@@ -19,6 +19,7 @@ on:
 jobs:
   dredd:
     runs-on: ubuntu-latest
+    needs: [backend-service]
     services:
       postgres:
         image: postgres:16-alpine
@@ -33,6 +34,31 @@ jobs:
           --health-interval 5s
           --health-timeout 5s
           --health-retries 5
+      backend-service:
+        image: golang:1.25-alpine
+        working_dir: /app
+        depends_on:
+          postgres:
+            condition: service_healthy
+        environment:
+          DATABASE_URL: postgres://gestao:gestao@postgres:5432/gestao_updev?sslmode=disable
+          HTTP_PORT: 8080
+          APP_ENV: development
+          JWT_ACCESS_SECRET: test-access
+          JWT_REFRESH_SECRET: test-refresh
+          JWT_ACCESS_TTL: 15m
+          JWT_REFRESH_TTL: 720h
+          LOG_LEVEL: info
+        ports:
+          - 8080:8080
+        volumes:
+          - ./backend:/app
+        command: sh -c "go mod tidy && go run cmd/api/main.go"
+        healthcheck:
+          test: ["CMD", "curl", "-f", "http://localhost:8080/v1/healthz"]
+          interval: 5s
+          timeout: 5s
+          retries: 5
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -47,15 +73,11 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Wait for backend to be healthy
+        run: curl --retry 10 --retry-delay 5 http://localhost:8080/v1/healthz
+
       - name: Create test environment file
         run: cp .env.example .env.test
-
-      - name: Download Go dependencies
-        run: go mod download
-        working-directory: backend
-
-      - name: Use localhost for DB host
-        run: sed -i 's/@postgres:/@localhost:/g' .env.test
 
       - name: Run Dredd contract tests
         run: make api-contract-test

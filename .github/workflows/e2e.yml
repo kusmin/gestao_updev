@@ -38,11 +38,26 @@ jobs:
         run: npx playwright install --with-deps
         working-directory: tests/e2e
 
+      - name: Bring up services with Docker Compose
+        run: docker compose -f docker-compose.e2e.yml up -d
+
+      - name: Wait for backend to be healthy
+        run: curl --retry 10 --retry-delay 5 http://localhost:8080/v1/healthz
+
+      - name: Wait for frontend to be healthy
+        run: curl --retry 10 --retry-delay 5 http://localhost:5173
+
+      - name: Wait for backoffice to be healthy
+        run: curl --retry 10 --retry-delay 5 http://localhost:5174
+
       - name: Run Playwright tests
         run: npx playwright test
         working-directory: tests/e2e
         env:
           CI: true
+          FRONTEND_URL: http://localhost:5173
+          BACKOFFICE_URL: http://localhost:5174
+          API_URL: http://localhost:8080/v1
 
       - name: Upload Playwright report
         if: always()
@@ -51,3 +66,7 @@ jobs:
           name: playwright-report
           path: tests/e2e/playwright-report
           if-no-files-found: ignore
+
+      - name: Tear down services
+        if: always()
+        run: docker compose -f docker-compose.e2e.yml down --remove-orphans

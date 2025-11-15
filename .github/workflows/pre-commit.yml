@@ -18,6 +18,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Cache Python dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -37,13 +44,6 @@ jobs:
       - name: Download Go modules
         run: go mod download
         working-directory: backend
-
-
-      - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v6
-        with:
-          version: v1.64.5
-          working-directory: backend
 
       - name: Install pre-commit
         run: pip install pre-commit

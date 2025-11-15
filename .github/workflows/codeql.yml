@@ -43,7 +43,7 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v4
       with:
-        upload: false
+        upload: true
 
   javascript-analysis:
     name: JavaScript CodeQL Analysis
@@ -66,4 +66,4 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v4
       with:
-        upload: false
+        upload: true

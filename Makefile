@@ -84,13 +84,8 @@ frontend-test:
 coverage: coverage-backend coverage-frontend coverage-backoffice
 
 coverage-backend:
-	-@docker compose -f docker-compose.test.yml down --remove-orphans --volumes >/dev/null 2>&1 || true
-	docker compose -f docker-compose.test.yml up -d db
-	@echo "Aguardando banco de testes ficar disponível..."
-	docker compose -f docker-compose.test.yml exec -T db sh -c 'until pg_isready -U testuser -d testdb >/dev/null 2>&1; do sleep 1; done'
 	DATABASE_URL=$(TEST_DATABASE_URL) $(MAKE) -C $(BACKEND_DIR) migrate
 	SKIP_AUTO_MIGRATE=1 DATABASE_URL=$(TEST_DATABASE_URL) $(MAKE) -C $(BACKEND_DIR) coverage
-	docker compose -f docker-compose.test.yml down --remove-orphans --volumes
 
 coverage-frontend:
 	npm --prefix $(FRONTEND_DIR) run test -- --coverage.enabled true --coverage.reporter=text-summary --coverage.reporter=lcov --coverage.include='src/**/*.{ts,tsx}' --passWithNoTests
