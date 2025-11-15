@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/kusmin/gestao_updev/compare/frontend-v0.4.0...frontend-v0.5.0) (2025-11-15)
+
+
+### Features
+
+* expandir os testes ([9fc91d1](https://github.com/kusmin/gestao_updev/commit/9fc91d16f1462cd1d8f043cff8c5e1f6c63552fa))
+
 ## [0.4.0](https://github.com/kusmin/gestao_updev/compare/frontend-v0.3.0...frontend-v0.4.0) (2025-11-15)
 
 
