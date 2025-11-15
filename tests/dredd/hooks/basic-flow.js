@@ -1,3 +1,4 @@
+const hooks = require('hooks');
 const crypto = require('crypto');
 
 const SUPPORTED = new Set([
@@ -110,13 +111,16 @@ function ensureResource(transaction, resource, id, reason) {
   return true;
 }
 
-module.exports = function registerHooks(hooks) {
   hooks.beforeEach((transaction, done) => {
     const key = keyOf(transaction);
     if (!SUPPORTED.has(key)) {
       transaction.skip = true;
       transaction.skipReason = 'Endpoint ainda não coberto pelo fluxo básico de contrato.';
       return done();
+    }
+
+    if (transaction.expected && transaction.expected.headers && transaction.expected.headers['Content-Type'] === 'application/json') {
+      transaction.expected.headers['Content-Type'] = 'application/json; charset=utf-8';
     }
 
     if (!PUBLIC_ENDPOINTS.has(key)) {
@@ -278,4 +282,3 @@ module.exports = function registerHooks(hooks) {
 
     done();
   });
-};

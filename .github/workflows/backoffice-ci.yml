@@ -1,24 +1,24 @@
-# Frontend CI
+# Backoffice CI
 
-name: Frontend CI
+name: Backoffice CI
 
 on:
   push:
     branches: [ main ]
     paths:
-      - 'frontend/**'
+      - 'backoffice/**'
       - 'docs/api.yaml'
       - 'Makefile'
   pull_request:
     branches: [ main ]
     paths:
-      - 'frontend/**'
+      - 'backoffice/**'
       - 'docs/api.yaml'
       - 'Makefile'
 
 jobs:
   lint:
-    name: Lint
+    name: Lint Backoffice
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -39,10 +39,10 @@ jobs:
         run: npm ci
 
       - name: Run linter
-        run: npm run lint -w frontend
+        run: npm run lint -w backoffice
 
   test:
-    name: Test Coverage
+    name: Test Coverage Backoffice
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -63,7 +63,7 @@ jobs:
         run: npm ci
 
       - name: Run tests and generate coverage report
-        run: npm run test -w frontend -- --coverage
+        run: npm run test -w backoffice -- --coverage
 
       - name: Upload coverage to Codecov
         # This step requires the CODECOV_TOKEN to be set in the repository secrets.
@@ -74,7 +74,7 @@ jobs:
           fail_ci_if_error: true
 
   build:
-    name: Build
+    name: Build Backoffice
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -95,10 +95,10 @@ jobs:
         run: npm ci
 
       - name: Build application
-        run: npm run build -w frontend
+        run: npm run build -w backoffice
 
   security-scan:
-    name: Security Scan
+    name: Security Scan Backoffice
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -127,4 +127,4 @@ jobs:
           output: 'trivy-results.txt'
           # Adicione um token se necessário para limites de API ou varreduras privadas
           # token: ${{ secrets.TRIVY_TOKEN }}
-        working-directory: frontend
+        working-directory: backoffice

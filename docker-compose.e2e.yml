@@ -42,7 +42,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "5173:5173"
+      - "5173:80"
     environment:
       - VITE_API_BASE_URL=http://backend:8080/v1
     depends_on:
@@ -59,7 +59,7 @@ services:
       context: ./backoffice
       dockerfile: Dockerfile
     ports:
-      - "5174:5174"
+      - "5174:80"
     environment:
       - VITE_API_BASE_URL=http://backend:8080/v1
     depends_on:

@@ -13,6 +13,16 @@ coverage:
 lint:
 	golangci-lint run
 
+.PHONY: govulncheck
+govulncheck:
+	go install golang.org/x/vuln/cmd/govulncheck@latest
+	govulncheck ./...
+
+.PHONY: gosec
+gosec:
+	go install github.com/securego/gosec/v2/cmd/gosec@latest
+	gosec ./...
+
 .PHONY: tidy
 tidy:
 	go mod tidy

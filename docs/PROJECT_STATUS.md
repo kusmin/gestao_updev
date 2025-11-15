@@ -120,7 +120,7 @@ O diretório `docs` é um ponto forte do projeto, sendo extremamente completo e 
 *   **Funcionalidades do Backoffice:**
     *   Documentos detalhados para várias seções do backoffice: `backoffice-appointments.md`, `backoffice-clients.md`, `backoffice-dashboard.md`, `backoffice-products.md`, `backoffice-sales.md`, `backoffice-services.md`, `backoffice-tenants.md`, `backoffice-users.md`.
 *   **Outros Tópicos Relevantes:**
-    *   `authentication.md`, `CICD.md`, `CONTRIBUTING.md`, `fluxos-uso.md`, `modelo-dados.md`, `observabilidade.md`, `operacao-devops.md`, `plano-cobertura-codigo.md`, `security-review.md`, `TESTING_AND_SECURITY_PLAN.md`, `TESTING_STRATEGY.md`, `tests-contrato.md`, `workflow-analysis-and-suggestions.md`, `testing-guide.md`, `cache-analysis.md`, `redis-integration-plan.md`, `notification-system-analysis.md`, `notification-system-comparison.md`.
+    *   `workflow-analysis-and-suggestions.md`, `testing-guide.md`, `cache-analysis.md`, `redis-integration-plan.md`, `notification-system-analysis.md`, `notification-system-analysis.md`, `notification-system-comparison.md`, `security-scan.md`.
 
 ## Conclusão
 
