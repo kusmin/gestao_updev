@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import {
   Button,
   Dialog,
@@ -39,7 +39,7 @@ const SaleForm: React.FC<SaleFormProps> = ({ open, onClose, onSave, sale }) => {
     }
   }, [sale, open, reset]);
 
-  const handleSave = (data: SalesOrder) => {
+  const handleSave: SubmitHandler<SalesOrder> = (data) => {
     onSave(data).then(() => {
       onClose();
     });

@@ -11,7 +11,10 @@ TEST_DATABASE_URL ?= postgres://testuser:testpassword@localhost:5433/testdb?sslm
 	compose-restart pre-commit-install pre-commit-run pre-commit-update \
 	coverage coverage-backend coverage-frontend coverage-backoffice \
 	update-deps update-backend-deps update-frontend-deps update-backoffice-deps update-workflow-deps update-tests-deps \
-	snyk-scan snyk-backend snyk-frontend snyk-backoffice snyk-tests snyk-e2e snyk-postman
+	snyk-scan snyk-backend snyk-frontend snyk-backoffice snyk-tests snyk-e2e snyk-postman \
+	backend-deps-check backoffice-install backoffice-deps-check backoffice-deps-update backoffice-validate backoffice-lint backoffice-build \
+	frontend-deps-check frontend-deps-update frontend-validate \
+	deps-check-all deps-update-all validate-all
 
 .PHONY: swagger
 swagger:
@@ -159,3 +162,61 @@ snyk-e2e:
 
 snyk-postman:
 	cd tests/postman && snyk test --file=package.json --package-manager=npm --severity-threshold=medium
+
+##@ Dependencies & Validation
+.PHONY: backoffice-install
+backoffice-install: ## Install backoffice dependencies
+	@echo ">>> Installing backoffice dependencies..."
+	npm --prefix $(BACKOFFICE_DIR) install
+
+.PHONY: backend-deps-check
+backend-deps-check: ## Check for backend dependency updates
+	@echo ">>> Checking for backend dependency updates..."
+	cd $(BACKEND_DIR) && go list -u -m all
+
+.PHONY: backoffice-deps-check
+backoffice-deps-check: ## Interactively check for backoffice dependency updates
+	@echo ">>> Checking for backoffice dependency updates..."
+	npx --prefix $(BACKOFFICE_DIR) ncu
+
+.PHONY: backoffice-deps-update
+backoffice-deps-update: ## Update backoffice dependencies
+	@echo ">>> Updating backoffice dependencies..."
+	npx --prefix $(BACKOFFICE_DIR) ncu -u
+	$(MAKE) backoffice-install
+
+.PHONY: backoffice-validate
+backoffice-validate: backoffice-lint backoffice-build ## Validate backoffice project
+
+.PHONY: backoffice-lint
+backoffice-lint: ## Lint backoffice project
+	@echo ">>> Linting backoffice project..."
+	npm --prefix $(BACKOFFICE_DIR) run lint
+
+.PHONY: backoffice-build
+backoffice-build: ## Build backoffice project
+	@echo ">>> Building backoffice project..."
+	npm --prefix $(BACKOFFICE_DIR) run build
+
+.PHONY: frontend-deps-check
+frontend-deps-check: ## Interactively check for frontend dependency updates
+	@echo ">>> Checking for frontend dependency updates..."
+	npx --prefix $(FRONTEND_DIR) ncu
+
+.PHONY: frontend-deps-update
+frontend-deps-update: ## Update frontend dependencies
+	@echo ">>> Updating frontend dependencies..."
+	npx --prefix $(FRONTEND_DIR) ncu -u
+	$(MAKE) frontend-install
+
+.PHONY: frontend-validate
+frontend-validate: frontend-lint frontend-build ## Validate frontend project
+
+.PHONY: deps-check-all
+deps-check-all: backend-deps-check backoffice-deps-check frontend-deps-check ## Check for all dependency updates
+
+.PHONY: deps-update-all
+deps-update-all: backoffice-deps-update frontend-deps-update ## Update all dependencies
+
+.PHONY: validate-all
+validate-all: backoffice-validate frontend-validate ## Validate all projects

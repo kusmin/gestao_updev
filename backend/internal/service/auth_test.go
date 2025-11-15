@@ -14,6 +14,7 @@ import (
 	"github.com/kusmin/gestao_updev/backend/internal/config"
 	"github.com/kusmin/gestao_updev/backend/internal/domain"
 	"github.com/kusmin/gestao_updev/backend/internal/repository"
+	"github.com/kusmin/gestao_updev/backend/internal/testutil"
 )
 
 func newAuthTestService(t *testing.T) *Service {
@@ -33,6 +34,7 @@ func newAuthTestService(t *testing.T) *Service {
 func TestSignupCreatesCompanyAndAdmin(t *testing.T) {
 	clearAllData()
 	svc := newAuthTestService(t)
+	adminPassword := testutil.RandomPassword()
 
 	result, err := svc.Signup(context.Background(), SignupInput{
 		CompanyName:     "Tech Corp",
@@ -40,7 +42,7 @@ func TestSignupCreatesCompanyAndAdmin(t *testing.T) {
 		CompanyPhone:    "+5511999999999",
 		UserName:        "Owner",
 		UserEmail:       "OWNER@example.com ",
-		UserPassword:    "Sup3rSecret!",
+		UserPassword:    adminPassword,
 		UserPhone:       "+5511988887777",
 	})
 
@@ -65,7 +67,7 @@ func TestSignupCreatesCompanyAndAdmin(t *testing.T) {
 	assert.Equal(t, "admin", user.Role)
 	assert.Equal(t, company.ID, user.TenantID)
 	assert.True(t, user.Active)
-	assert.NoError(t, bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte("Sup3rSecret!")))
+	assert.NoError(t, bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(adminPassword)))
 }
 
 func TestLoginHandlesCredentialScenarios(t *testing.T) {
@@ -73,7 +75,8 @@ func TestLoginHandlesCredentialScenarios(t *testing.T) {
 	svc := newAuthTestService(t)
 	tenant, _ := createTestTenant()
 
-	hash, err := bcrypt.GenerateFromPassword([]byte("plain-password"), svc.cfg.BcryptCost)
+	loginPassword := testutil.RandomPassword()
+	hash, err := bcrypt.GenerateFromPassword([]byte(loginPassword), svc.cfg.BcryptCost)
 	require.NoError(t, err)
 	user := &domain.User{
 		TenantModel:  domain.TenantModel{TenantID: tenant.ID},
@@ -86,7 +89,7 @@ func TestLoginHandlesCredentialScenarios(t *testing.T) {
 	require.NoError(t, testDB.Create(user).Error)
 
 	t.Run("successfully authenticates and updates last login", func(t *testing.T) {
-		found, tokens, err := svc.Login(context.Background(), " LOGIN@example.com ", "plain-password")
+		found, tokens, err := svc.Login(context.Background(), " LOGIN@example.com ", loginPassword)
 		require.NoError(t, err)
 		require.NotNil(t, found)
 		assert.Equal(t, user.ID, found.ID)
@@ -100,13 +103,13 @@ func TestLoginHandlesCredentialScenarios(t *testing.T) {
 	})
 
 	t.Run("fails with invalid password", func(t *testing.T) {
-		_, _, err := svc.Login(context.Background(), user.Email, "wrong-password")
+		_, _, err := svc.Login(context.Background(), user.Email, testutil.RandomPassword())
 		assert.ErrorIs(t, err, ErrInvalidCredentials)
 	})
 
 	t.Run("fails when user inactive", func(t *testing.T) {
 		require.NoError(t, testDB.Model(user).Update("active", false).Error)
-		_, _, err := svc.Login(context.Background(), user.Email, "plain-password")
+		_, _, err := svc.Login(context.Background(), user.Email, loginPassword)
 		assert.ErrorIs(t, err, ErrInvalidCredentials)
 	})
 }

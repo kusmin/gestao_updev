@@ -38,7 +38,7 @@ func TestHealthz(t *testing.T) {
 
 	// assert
 	assert.Equal(t, http.StatusOK, w.Code)
-	assert.JSONEq(t, `{"data":{"env":"test","status":"ok"},"error":null}`, w.Body.String())
+	assert.JSONEq(t, `{"data":{"env":"test","status":"ok"},"meta":{},"error":{}}`, w.Body.String())
 }
 
 func TestProtectedRouteRequiresAuth(t *testing.T) {

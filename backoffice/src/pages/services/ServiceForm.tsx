@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import {
   Button,
   Dialog,
@@ -47,7 +47,7 @@ const ServiceForm: React.FC<ServiceFormProps> = ({ open, onClose, onSave, servic
     }
   }, [service, open, reset]);
 
-  const handleSave = (data: Service) => {
+  const handleSave: SubmitHandler<Service> = (data) => {
     onSave(data).then(() => {
       onClose();
     });

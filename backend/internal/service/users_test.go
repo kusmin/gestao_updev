@@ -11,6 +11,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/kusmin/gestao_updev/backend/internal/domain"
+	"github.com/kusmin/gestao_updev/backend/internal/testutil"
 )
 
 func TestGetUser(t *testing.T) {
@@ -22,7 +23,7 @@ func TestGetUser(t *testing.T) {
 			TenantModel:  domain.TenantModel{TenantID: tenant.ID},
 			Name:         "Test User",
 			Email:        "test@example.com",
-			PasswordHash: "some-hash",
+			PasswordHash: randomPasswordHash(t),
 			Role:         "admin",
 			Active:       true,
 		}
@@ -62,7 +63,7 @@ func TestGetUser(t *testing.T) {
 			TenantModel:  domain.TenantModel{TenantID: tenant.ID},
 			Name:         "Test User",
 			Email:        "test@example.com",
-			PasswordHash: "some-hash",
+			PasswordHash: randomPasswordHash(t),
 			Role:         "admin",
 			Active:       true,
 		}
@@ -123,10 +124,11 @@ func TestCreateUserSanitizesEmailAndHashesPassword(t *testing.T) {
 	tenant, err := createTestTenant()
 	require.NoError(t, err)
 
+	password := testutil.RandomPassword()
 	user, err := testSvc.CreateUser(context.Background(), tenant.ID, CreateUserInput{
 		Name:     "New User",
 		Email:    "  USER@Example.com ",
-		Password: "secret123",
+		Password: password,
 		Phone:    "123",
 		Role:     "admin",
 	})
@@ -135,7 +137,7 @@ func TestCreateUserSanitizesEmailAndHashesPassword(t *testing.T) {
 	require.NotNil(t, user)
 	assert.Equal(t, "user@example.com", user.Email)
 	assert.True(t, user.Active)
-	assert.NoError(t, bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte("secret123")))
+	assert.NoError(t, bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)))
 }
 
 func TestUpdateUserAllowsPartialChanges(t *testing.T) {
@@ -148,7 +150,7 @@ func TestUpdateUserAllowsPartialChanges(t *testing.T) {
 	newPhone := "555-1234"
 	newRole := "admin"
 	active := false
-	newPassword := "newpass!"
+	newPassword := testutil.RandomPassword()
 
 	updated, err := testSvc.UpdateUser(context.Background(), tenant.ID, user.ID, UpdateUserInput{
 		Name:     &newName,
@@ -187,14 +189,23 @@ func TestDeleteUserPerformsSoftDelete(t *testing.T) {
 
 func createTestUser(t *testing.T, tenantID uuid.UUID, name, email, role string) *domain.User {
 	t.Helper()
+	hash := randomPasswordHash(t)
 	user := &domain.User{
 		TenantModel:  domain.TenantModel{TenantID: tenantID},
 		Name:         name,
 		Email:        email,
 		Role:         role,
-		PasswordHash: "hash",
+		PasswordHash: hash,
 		Active:       true,
 	}
 	require.NoError(t, testDB.Create(user).Error)
 	return user
+}
+
+func randomPasswordHash(t *testing.T) string {
+	t.Helper()
+	password := testutil.RandomPassword()
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	require.NoError(t, err)
+	return string(hash)
 }

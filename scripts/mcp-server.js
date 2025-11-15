@@ -1,5 +1,8 @@
 // scripts/mcp-server.js
 const http = require('http');
+const https = require('https');
+const fs = require('fs');
+const path = require('path');
 const { exec } = require('child_process');
 
 const PORT = process.env.PORT || 8081;
@@ -236,7 +239,28 @@ const tools = [
   }
 ];
 
-const server = http.createServer(async (req, res) => {
+function buildTLSOptions() {
+  const certPath = process.env.MCP_SERVER_CERT_PATH;
+  const keyPath = process.env.MCP_SERVER_KEY_PATH;
+  if (!certPath || !keyPath) {
+    throw new Error('Missing TLS configuration. Set MCP_SERVER_CERT_PATH and MCP_SERVER_KEY_PATH.');
+  }
+  return {
+    cert: fs.readFileSync(path.resolve(certPath)),
+    key: fs.readFileSync(path.resolve(keyPath))
+  };
+}
+
+function createServer(handler) {
+  const allowHTTP = process.env.MCP_ALLOW_HTTP === 'true';
+  if (allowHTTP) {
+    console.warn('[MCP] MCP_ALLOW_HTTP=true detected – running in HTTP mode. Do not use this outside local development.');
+    return http.createServer(handler);
+  }
+  return https.createServer(buildTLSOptions(), handler);
+}
+
+const server = createServer(async (req, res) => {
   if (req.url === '/tools' && req.method === 'GET') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(tools.map(tool => ({

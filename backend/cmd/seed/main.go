@@ -2,7 +2,11 @@ package main
 
 import (
 	"context"
+	"crypto/rand"
+	"encoding/base64"
 	"log"
+	"os"
+	"strings"
 
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -16,7 +20,6 @@ import (
 const (
 	demoDocument = "00000000000191"
 	demoEmail    = "admin@updev.demo"
-	demoPassword = "Admin@123"
 )
 
 func main() {
@@ -40,14 +43,15 @@ func main() {
 	}
 	defer sqlDB.Close()
 
-	if err := runSeed(context.Background(), db); err != nil {
+	adminPassword := resolveSeedPassword()
+	if err := runSeed(context.Background(), db, adminPassword); err != nil {
 		log.Fatalf("seed data: %v", err)
 	}
 
 	log.Println("Seed executado com sucesso.")
 }
 
-func runSeed(ctx context.Context, db *gorm.DB) error {
+func runSeed(ctx context.Context, db *gorm.DB, adminPassword string) error {
 	var company domain.Company
 	err := db.WithContext(ctx).Where("document = ?", demoDocument).First(&company).Error
 	if err != nil {
@@ -65,7 +69,7 @@ func runSeed(ctx context.Context, db *gorm.DB) error {
 		}
 	}
 
-	if err := ensureAdminUser(ctx, db, company); err != nil {
+	if err := ensureAdminUser(ctx, db, company, adminPassword); err != nil {
 		return err
 	}
 	if err := ensureClient(ctx, db, company); err != nil {
@@ -80,7 +84,7 @@ func runSeed(ctx context.Context, db *gorm.DB) error {
 	return nil
 }
 
-func ensureAdminUser(ctx context.Context, db *gorm.DB, company domain.Company) error {
+func ensureAdminUser(ctx context.Context, db *gorm.DB, company domain.Company, password string) error {
 	var user domain.User
 	err := db.WithContext(ctx).Where("tenant_id = ? AND email = ?", company.ID, demoEmail).First(&user).Error
 	if err == nil {
@@ -90,7 +94,7 @@ func ensureAdminUser(ctx context.Context, db *gorm.DB, company domain.Company) e
 		return err
 	}
 
-	hash, err := bcrypt.GenerateFromPassword([]byte(demoPassword), 12)
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), 12)
 	if err != nil {
 		return err
 	}
@@ -157,4 +161,19 @@ func ensureProduct(ctx context.Context, db *gorm.DB, company domain.Company) err
 			UpdateAll: false,
 		}).
 		Create(&product).Error
+}
+
+func resolveSeedPassword() string {
+	if value := strings.TrimSpace(os.Getenv("SEED_ADMIN_PASSWORD")); value != "" {
+		return value
+	}
+	const size = 16
+	buf := make([]byte, size)
+	if _, err := rand.Read(buf); err != nil {
+		log.Printf("failed to generate random seed password, falling back to timestamp-based value: %v", err)
+		return base64.RawURLEncoding.EncodeToString([]byte("gestao-demo-password"))
+	}
+	password := base64.RawURLEncoding.EncodeToString(buf)
+	log.Printf("SEED_ADMIN_PASSWORD not set; generated random admin password for demo data.")
+	return password
 }

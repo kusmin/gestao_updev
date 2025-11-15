@@ -4,9 +4,11 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"strings"
 	"testing"
 	"time"
 
@@ -24,6 +26,7 @@ import (
 	"github.com/kusmin/gestao_updev/backend/internal/middleware"
 	"github.com/kusmin/gestao_updev/backend/internal/repository"
 	"github.com/kusmin/gestao_updev/backend/internal/service"
+	"github.com/kusmin/gestao_updev/backend/internal/testutil"
 )
 
 var (
@@ -69,10 +72,11 @@ func setupTestAPI(t *testing.T) (*gin.Engine, *domain.Company, string) {
 	svc := service.New(cfg, repo, jwtManager, logger)
 
 	// Cria um usuário admin para autenticação
+	adminPassword := testutil.RandomPassword()
 	adminUser, err := svc.CreateUser(context.Background(), tenant.ID, service.CreateUserInput{
 		Name:     "Admin",
 		Email:    "admin@test.com",
-		Password: "password",
+		Password: adminPassword,
 		Role:     "admin",
 	})
 	require.NoError(t, err)
@@ -103,13 +107,14 @@ func registerUserRoutes(api *gin.RouterGroup, h *API) {
 
 func TestCreateUserHandler(t *testing.T) {
 	router, tenant, token := setupTestAPI(t)
+	passwordForCreation := testutil.RandomPassword()
 
 	t.Run("should create user successfully", func(t *testing.T) {
 		// Payload
 		userPayload := CreateUserRequest{
 			Name:     "New User",
 			Email:    "newuser@test.com",
-			Password: "password123",
+			Password: passwordForCreation,
 			Role:     "professional",
 		}
 		payloadBytes, _ := json.Marshal(userPayload)
@@ -143,7 +148,7 @@ func TestCreateUserHandler(t *testing.T) {
 		// Payload inválido (sem nome)
 		userPayload := CreateUserRequest{
 			Email:    "invalid@test.com",
-			Password: "password123",
+			Password: testutil.RandomPassword(),
 			Role:     "professional",
 		}
 		payloadBytes, _ := json.Marshal(userPayload)
@@ -170,11 +175,12 @@ func TestCreateUserHandler(t *testing.T) {
 	})
 
 	t.Run("should return error for duplicate email", func(t *testing.T) {
+		duplicatePassword := testutil.RandomPassword()
 		// Cria um usuário uma vez
 		userPayload := CreateUserRequest{
 			Name:     "Duplicate User",
 			Email:    "duplicate@test.com",
-			Password: "password123",
+			Password: duplicatePassword,
 			Role:     "professional",
 		}
 		payloadBytes, _ := json.Marshal(userPayload)
@@ -308,9 +314,9 @@ func TestDeleteUserHandler(t *testing.T) {
 // --- Funções Helper de Teste ---
 
 func setupTestDatabase() (*gorm.DB, error) {
-	dsn := os.Getenv("DATABASE_URL")
-	if dsn == "" {
-		dsn = "postgres://testuser:testpassword@localhost:5433/testdb?sslmode=disable"
+	dsn, err := resolveTestDSN()
+	if err != nil {
+		return nil, err
 	}
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -319,6 +325,34 @@ func setupTestDatabase() (*gorm.DB, error) {
 	}
 
 	return db, nil
+}
+
+func resolveTestDSN() (string, error) {
+	if dsn := os.Getenv("DATABASE_URL"); dsn != "" {
+		return dsn, nil
+	}
+	if dsn := os.Getenv("TEST_DATABASE_URL"); dsn != "" {
+		return dsn, nil
+	}
+	if contents, err := os.ReadFile(".env.test"); err == nil {
+		lines := strings.Split(string(contents), "\n")
+		for _, line := range lines {
+			line = strings.TrimSpace(line)
+			if line == "" || strings.HasPrefix(line, "#") {
+				continue
+			}
+			parts := strings.SplitN(line, "=", 2)
+			if len(parts) != 2 {
+				continue
+			}
+			key := strings.TrimSpace(parts[0])
+			value := strings.TrimSpace(parts[1])
+			if key == "DATABASE_URL" && value != "" {
+				return value, nil
+			}
+		}
+	}
+	return "", fmt.Errorf("DATABASE_URL or TEST_DATABASE_URL must be set for user handler tests")
 }
 
 func createTestTenant() (*domain.Company, error) {

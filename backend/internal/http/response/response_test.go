@@ -19,7 +19,7 @@ func TestSuccess(t *testing.T) {
 
 	// assert
 	assert.Equal(t, http.StatusOK, w.Code)
-	assert.JSONEq(t, `{"data":{"foo":"bar"},"meta":{"meta":"data"},"error":null}`, w.Body.String())
+	assert.JSONEq(t, `{"data":{"foo":"bar"},"meta":{"meta":"data"},"error":{}}`, w.Body.String())
 }
 
 func TestError(t *testing.T) {
@@ -32,5 +32,5 @@ func TestError(t *testing.T) {
 
 	// assert
 	assert.Equal(t, http.StatusBadRequest, w.Code)
-	assert.JSONEq(t, `{"data":null,"error":{"code":"BAD_REQUEST","message":"Invalid request","details":{"details":"here"}}}`, w.Body.String())
+	assert.JSONEq(t, `{"data":{},"meta":{},"error":{"code":"BAD_REQUEST","message":"Invalid request","details":{"details":"here"}}}`, w.Body.String())
 }

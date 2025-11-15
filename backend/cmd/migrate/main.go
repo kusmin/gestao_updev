@@ -10,6 +10,8 @@ import (
 	"strings"
 	"time"
 
+	"regexp"
+
 	"gorm.io/gorm"
 
 	"github.com/kusmin/gestao_updev/backend/internal/config"
@@ -21,6 +23,11 @@ type migrationFile struct {
 	Path    string
 	Name    string
 }
+
+var (
+	migrationsDir           = "migrations"
+	migrationFilenameRegexp = regexp.MustCompile(`^[0-9]{4,}_[a-zA-Z0-9\-_]+\.up\.sql$`)
+)
 
 func main() {
 	cfg, err := config.Load()
@@ -62,7 +69,7 @@ func applyMigrations(ctx context.Context, db *gorm.DB) error {
 		return fmt.Errorf("create schema_migrations: %w", err)
 	}
 
-	files, err := os.ReadDir("migrations")
+	files, err := os.ReadDir(migrationsDir)
 	if err != nil {
 		return fmt.Errorf("read migrations dir: %w", err)
 	}
@@ -72,10 +79,20 @@ func applyMigrations(ctx context.Context, db *gorm.DB) error {
 		if file.IsDir() || !strings.HasSuffix(file.Name(), ".up.sql") {
 			continue
 		}
+		if !migrationFilenameRegexp.MatchString(file.Name()) {
+			log.Printf("Skipping migration %s: filename does not match expected pattern", file.Name())
+			continue
+		}
 		version := strings.SplitN(file.Name(), "_", 2)[0]
+		migrationPath := filepath.Join(migrationsDir, file.Name())
+		cleanPath := filepath.Clean(migrationPath)
+		if !strings.HasPrefix(cleanPath, migrationsDir+string(os.PathSeparator)) && cleanPath != migrationsDir {
+			log.Printf("Skipping migration %s: resolved path %s escapes migrations directory", file.Name(), cleanPath)
+			continue
+		}
 		migrations = append(migrations, migrationFile{
 			Version: version,
-			Path:    filepath.Join("migrations", file.Name()),
+			Path:    cleanPath,
 			Name:    file.Name(),
 		})
 	}

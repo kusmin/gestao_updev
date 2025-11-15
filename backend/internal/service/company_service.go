@@ -2,16 +2,26 @@ package service
 
 import (
 	"context"
+
 	"github.com/google/uuid"
+
 	"github.com/kusmin/gestao_updev/backend/internal/domain"
 	"github.com/kusmin/gestao_updev/backend/internal/repository"
 )
 
-type CompanyService struct {
-	repo *repository.CompanyRepository
+type CompanyRepository interface {
+	ListAll(ctx context.Context) ([]domain.Company, error)
+	FindByID(ctx context.Context, id uuid.UUID) (*domain.Company, error)
+	Create(ctx context.Context, company *domain.Company) error
+	Update(ctx context.Context, company *domain.Company) error
+	Delete(ctx context.Context, id uuid.UUID) error
 }
 
-func NewCompanyService(repo *repository.CompanyRepository) *CompanyService {
+type CompanyService struct {
+	repo CompanyRepository
+}
+
+func NewCompanyService(repo CompanyRepository) *CompanyService {
 	return &CompanyService{repo: repo}
 }
 
