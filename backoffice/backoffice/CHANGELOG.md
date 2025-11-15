@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/kusmin/gestao_updev/compare/backoffice-v1.0.0...backoffice-v1.0.1) (2025-11-15)
+
+
+### Bug Fixes
+
+* Apply pre-commit formatting changes ([11fccc7](https://github.com/kusmin/gestao_updev/commit/11fccc740a9d9095d3bba123b2f618e221f5b5b6))
+
 ## 1.0.0 (2025-11-10)
 
 
