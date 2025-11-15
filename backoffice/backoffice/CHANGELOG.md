@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/kusmin/gestao_updev/compare/backoffice-v1.0.1...backoffice-v1.1.0) (2025-11-15)
+
+
+### Features
+
+* add teste aumentar o coverage ([6608b9d](https://github.com/kusmin/gestao_updev/commit/6608b9dd3dc9aa119073e20e2cf31a1c783e6118))
+
 ## [1.0.1](https://github.com/kusmin/gestao_updev/compare/backoffice-v1.0.0...backoffice-v1.0.1) (2025-11-15)
 
 

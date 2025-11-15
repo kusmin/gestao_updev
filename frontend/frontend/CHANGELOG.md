@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/kusmin/gestao_updev/compare/frontend-v0.2.1...frontend-v0.3.0) (2025-11-15)
+
+
+### Features
+
+* add teste aumentar o coverage ([a15023e](https://github.com/kusmin/gestao_updev/commit/a15023e37750e03f8f6d9c346bd4bd69ad7c0e22))
+
 ## [0.2.1](https://github.com/kusmin/gestao_updev/compare/frontend-v0.2.0...frontend-v0.2.1) (2025-11-15)
 
 
