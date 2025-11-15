@@ -8,7 +8,7 @@ const LoginPage: React.FC = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     // TODO: Implement actual login logic
-    console.log('Login attempt with:', { email, password });
+    console.log('Login attempt with:', { email });
   };
 
   return (
