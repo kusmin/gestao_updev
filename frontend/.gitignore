@@ -12,18 +12,9 @@ dist
 dist-ssr
 *.local
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-/coverage/
-
 # TypeScript
 **/*.d.ts
 **/*.d.ts.map
+
+# JavaScript build artifacts
+**/*.js

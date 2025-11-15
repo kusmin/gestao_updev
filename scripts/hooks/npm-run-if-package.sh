@@ -15,4 +15,4 @@ if [[ ! -f "$TARGET_DIR/package.json" ]]; then
   exit 0
 fi
 
-pnpm --prefix "$TARGET_DIR" run "$SCRIPT_NAME" "$@"
+npm --prefix "$TARGET_DIR" run "$SCRIPT_NAME" "$@"
