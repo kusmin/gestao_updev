@@ -62,8 +62,8 @@ api-contract-test:
 	  else \
 	    echo ".env.test not found – continuing without injecting extra env vars"; \
 	  fi; \
-	  $(MAKE) backend-migrate; \
-	  pnpm dlx dredd@14 docs/api.yaml http://127.0.0.1:8080 \
+	  DATABASE_URL=$(TEST_DATABASE_URL) $(MAKE) backend-migrate; \
+	  DATABASE_URL=$(TEST_DATABASE_URL) pnpm dlx dredd@14 docs/api.yaml http://127.0.0.1:8080 \
 	    --hookfiles ./tests/dredd/hooks/basic-flow.js \
 	    --server ./scripts/run_dredd_server.sh \
 	    --server-wait 5 \
