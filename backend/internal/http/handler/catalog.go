@@ -264,7 +264,7 @@ func (api *API) CreateProduct(c *gin.Context) {
 // @Produce json
 // @Security BearerAuth
 // @Security TenantHeader
-// @Param id path string true "Product ID"
+// @Param id path string true "Product ID" example(product_123456)
 // @Param request body ProductRequest true "Produto"
 // @Success 200 {object} response.APIResponse
 // @Router /products/{id} [put]
@@ -308,7 +308,7 @@ func (api *API) UpdateProduct(c *gin.Context) {
 // @Tags Products
 // @Security BearerAuth
 // @Security TenantHeader
-// @Param id path string true "Product ID"
+// @Param id path string true "Product ID" example(product_123456)
 // @Success 204 "No Content"
 // @Router /products/{id} [delete]
 func (api *API) DeleteProduct(c *gin.Context) {
@@ -336,7 +336,7 @@ func (api *API) DeleteProduct(c *gin.Context) {
 // @Produce json
 // @Security BearerAuth
 // @Security TenantHeader
-// @Param id path string true "Product ID"
+// @Param id path string true "Product ID" example(product_123456)
 // @Success 200 {object} response.APIResponse
 // @Router /products/{id} [get]
 func (api *API) GetProduct(c *gin.Context) {
