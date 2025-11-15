@@ -15,7 +15,9 @@ Plataforma de gestão para negócios locais (barbearias, lojas de roupa e comér
 - Modelo de dados: `docs/modelo-dados.md`.
 - Fluxos de uso: `docs/fluxos-uso.md`.
 - Padrões de código: `docs/padroes-codigo.md`.
+- Multi-tenancy: `docs/multi-tenancy.md`.
 - Operação & DevOps: `docs/operacao-devops.md`.
+- Análise de Workflows: `docs/workflow-analysis-and-suggestions.md`.
 - Guia Docker/Compose: `docs/docker.md`.
 - API (referência + spec + changelog):
   - Resumo textual: `docs/api-reference.md`.

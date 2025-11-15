@@ -20,4 +20,12 @@ test.describe('Frontend - Clientes', () => {
       ).toBeVisible();
     }
   });
+
+  test('abre o formulário ao clicar em Adicionar Cliente', async ({ page }) => {
+    await page.goto('/');
+
+    await page.getByRole('button', { name: /Adicionar Cliente/i }).click();
+    await expect(page.getByRole('dialog', { name: /Adicionar Cliente/i })).toBeVisible();
+    await expect(page.getByLabel('Nome')).toBeVisible();
+  });
 });
