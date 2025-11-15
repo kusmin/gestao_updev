@@ -43,7 +43,7 @@ jobs:
         uses: golangci/golangci-lint-action@v6
         with:
           version: v1.61.0
-          install-mode: source
+          install-mode: go
           working-directory: backend
 
       - name: Install pre-commit

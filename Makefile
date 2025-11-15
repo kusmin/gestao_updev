@@ -10,7 +10,8 @@ TEST_DATABASE_URL ?= postgres://testuser:testpassword@localhost:5433/testdb?sslm
 	frontend-lint frontend-test compose-up compose-down compose-logs \
 	compose-restart pre-commit-install pre-commit-run pre-commit-update \
 	coverage coverage-backend coverage-frontend coverage-backoffice \
-	update-deps update-backend-deps update-frontend-deps update-backoffice-deps update-workflow-deps update-tests-deps
+	update-deps update-backend-deps update-frontend-deps update-backoffice-deps update-workflow-deps update-tests-deps \
+	snyk-scan snyk-backend snyk-frontend snyk-backoffice snyk-tests snyk-e2e snyk-postman
 
 .PHONY: swagger
 swagger:
@@ -141,3 +142,22 @@ update-tests-deps:
 	npm --prefix tests/e2e install
 	npm --prefix tests/postman update
 	npm --prefix tests/postman install
+
+snyk-scan: snyk-backend snyk-frontend snyk-backoffice snyk-tests
+
+snyk-backend:
+	cd $(BACKEND_DIR) && snyk test --file=go.mod --package-manager=gomod --severity-threshold=medium
+
+snyk-frontend:
+	cd $(FRONTEND_DIR) && snyk test --file=package.json --package-manager=npm --severity-threshold=medium
+
+snyk-backoffice:
+	cd $(BACKOFFICE_DIR) && snyk test --file=package.json --package-manager=npm --severity-threshold=medium
+
+snyk-tests: snyk-e2e snyk-postman
+
+snyk-e2e:
+	cd tests/e2e && snyk test --file=package.json --package-manager=npm --severity-threshold=medium
+
+snyk-postman:
+	cd tests/postman && snyk test --file=package.json --package-manager=npm --severity-threshold=medium
