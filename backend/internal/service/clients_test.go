@@ -74,13 +74,15 @@ func TestGetClientReturnsStats(t *testing.T) {
 	clearAllData()
 	tenant, _ := createTestTenant()
 	client := seedClientRecord(t, tenant.ID, "Cliente Stats", "stats@example.com", nil)
+	pro := seedProfessionalRecord(t, tenant.ID, "Pro Stats")
+	service := seedServiceRecord(t, tenant.ID, "Serv Stats", 60)
 
 	// Seed bookings
 	book1 := &domain.Booking{
 		TenantModel:    domain.TenantModel{TenantID: tenant.ID},
 		ClientID:       client.ID,
-		ProfessionalID: uuid.New(),
-		ServiceID:      uuid.New(),
+		ProfessionalID: pro.ID,
+		ServiceID:      service.ID,
 		Status:         domain.BookingStatusConfirmed,
 		StartAt:        time.Now().Add(-48 * time.Hour),
 		EndAt:          time.Now().Add(-47 * time.Hour),
@@ -90,8 +92,8 @@ func TestGetClientReturnsStats(t *testing.T) {
 	book2 := &domain.Booking{
 		TenantModel:    domain.TenantModel{TenantID: tenant.ID},
 		ClientID:       client.ID,
-		ProfessionalID: uuid.New(),
-		ServiceID:      uuid.New(),
+		ProfessionalID: pro.ID,
+		ServiceID:      service.ID,
 		Status:         domain.BookingStatusDone,
 		StartAt:        time.Now().Add(-24 * time.Hour),
 		EndAt:          time.Now().Add(-23 * time.Hour),
