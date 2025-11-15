@@ -3,10 +3,10 @@
 ## Objetivo
 Documentar endpoints REST do MVP com foco em payloads, respostas e códigos de status para integração entre frontend e backend.
 
-> **Nota**: versão inicial textual; futura migração para OpenAPI (`docs/api.yaml`).
+> **Nota**: A especificação OpenAPI (`docs/api.yaml`) é a fonte definitiva do contrato da API. Este documento serve como um guia complementar e de referência rápida.
 
 ## Autenticação
-- **POST** `/auth/signup`
+- **POST** `/v1/auth/signup`
   - Request:
     ```json
     {
@@ -19,56 +19,56 @@ Documentar endpoints REST do MVP com foco em payloads, respostas e códigos de s
     ```json
     {"data": {"tenant_id": "uuid", "user_id": "uuid"}, "error": null}
     ```
-- **POST** `/auth/login`
+- **POST** `/v1/auth/login`
   - Request: `{"email": "joao@x.com", "password": "Senha@123"}`
   - Response `200`: `{"data": {"access_token": "...", "refresh_token": "...", "expires_in": 3600}}`
-- **POST** `/auth/refresh`
+- **POST** `/v1/auth/refresh`
   - Request: `{"refresh_token": "..."}`.
   - Response `200`: novos tokens.
 
 ## Saúde
-- **GET** `/healthz`
+- **GET** `/v1/healthz`
   - Sem autenticação.
   - Response `200`: `{"data": {"status": "ok", "env": "production"}, "error": null}`.
 
 ## Empresas e Usuários
-- **GET** `/companies/me`
+- **GET** `/v1/companies/me`
   - Headers: `Authorization: Bearer`, `X-Tenant-ID`.
   - Response `200`: dados da empresa + configurações.
-- **PUT** `/companies/me`
+- **PUT** `/v1/companies/me`
   - Body: campos atualizáveis (nome, horários, timezone).
   - Response `200`: empresa atualizada.
-- **POST** `/users`
+- **POST** `/v1/users`
   - Body: `{"name": "...", "email": "...", "role": "manager", "phone": "...", "password": "..."}`
   - Response `201`: usuário criado.
-- **GET** `/users`
+- **GET** `/v1/users`
   - Query: `role`, `page`, `per_page`.
   - Response `200`: lista paginada.
-- **PATCH** `/users/{id}`
+- **PATCH** `/v1/users/{id}`
   - Body parcial (role, ativo, phone).
   - Response `200`.
-- **DELETE** `/users/{id}`
+- **DELETE** `/v1/users/{id}`
   - Soft delete (marca `deleted_at`).
   - Response `204`.
 
 ## Clientes
-- **POST** `/clients`
+- **POST** `/v1/clients`
   - Body: `{"name": "...", "phone": "...", "email": "...", "notes": ""}`
   - Response `201`.
-- **GET** `/clients`
+- **GET** `/v1/clients`
   - Query: `search`, `page`, `tags`.
   - Response `200`: lista + `meta.pagination`.
-- **GET** `/clients/{id}`
+- **GET** `/v1/clients/{id}`
   - Response `200` com histórico resumido.
-- **PUT** `/clients/{id}`
+- **PUT** `/v1/clients/{id}`
   - Atualiza dados e preferências.
-- **DELETE** `/clients/{id}`
+- **DELETE** `/v1/clients/{id}`
   - Soft delete (motivo opcional).
 
 ## Agenda
-- **GET** `/professionals`
+- **GET** `/v1/professionals`
   - Lista profissionais disponíveis (nome, especialidades, capacidade).
-- **POST** `/bookings`
+- **POST** `/v1/bookings`
   - Body:
     ```json
     {
@@ -81,27 +81,27 @@ Documentar endpoints REST do MVP com foco em payloads, respostas e códigos de s
     }
     ```
   - Response `201`: booking criado.
-- **GET** `/bookings`
+- **GET** `/v1/bookings`
   - Query: `date`, `professional_id`, `status`.
   - Response `200`: lista ordenada por `start_at`.
-- **PATCH** `/bookings/{id}`
+- **PATCH** `/v1/bookings/{id}`
   - Campos: `status`, `notes`, `start_at`, `end_at`.
-- **POST** `/bookings/{id}/cancel`
+- **POST** `/v1/bookings/{id}/cancel`
   - Body: `{"reason": "Cliente não compareceu"}`; Response `200`.
 
 ## Serviços e Produtos
-- **GET/POST/PUT/DELETE** `/services`
+- **GET/POST/PUT/DELETE** `/v1/services`
   - Campos: `name`, `duration_minutes`, `price`, `category`, `description`.
-- **GET/POST/PUT/DELETE** `/products`
+- **GET/POST/PUT/DELETE** `/v1/products`
   - Campos: `name`, `sku`, `price`, `cost`, `stock_qty`, `min_stock`.
-- **POST** `/inventory/movements`
+- **POST** `/v1/inventory/movements`
   - Body: `{"product_id": "uuid", "type": "in|out|adjustment", "quantity": 3, "reason": "Reposição"}`
   - Response `201`.
-- **GET** `/inventory/movements`
+- **GET** `/v1/inventory/movements`
   - Filtros: `product_id`, `type`, `date_range`.
 
 ## Vendas
-- **POST** `/sales/orders`
+- **POST** `/v1/sales/orders`
   - Body:
     ```json
     {
@@ -116,21 +116,21 @@ Documentar endpoints REST do MVP com foco em payloads, respostas e códigos de s
     }
     ```
   - Response `201`: `order_id`.
-- **GET** `/sales/orders`
+- **GET** `/v1/sales/orders`
   - Query: `status`, `date`, `client_id`.
-- **PATCH** `/sales/orders/{id}`
+- **PATCH** `/v1/sales/orders/{id}`
   - Atualiza status (`confirmed`, `canceled`), notas, itens (restrito).
-- **POST** `/sales/orders/{id}/payments`
+- **POST** `/v1/sales/orders/{id}/payments`
   - Body: `{"method": "pix", "amount": 120, "paid_at": "..." }`
   - Response `201`.
-- **GET** `/payments`
+- **GET** `/v1/payments`
   - Filtros: `method`, `date_range`.
 
 ## Dashboard & Relatórios
-- **GET** `/dashboard/daily`
+- **GET** `/v1/dashboard/daily`
   - Query: `date`, `professional_id` opcional.
   - Response: KPIs (agendamentos, atendimentos, receita, top serviços).
-- **GET** `/reports/stock`
+- **GET** `/v1/reports/stock`
   - Retorna produtos abaixo do mínimo + export CSV (header `Accept: text/csv`).
 
 ## Convenções de Resposta

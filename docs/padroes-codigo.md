@@ -3,10 +3,15 @@
 ## Objetivo
 Estabelecer convenções para backend Go e frontend React + Vite, garantindo consistência entre times e facilitando revisões.
 
+## Geral
+- **Idioma:** Todo o código, comentários e documentação devem ser escritos em português.
+- **Formatação:** Use `prettier` para o frontend e `gofmt` para o backend para garantir um estilo consistente.
+
 ## Backend (Go)
 - **Estilo**: seguir `gofmt`/`goimports` obrigatoriamente; usar `golangci-lint` com linters `govet`, `staticcheck`, `errcheck`, `gocyclo`.
 - **Estrutura**: módulos dentro de `internal/` por domínio (ex.: `internal/service/agenda`); código compartilhado em `pkg/`.
 - **Nomenclatura**:
+  - Use `camelCase` para variáveis e `PascalCase` para tipos e funções exportadas.
   - Interfaces com sufixo `Service`, `Repository`.
   - Structs de request terminam com `Request`, responses com `Response`.
   - Use `ErrAlgo` para erros exportados.
@@ -60,6 +65,10 @@ Estabelecer convenções para backend Go e frontend React + Vite, garantindo con
 - Cada módulo deve ter README curto (dependências, comandos).
 - Comentários no código só quando necessário para explicar decisões não triviais.
 - ADRs (Architecture Decision Records) para mudanças significativas na arquitetura.
+
+## Banco de Dados
+- **Nomenclatura:** Use `snake_case` para tabelas e colunas.
+- **Migrations:** Todas as alterações de esquema devem ser feitas através de arquivos de migração.
 
 ## Próximos Passos
 1. Configurar linters e scripts (`make lint`, `npm run lint`) no repositório.

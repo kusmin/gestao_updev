@@ -27,8 +27,25 @@ A documentação da API é gerada automaticamente a partir dos comentários do c
 
 ### Visualizando a Documentação
 
-1.  **Inicie a aplicação:** (instruções a serem adicionadas, ex: `docker-compose up`)
+1.  **Inicie a aplicação:** Siga as instruções em `docs/backend-setup.md` para iniciar o backend.
 2.  **Acesse no navegador:** [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)
+
+### Comandos de Desenvolvimento Comuns
+
+A partir da pasta `backend`:
+
+- **Instalar dependências:**
+  ```bash
+  go mod download
+  ```
+- **Rodar a aplicação:**
+  ```bash
+  make run
+  ```
+- **Rodar testes:**
+  ```bash
+  make test
+  ```
 
 ### Atualizando a Documentação
 
