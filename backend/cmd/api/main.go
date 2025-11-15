@@ -100,7 +100,7 @@ func main() {
 	srv := server.New(cfg, zapLogger, db, tel)
 
 	if sentry.CurrentHub().Client() != nil {
-		srv.Router.Use(sentrygin.New(sentrygin.Options{
+		srv.Router().Use(sentrygin.New(sentrygin.Options{
 			Repanic: true,
 		}))
 		defer func() {

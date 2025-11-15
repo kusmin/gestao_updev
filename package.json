@@ -12,6 +12,7 @@
     "test:e2e": "npm test --prefix tests/e2e"
   },
   "devDependencies": {
-    "@stoplight/spectral-cli": "^6.15.0"
+    "@stoplight/spectral-cli": "^6.15.0",
+    "wait-on": "^9.0.3"
   }
 }

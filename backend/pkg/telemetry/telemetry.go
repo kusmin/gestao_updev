@@ -179,10 +179,7 @@ func parseHeaders(raw string) map[string]string {
 }
 
 func buildResource(ctx context.Context, cfg Config) (*resource.Resource, error) {
-	base := resource.NewWithAttributes(
-		semconv.SchemaURL,
-		resourceAttributes(cfg)...,
-	)
+	base := resource.NewSchemaless(resourceAttributes(cfg)...)
 
 	envRes, err := resource.New(ctx, resource.WithFromEnv())
 	if err != nil {

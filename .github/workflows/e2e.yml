@@ -38,6 +38,16 @@ jobs:
         run: npx playwright install --with-deps
         working-directory: tests/e2e
 
+      - name: Start backoffice dev server
+        run: npm run dev --workspace=backoffice &
+        env:
+          CI: true
+
+      - name: Wait for backoffice server
+        run: npx wait-on http://localhost:5174
+        env:
+          CI: true
+
       - name: Run Playwright tests
         run: npx playwright test
         working-directory: tests/e2e

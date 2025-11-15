@@ -113,6 +113,11 @@ func (s *Server) Run(ctx context.Context) error {
 	}
 }
 
+// Router expõe a instância do gin.Engine para middlewares externos.
+func (s *Server) Router() *gin.Engine {
+	return s.engine
+}
+
 func registerRoutes(api *gin.RouterGroup, cfg *config.Config, h *handler.API, companyHandler *handler.CompanyHandler, jwtManager *auth.JWTManager) {
 	authGroup := api.Group("/auth")
 	authGroup.POST("/signup", h.Signup)

@@ -3,6 +3,7 @@ package service
 import (
 	"log"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/google/uuid"
@@ -88,11 +89,23 @@ func createTestTenant() (*domain.Company, error) {
 // Helper function to clear all data from tables
 func clearAllData() {
 	tables := []string{
-		"payments", "sales_items", "sales_orders", "inventory_movements",
-		"bookings", "products", "services", "clients", "users", "companies",
+		"availability_rules",
+		"payments",
+		"sales_items",
+		"sales_orders",
+		"inventory_movements",
+		"bookings",
+		"services",
+		"products",
+		"clients",
+		"users",
+		"professionals",
+		"audit_logs",
+		"companies",
 	}
-	for _, table := range tables {
-		testDB.Exec("DELETE FROM " + table)
+	stmt := "TRUNCATE TABLE " + strings.Join(tables, ", ") + " RESTART IDENTITY CASCADE"
+	if err := testDB.Exec(stmt).Error; err != nil {
+		log.Printf("failed to truncate test tables: %v", err)
 	}
 }
 
