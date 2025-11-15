@@ -20,21 +20,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: '22'
-          cache: 'npm'
-          cache-dependency-path: package-lock.json
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Run Spectral lint
-        run: ./node_modules/.bin/spectral lint docs/api.yaml
+        run: pnpm exec spectral lint docs/api.yaml
 
       - name: Build Redoc HTML
-        run: npx @redocly/cli build-docs docs/api.yaml --output api-reference.html
+        run: pnpm dlx @redocly/cli build-docs docs/api.yaml --output api-reference.html
 
       - name: Upload API artifact
         uses: actions/upload-artifact@v5
@@ -53,18 +56,20 @@ jobs:
       pages: write
       id-token: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
-
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: '22'
+          cache: 'pnpm'
 
       - name: Build Redoc HTML
         run: |
           mkdir -p public
-          npx @redocly/cli build-docs docs/api.yaml --output public/index.html
+          pnpm dlx @redocly/cli build-docs docs/api.yaml --output public/index.html
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
