@@ -111,7 +111,7 @@ func (api *API) CreateClient(c *gin.Context) {
 // @Produce json
 // @Security BearerAuth
 // @Security TenantHeader
-// @Param id path string true "Client ID"
+// @Param id path string true "Client ID" example(client_123456)
 // @Success 200 {object} response.APIResponse
 // @Router /clients/{id} [get]
 func (api *API) GetClient(c *gin.Context) {
@@ -145,7 +145,7 @@ func (api *API) GetClient(c *gin.Context) {
 // @Produce json
 // @Security BearerAuth
 // @Security TenantHeader
-// @Param id path string true "Client ID"
+// @Param id path string true "Client ID" example(client_123456)
 // @Param request body ClientRequest true "Cliente"
 // @Success 200 {object} response.APIResponse
 // @Router /clients/{id} [put]
@@ -187,7 +187,7 @@ func (api *API) UpdateClient(c *gin.Context) {
 // @Tags Clients
 // @Security BearerAuth
 // @Security TenantHeader
-// @Param id path string true "Client ID"
+// @Param id path string true "Client ID" example(client_123456)
 // @Success 204 "No Content"
 // @Router /clients/{id} [delete]
 func (api *API) DeleteClient(c *gin.Context) {

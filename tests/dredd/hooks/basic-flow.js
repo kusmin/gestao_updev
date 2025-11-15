@@ -152,6 +152,9 @@ function ensureResource(transaction, resource, id, reason) {
             phone: '+55 11 91111-0000',
           },
         });
+        if (transaction.expected) {
+          delete transaction.expected.body;
+        }
         break;
       }
       case 'POST /auth/login':

@@ -121,7 +121,7 @@ func (api *API) CreateBooking(c *gin.Context) {
 // @Produce json
 // @Security BearerAuth
 // @Security TenantHeader
-// @Param id path string true "Booking ID"
+// @Param id path string true "Booking ID" example(book_123456)
 // @Param request body BookingUpdateRequest true "Campos editáveis"
 // @Success 200 {object} response.APIResponse
 // @Router /bookings/{id} [patch]
@@ -163,7 +163,7 @@ func (api *API) UpdateBooking(c *gin.Context) {
 // @Produce json
 // @Security BearerAuth
 // @Security TenantHeader
-// @Param id path string true "Booking ID"
+// @Param id path string true "Booking ID" example(book_123456)
 // @Param request body BookingCancelRequest true "Motivo"
 // @Success 200 {object} response.APIResponse
 // @Router /bookings/{id}/cancel [post]
