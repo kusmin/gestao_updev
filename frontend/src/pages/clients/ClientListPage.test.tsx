@@ -1,20 +1,33 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import ClientListPage from './ClientListPage';
 import * as apiClient from '../../lib/apiClient';
 import { type Client } from '../../lib/apiClient';
-import { AUTH_STORAGE_KEY } from '../../contexts/AuthContext';
 import { AuthProvider } from '../../contexts/AuthContext';
+import { AuthState } from '../../contexts/AuthContextDefinition';
 
 // Mock the apiClient module
 vi.mock('../../lib/apiClient');
 
 const mockedApiClient = vi.mocked(apiClient);
-const authState = {
+const MOCK_AUTH_STATE: AuthState = {
   tenantId: 'tenant-1',
   userId: 'user-1',
   tokens: { accessToken: 'token', refreshToken: 'refresh', expiresAt: Date.now() + 100000 },
 };
+
+// Mock authUtils to control the initial state of AuthProvider
+vi.mock('../../contexts/authUtils', () => ({
+  loadStoredAuth: vi.fn(() => MOCK_AUTH_STATE),
+  persistState: vi.fn(),
+  DEFAULT_STATE: {
+    tenantId: null,
+    userId: null,
+    tokens: null,
+  },
+  mapSignupResult: vi.fn(),
+  mapTokens: vi.fn(),
+}));
 
 const renderWithAuth = () =>
   render(
@@ -27,11 +40,10 @@ describe('ClientListPage', () => {
   beforeEach(() => {
     // Reseta os mocks antes de cada teste
     vi.resetAllMocks();
-    window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(authState));
   });
 
   afterEach(() => {
-    window.localStorage.clear();
+    vi.restoreAllMocks();
   });
 
   it('should display a loading state initially', () => {
@@ -53,7 +65,7 @@ describe('ClientListPage', () => {
     ];
     mockedApiClient.fetchClients.mockResolvedValue(mockClients);
 
-    renderWithAuth();
+    await renderWithAuth();
 
     // Espera que os clientes apareçam na tela
     await waitFor(() => {
@@ -61,15 +73,15 @@ describe('ClientListPage', () => {
       expect(screen.getByText('Jane Smith')).toBeInTheDocument();
     });
     expect(mockedApiClient.fetchClients).toHaveBeenCalledWith({
-      tenantId: authState.tenantId,
-      accessToken: authState.tokens.accessToken,
+      tenantId: MOCK_AUTH_STATE.tenantId,
+      accessToken: MOCK_AUTH_STATE.tokens?.accessToken,
     });
   });
 
   it('should display an empty state message when no clients are found', async () => {
     mockedApiClient.fetchClients.mockResolvedValue([]);
 
-    renderWithAuth();
+    await renderWithAuth();
 
     // O componente não tem uma mensagem de estado vazio explícita.
     // Vamos verificar se a tabela está presente, mas sem linhas de dados.
@@ -87,7 +99,7 @@ describe('ClientListPage', () => {
     // Mock console.error para evitar poluir a saída do teste
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-    renderWithAuth();
+    await renderWithAuth();
 
     // Espera que o erro seja logado
     await waitFor(() => {

@@ -20,7 +20,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { useColorMode } from '../../theme/ColorModeProvider';
+import { useColorMode } from '../../theme/useColorMode';
 
 const drawerWidth = 240;
 

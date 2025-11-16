@@ -17,6 +17,7 @@ import {
   useMemo,
   useRef,
   useState,
+  useContext, // Adicionar esta importação
 } from 'react';
 
 type AuthProviderProps = {
@@ -106,3 +107,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
+
+export const useAuth = (): AuthContextValue => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
+

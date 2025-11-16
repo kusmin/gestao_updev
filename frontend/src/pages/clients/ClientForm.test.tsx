@@ -4,7 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import ClientForm from './ClientForm';
 import { createClient, updateClient } from '../../lib/apiClient';
-import { AuthProvider, AUTH_STORAGE_KEY } from '../../contexts/AuthContext';
+import { AuthProvider } from '../../contexts/AuthContext';
+import { AuthState } from '../../contexts/AuthContextDefinition';
 
 vi.mock('../../lib/apiClient', () => ({
   createClient: vi.fn(),
@@ -15,11 +16,24 @@ const mockCreate = vi.mocked(createClient);
 const mockUpdate = vi.mocked(updateClient);
 const TENANT_ID = 'tenant-ctx';
 const ACCESS_TOKEN = 'token-ctx';
-const authState = {
+const MOCK_AUTH_STATE: AuthState = {
   tenantId: TENANT_ID,
   userId: 'user-ctx',
   tokens: { accessToken: ACCESS_TOKEN, refreshToken: 'refresh', expiresAt: Date.now() + 100000 },
 };
+
+// Mock authUtils to control the initial state of AuthProvider
+vi.mock('../../contexts/authUtils', () => ({
+  loadStoredAuth: vi.fn(() => MOCK_AUTH_STATE),
+  persistState: vi.fn(),
+  DEFAULT_STATE: {
+    tenantId: null,
+    userId: null,
+    tokens: null,
+  },
+  mapSignupResult: vi.fn(),
+  mapTokens: vi.fn(),
+}));
 
 const renderWithProviders = (ui: React.ReactElement) => render(<AuthProvider>{ui}</AuthProvider>);
 
@@ -34,11 +48,10 @@ describe('ClientForm', () => {
     vi.clearAllMocks();
     baseProps.onClose.mockReset();
     baseProps.onSave.mockReset();
-    window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(authState));
   });
 
   afterEach(() => {
-    window.localStorage.clear();
+    vi.restoreAllMocks();
   });
 
   it('cria um novo cliente quando client é nulo', async () => {

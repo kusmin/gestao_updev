@@ -4,7 +4,7 @@ import {
   createTheme,
 } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
-import { getDesignTokens, resolveInitialMode } from './utils';
+import { getDesignTokens, resolveInitialMode, STORAGE_KEY } from './utils';
 import { ColorModeContext } from './ColorModeContextDefinition';
 
 export const ColorModeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

@@ -63,8 +63,9 @@ export const getDesignTokens = (mode: PaletteMode) => ({
   },
 });
 
+export const STORAGE_KEY = 'gestao-frontend-theme';
+
 export const resolveInitialMode = (): PaletteMode => {
-  const STORAGE_KEY = 'gestao-frontend-theme';
   if (typeof window === 'undefined') {
     return 'light';
   }
