@@ -15,6 +15,13 @@ repos:
         files: ^backend/.*\.go$
         args: ['-w']
 
+      - id: backend-gosec
+        name: gosec (backend)
+        entry: gosec
+        language: system
+        files: ^backend/.*\.go$
+        pass_filenames: false
+
 
 
       - id: frontend-format

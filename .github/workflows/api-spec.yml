@@ -37,7 +37,7 @@ jobs:
         run: pnpm exec spectral lint docs/api.yaml
 
       - name: Build Redoc HTML
-        run: pnpm dlx @redocly/cli build-docs docs/api.yaml --output api-reference.html
+        run: pnpm --package=@redocly/cli dlx redocly build-docs docs/api.yaml --output api-reference.html
 
       - name: Upload API artifact
         uses: actions/upload-artifact@v5
@@ -69,7 +69,7 @@ jobs:
       - name: Build Redoc HTML
         run: |
           mkdir -p public
-          pnpm dlx @redocly/cli build-docs docs/api.yaml --output public/index.html
+          pnpm --package=@redocly/cli dlx redocly build-docs docs/api.yaml --output public/index.html
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

@@ -66,7 +66,7 @@ func setupTest(t *testing.T) {
 	clearAllData()
 	repo := repository.New(testDB)
 	testSvc = New(&config.Config{}, repo, nil, nil) // Adjust as needed
-	t.Cleanup(clearAllData) // Ensure cleanup after each test
+	t.Cleanup(clearAllData)                         // Ensure cleanup after each test
 }
 
 func setupTestDatabase() (*gorm.DB, error) {

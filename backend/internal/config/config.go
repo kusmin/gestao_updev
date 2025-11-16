@@ -10,8 +10,6 @@ import (
 
 const (
 	defaultDatabaseURL      = "postgres://postgres:postgres@localhost:5432/gestao_updev?sslmode=disable"
-	defaultJWTAccessSecret  = "dev-access-secret"
-	defaultJWTRefreshSecret = "dev-refresh-secret"
 )
 
 // Config centraliza parâmetros de execução do backend.
@@ -68,23 +66,25 @@ func (c *Config) ensureProtectedValues() error {
 		return fmt.Errorf("DATABASE_URL must not use the development default in production")
 	}
 
+	const devJWTAccessSecret = "dev-access-secret"
 	switch {
 	case c.JWTAccessSecret == "":
 		if isProd {
 			return fmt.Errorf("JWT_ACCESS_SECRET must be defined in production")
 		}
-		c.JWTAccessSecret = defaultJWTAccessSecret
-	case isProd && c.JWTAccessSecret == defaultJWTAccessSecret:
+		c.JWTAccessSecret = devJWTAccessSecret
+	case isProd && c.JWTAccessSecret == devJWTAccessSecret:
 		return fmt.Errorf("JWT_ACCESS_SECRET must not use the development default in production")
 	}
 
+	const devJWTRefreshSecret = "dev-refresh-secret"
 	switch {
 	case c.JWTRefreshSecret == "":
 		if isProd {
 			return fmt.Errorf("JWT_REFRESH_SECRET must be defined in production")
 		}
-		c.JWTRefreshSecret = defaultJWTRefreshSecret
-	case isProd && c.JWTRefreshSecret == defaultJWTRefreshSecret:
+		c.JWTRefreshSecret = devJWTRefreshSecret
+	case isProd && c.JWTRefreshSecret == devJWTRefreshSecret:
 		return fmt.Errorf("JWT_REFRESH_SECRET must not use the development default in production")
 	}
 

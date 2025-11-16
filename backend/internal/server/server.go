@@ -91,6 +91,7 @@ func (s *Server) Run(ctx context.Context) error {
 	httpSrv := &http.Server{
 		Addr:    s.cfg.Address(),
 		Handler: s.engine,
+		ReadHeaderTimeout: 5 * time.Second, // Mitigação contra ataques Slowloris
 	}
 
 	errCh := make(chan error, 1)
