@@ -1,6 +1,6 @@
 import { Box, Button, Link, Paper, Stack, TextField, Typography, Alert } from '@mui/material';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/useAuth';
 import { useEffect, useState } from 'react';
 
 const LoginPage: React.FC = () => {

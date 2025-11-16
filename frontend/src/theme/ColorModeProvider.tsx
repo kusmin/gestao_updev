@@ -2,10 +2,13 @@ import {
   CssBaseline,
   ThemeProvider as MuiThemeProvider,
   createTheme,
+  PaletteMode,
 } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { getDesignTokens, resolveInitialMode, STORAGE_KEY } from './utils';
 import { ColorModeContext } from './ColorModeContextDefinition';
+export { ColorModeContext } from './ColorModeContextDefinition';
+export type { ColorModeContextValue } from './ColorModeContextDefinition';
 
 export const ColorModeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [mode, setMode] = useState<PaletteMode>(resolveInitialMode);
@@ -17,7 +20,7 @@ export const ColorModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const value = useMemo(
     () => {
       const toggleColorMode = () => {
-        setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
+        setMode((prev: PaletteMode) => (prev === 'light' ? 'dark' : 'light'));
       };
       return {
         mode,

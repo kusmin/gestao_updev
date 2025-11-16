@@ -1,4 +1,6 @@
-import { AuthContext, AuthContextValue } from './AuthContextDefinition';
+import { AuthContext, AuthContextValue, AuthState, AuthTokens } from './AuthContextDefinition';
+export { AuthContext } from './AuthContextDefinition';
+export type { AuthContextValue } from './AuthContextDefinition';
 import {
   DEFAULT_STATE,
   loadStoredAuth,
@@ -10,6 +12,8 @@ import {
   login as loginRequest,
   signup as signupRequest,
   refreshTokens as refreshTokensRequest,
+  LoginRequest,
+  SignupRequest,
 } from '../lib/apiClient';
 import {
   useCallback,
