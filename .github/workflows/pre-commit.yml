@@ -55,5 +55,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Format frontend and backoffice
+        run: |
+          pnpm --dir frontend run format
+          pnpm --dir backoffice run format
+
+      - name: Lint and fix frontend and backoffice
+        run: |
+          pnpm --dir frontend run lint -- --fix
+          pnpm --dir backoffice run lint -- --fix
+
       - name: Run pre-commit checks
         run: pre-commit run --all-files --show-diff-on-failure

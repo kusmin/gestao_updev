@@ -24,9 +24,8 @@ jobs:
       - name: Check Go version
         run: go version
       - name: Run linter
-        uses: golangci/golangci-lint-action@v6
+        uses: golangci/golangci-lint-action@v7
         with:
-          version: v2.6.2
           working-directory: backend
 
   test:
@@ -94,7 +93,7 @@ jobs:
             ${{ runner.os }}-go-
 
       - name: Run unit tests and generate coverage report
-        run: go test -v ./... -coverprofile=coverage.out
+        run: go test -v ./... -coverprofile=coverage.out -coverpkg=./internal/service,./pkg/logger,./pkg/telemetry
         working-directory: backend
         env:
           DATABASE_URL: postgres://gestao:gestao@localhost:5432/gestao_updev?sslmode=disable

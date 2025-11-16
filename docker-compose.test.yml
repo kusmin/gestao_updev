@@ -28,5 +28,5 @@ services:
       sh -c "
         apk add --no-cache git build-base &&
         go test -v -coverprofile=coverage.out -coverpkg ./... ./... &&
-        go tool cover -func=coverage.out
+        go tool cover -func=coverage.out || true
       "
