@@ -1,8 +1,12 @@
-import React from 'react';
-import ClientListPage from './pages/clients/ClientListPage';
+import AppRouter from './routes/AppRouter';
+import { ColorModeProvider } from './theme/ColorModeProvider';
 
 const App: React.FC = () => {
-  return <ClientListPage />;
+  return (
+    <ColorModeProvider>
+      <AppRouter />
+    </ColorModeProvider>
+  );
 };
 
 export default App;

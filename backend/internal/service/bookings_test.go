@@ -12,6 +12,7 @@ import (
 )
 
 func TestCreateBookingCalculatesEndAndPreventsOverlap(t *testing.T) {
+	setupTest(t)
 	clearAllData()
 	tenant, _ := createTestTenant()
 	client := seedClientRecord(t, tenant.ID, "Booking Client", "booking@example.com", nil)
@@ -41,6 +42,7 @@ func TestCreateBookingCalculatesEndAndPreventsOverlap(t *testing.T) {
 }
 
 func TestUpdateBookingWithConflictDetection(t *testing.T) {
+	setupTest(t)
 	clearAllData()
 	tenant, _ := createTestTenant()
 	client := seedClientRecord(t, tenant.ID, "Update Booking", "update@example.com", nil)
@@ -79,6 +81,7 @@ func TestUpdateBookingWithConflictDetection(t *testing.T) {
 }
 
 func TestCancelBookingPersistsReason(t *testing.T) {
+	setupTest(t)
 	clearAllData()
 	tenant, _ := createTestTenant()
 	client := seedClientRecord(t, tenant.ID, "Cancel Booking", "cancel@example.com", nil)
@@ -102,6 +105,7 @@ func TestCancelBookingPersistsReason(t *testing.T) {
 }
 
 func TestListBookingsFilters(t *testing.T) {
+	setupTest(t)
 	clearAllData()
 	tenant, _ := createTestTenant()
 	client := seedClientRecord(t, tenant.ID, "List Booking", "list@example.com", nil)
@@ -133,6 +137,7 @@ func TestListBookingsFilters(t *testing.T) {
 }
 
 func TestAdminBookingLifecycle(t *testing.T) {
+	setupTest(t)
 	clearAllData()
 	tenant, _ := createTestTenant()
 	client := seedClientRecord(t, tenant.ID, "Admin Lifecycle", "adminlifecyle@example.com", nil)
