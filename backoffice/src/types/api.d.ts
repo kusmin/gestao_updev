@@ -155,7 +155,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
+                        "application/json": components["schemas"]["response.AuthSignup"];
                     };
                 };
                 /** @description Bad Request */
@@ -1527,6 +1527,14 @@ export interface components {
                 phone?: string;
             };
         };
+        "handler.SignupResponse": {
+            tenant_id: string;
+            user_id: string;
+            access_token: string;
+            refresh_token: string;
+            /** Format: int64 */
+            expires_in: number;
+        };
         "handler.UpdateUserRequest": {
             active?: boolean;
             name?: string;
@@ -1536,6 +1544,11 @@ export interface components {
         };
         "response.APIResponse": {
             data?: unknown;
+            error?: unknown;
+            meta?: unknown;
+        };
+        "response.AuthSignup": {
+            data?: components["schemas"]["handler.SignupResponse"];
             error?: unknown;
             meta?: unknown;
         };

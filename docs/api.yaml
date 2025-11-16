@@ -261,33 +261,6 @@ definitions:
     - company
     - user
     type: object
-  handler.SignupResponse:
-    properties:
-      tenant_id:
-        type: string
-      user_id:
-        type: string
-      access_token:
-        type: string
-      refresh_token:
-        type: string
-      expires_in:
-        type: integer
-        format: int64
-    required:
-    - tenant_id
-    - user_id
-    - access_token
-    - refresh_token
-    - expires_in
-    type: object
-  response.AuthSignup:
-    properties:
-      data:
-        $ref: '#/definitions/handler.SignupResponse'
-      error: {}
-      meta: {}
-    type: object
   handler.UpdateUserRequest:
     properties:
       active:
@@ -396,7 +369,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/response.AuthSignup'
+            $ref: '#/definitions/response.APIResponse'
         "400":
           description: Bad Request
           schema:
@@ -461,11 +434,11 @@ paths:
       - application/json
       parameters:
       - description: Booking ID
+        x-example: book_123456
         in: path
         name: id
         required: true
         type: string
-        x-example: book_123456
       - description: Campos editáveis
         in: body
         name: request
@@ -491,11 +464,11 @@ paths:
       - application/json
       parameters:
       - description: Booking ID
+        x-example: book_123456
         in: path
         name: id
         required: true
         type: string
-        x-example: book_123456
       - description: Motivo
         in: body
         name: request
@@ -580,11 +553,11 @@ paths:
     delete:
       parameters:
       - description: Client ID
+        x-example: client_123456
         in: path
         name: id
         required: true
         type: string
-        x-example: client_123456
       responses:
         "204":
           description: No Content
@@ -597,11 +570,11 @@ paths:
     get:
       parameters:
       - description: Client ID
+        x-example: client_123456
         in: path
         name: id
         required: true
         type: string
-        x-example: client_123456
       produces:
       - application/json
       responses:
@@ -620,11 +593,11 @@ paths:
       - application/json
       parameters:
       - description: Client ID
+        x-example: client_123456
         in: path
         name: id
         required: true
         type: string
-        x-example: client_123456
       - description: Cliente
         in: body
         name: request
@@ -839,11 +812,11 @@ paths:
     delete:
       parameters:
       - description: Product ID
+        x-example: product_123456
         in: path
         name: id
         required: true
         type: string
-        x-example: product_123456
       responses:
         "204":
           description: No Content
@@ -856,11 +829,11 @@ paths:
     get:
       parameters:
       - description: Product ID
+        x-example: product_123456
         in: path
         name: id
         required: true
         type: string
-        x-example: product_123456
       produces:
       - application/json
       responses:
@@ -879,11 +852,11 @@ paths:
       - application/json
       parameters:
       - description: Product ID
+        x-example: product_123456
         in: path
         name: id
         required: true
         type: string
-        x-example: product_123456
       - description: Produto
         in: body
         name: request
@@ -975,11 +948,11 @@ paths:
       - application/json
       parameters:
       - description: Order ID
+        x-example: order_123456
         in: path
         name: id
         required: true
         type: string
-        x-example: order_123456
       - description: Campos editáveis
         in: body
         name: request
@@ -1005,11 +978,11 @@ paths:
       - application/json
       parameters:
       - description: Order ID
+        x-example: order_123456
         in: path
         name: id
         required: true
         type: string
-        x-example: order_123456
       - description: Pagamento
         in: body
         name: request
@@ -1071,11 +1044,11 @@ paths:
     delete:
       parameters:
       - description: Service ID
+        x-example: service_123456
         in: path
         name: id
         required: true
         type: string
-        x-example: service_123456
       responses:
         "204":
           description: No Content
@@ -1088,11 +1061,11 @@ paths:
     get:
       parameters:
       - description: Service ID
+        x-example: service_123456
         in: path
         name: id
         required: true
         type: string
-        x-example: service_123456
       produces:
       - application/json
       responses:
@@ -1111,11 +1084,11 @@ paths:
       - application/json
       parameters:
       - description: Service ID
+        x-example: service_123456
         in: path
         name: id
         required: true
         type: string
-        x-example: service_123456
       - description: Serviço
         in: body
         name: request
@@ -1196,11 +1169,11 @@ paths:
     delete:
       parameters:
       - description: User ID
+        x-example: user_123456
         in: path
         name: id
         required: true
         type: string
-        x-example: user_123456
       responses:
         "204":
           description: No Content
@@ -1213,11 +1186,11 @@ paths:
     get:
       parameters:
       - description: User ID
+        x-example: user_123456
         in: path
         name: id
         required: true
         type: string
-        x-example: user_123456
       produces:
       - application/json
       responses:
@@ -1236,11 +1209,11 @@ paths:
       - application/json
       parameters:
       - description: User ID
+        x-example: user_123456
         in: path
         name: id
         required: true
         type: string
-        x-example: user_123456
       - description: Campos editáveis
         in: body
         name: request

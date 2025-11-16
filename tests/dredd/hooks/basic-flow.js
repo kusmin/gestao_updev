@@ -154,6 +154,7 @@ function ensureResource(transaction, resource, id, reason) {
         });
         if (transaction.expected) {
           delete transaction.expected.body;
+          delete transaction.expected.bodySchema;
         }
         break;
       }

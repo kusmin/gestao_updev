@@ -261,6 +261,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "book_123456",
                         "description": "Booking ID",
                         "name": "id",
                         "in": "path",
@@ -309,6 +310,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "book_123456",
                         "description": "Booking ID",
                         "name": "id",
                         "in": "path",
@@ -454,6 +456,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "client_123456",
                         "description": "Client ID",
                         "name": "id",
                         "in": "path",
@@ -491,6 +494,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "client_123456",
                         "description": "Client ID",
                         "name": "id",
                         "in": "path",
@@ -531,6 +535,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "client_123456",
                         "description": "Client ID",
                         "name": "id",
                         "in": "path",
@@ -888,6 +893,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "product_123456",
                         "description": "Product ID",
                         "name": "id",
                         "in": "path",
@@ -925,6 +931,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "product_123456",
                         "description": "Product ID",
                         "name": "id",
                         "in": "path",
@@ -965,6 +972,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "product_123456",
                         "description": "Product ID",
                         "name": "id",
                         "in": "path",

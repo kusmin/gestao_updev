@@ -16,7 +16,7 @@ import (
 
 func TestGetUser(t *testing.T) {
 	t.Run("should get user successfully", func(t *testing.T) {
-		clearAllData()
+		setupTest(t)
 		tenant, err := createTestTenant()
 		require.NoError(t, err)
 		user := &domain.User{
@@ -42,7 +42,7 @@ func TestGetUser(t *testing.T) {
 	})
 
 	t.Run("should return error for non-existent user", func(t *testing.T) {
-		clearAllData()
+		setupTest(t)
 		tenant, err := createTestTenant()
 		require.NoError(t, err)
 
@@ -56,7 +56,7 @@ func TestGetUser(t *testing.T) {
 	})
 
 	t.Run("should return error for user in another tenant", func(t *testing.T) {
-		clearAllData()
+		setupTest(t)
 		tenant, err := createTestTenant()
 		require.NoError(t, err)
 		user := &domain.User{
@@ -83,7 +83,7 @@ func TestGetUser(t *testing.T) {
 }
 
 func TestListUsersWithPaginationAndRoleFilter(t *testing.T) {
-	clearAllData()
+	setupTest(t)
 	tenant, err := createTestTenant()
 	require.NoError(t, err)
 
@@ -120,7 +120,7 @@ func TestListUsersWithPaginationAndRoleFilter(t *testing.T) {
 }
 
 func TestCreateUserSanitizesEmailAndHashesPassword(t *testing.T) {
-	clearAllData()
+	setupTest(t)
 	tenant, err := createTestTenant()
 	require.NoError(t, err)
 
@@ -141,7 +141,7 @@ func TestCreateUserSanitizesEmailAndHashesPassword(t *testing.T) {
 }
 
 func TestUpdateUserAllowsPartialChanges(t *testing.T) {
-	clearAllData()
+	setupTest(t)
 	tenant, err := createTestTenant()
 	require.NoError(t, err)
 	user := createTestUser(t, tenant.ID, "Original", "original@example.com", "member")
@@ -170,7 +170,7 @@ func TestUpdateUserAllowsPartialChanges(t *testing.T) {
 }
 
 func TestDeleteUserPerformsSoftDelete(t *testing.T) {
-	clearAllData()
+	setupTest(t)
 	tenant, err := createTestTenant()
 	require.NoError(t, err)
 	user := createTestUser(t, tenant.ID, "To Delete", "delete@example.com", "member")

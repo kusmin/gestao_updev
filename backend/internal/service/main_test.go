@@ -30,6 +30,7 @@ var (
 		&domain.SalesItem{},
 		&domain.Payment{},
 		&domain.InventoryMovement{},
+		&domain.AuditLog{},
 	}
 )
 
@@ -47,12 +48,10 @@ func TestMain(m *testing.M) {
 	if err := autoMigrateIfNeeded(db); err != nil {
 		log.Fatalf("could not run migrations: %v", err)
 	}
-	clearAllData()
-
 	// Create a mock service
 	// In a real scenario, you might want to mock dependencies like JWT manager
-	repo := repository.New(testDB)
-	testSvc = New(&config.Config{}, repo, nil, nil) // Adjust as needed
+	// repo := repository.New(testDB)
+	// testSvc = New(&config.Config{}, repo, nil, nil) // Adjust as needed
 
 	// Run tests
 	code := m.Run()
@@ -61,6 +60,13 @@ func TestMain(m *testing.M) {
 	// No teardown needed for the test container, it will be destroyed.
 
 	os.Exit(code)
+}
+
+func setupTest(t *testing.T) {
+	clearAllData()
+	repo := repository.New(testDB)
+	testSvc = New(&config.Config{}, repo, nil, nil) // Adjust as needed
+	t.Cleanup(clearAllData) // Ensure cleanup after each test
 }
 
 func setupTestDatabase() (*gorm.DB, error) {
