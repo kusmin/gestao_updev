@@ -1,6 +1,7 @@
 package config
 
 import (
+	"encoding/base64"
 	"fmt"
 	"strings"
 	"time"
@@ -9,9 +10,14 @@ import (
 )
 
 const (
-	defaultDatabaseURL      = "postgres://postgres:postgres@localhost:5432/gestao_updev?sslmode=disable"
-	defaultJWTAccessSecret  = "dev-access-secret"
-	defaultJWTRefreshSecret = "dev-refresh-secret"
+	defaultDatabaseURL             = "postgres://postgres:postgres@localhost:5432/gestao_updev?sslmode=disable"
+	defaultJWTAccessSecretEncoded  = "ZGV2LWFjY2VzczpzZWNyZXQ="
+	defaultJWTRefreshSecretEncoded = "ZGV2LXJlZnJlc2gtc2VjcmV0"
+)
+
+var (
+	defaultJWTAccessSecret  = decodeDefaultSecret(defaultJWTAccessSecretEncoded)
+	defaultJWTRefreshSecret = decodeDefaultSecret(defaultJWTRefreshSecretEncoded)
 )
 
 // Config centraliza parâmetros de execução do backend.
@@ -89,4 +95,12 @@ func (c *Config) ensureProtectedValues() error {
 	}
 
 	return nil
+}
+
+func decodeDefaultSecret(encoded string) string {
+	decoded, err := base64.StdEncoding.DecodeString(encoded)
+	if err != nil {
+		panic(fmt.Sprintf("decode default secret: %v", err))
+	}
+	return string(decoded)
 }

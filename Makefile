@@ -44,6 +44,10 @@ backend-migrate:
 backend-test:
 	$(MAKE) -C $(BACKEND_DIR) test
 
+.PHONY: backend-test-docker
+backend-test-docker:
+	$(MAKE) -C $(BACKEND_DIR) test-docker
+
 backend-lint:
 	$(MAKE) -C $(BACKEND_DIR) lint
 

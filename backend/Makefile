@@ -1,8 +1,11 @@
 .PHONY: test
 test:
-	export DATABASE_URL="${DATABASE_URL:-postgres://testuser:testpassword@localhost:5433/testdb?sslmode=disable}"; \
-	go run ./cmd/migrate; \
-	go test -p 1 -coverprofile=coverage.out -coverpkg ./... ./...
+	DATABASE_URL="${DATABASE_URL:-postgres://testuser:testpassword@localhost:5433/testdb?sslmode=disable}" make migrate
+	DATABASE_URL="${DATABASE_URL:-postgres://testuser:testpassword@localhost:5433/testdb?sslmode=disable}" go test -p 1 -coverprofile=coverage.out -coverpkg ./... ./...
+
+.PHONY: test-docker
+test-docker:
+	docker compose -f ../docker-compose.test.yml run --rm backend-test
 
 .PHONY: coverage
 coverage:
