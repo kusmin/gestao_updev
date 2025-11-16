@@ -1,12 +1,13 @@
 package handler
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
-	"github.com/kusmin/gestao_updev/backend/internal/service"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+	"github.com/kusmin/gestao_updev/backend/internal/service"
 )
 
 func (h *API) RegisterAdminClientRoutes(router *gin.RouterGroup) {

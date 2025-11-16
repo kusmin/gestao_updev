@@ -10,7 +10,7 @@ import (
 )
 
 // ServiceInput representa payload de serviços.
-type ServiceInput struct {
+type Input struct {
 	Name            string
 	Category        string
 	Description     string
@@ -53,7 +53,7 @@ func (s *Service) GetService(ctx context.Context, tenantID, serviceID uuid.UUID)
 	return &service, nil
 }
 
-func (s *Service) CreateService(ctx context.Context, tenantID uuid.UUID, input ServiceInput) (*domain.Service, error) {
+func (s *Service) CreateService(ctx context.Context, tenantID uuid.UUID, input Input) (*domain.Service, error) {
 	service := &domain.Service{
 		TenantModel: domain.TenantModel{
 			TenantID: tenantID,
@@ -72,7 +72,7 @@ func (s *Service) CreateService(ctx context.Context, tenantID uuid.UUID, input S
 	return service, nil
 }
 
-func (s *Service) UpdateService(ctx context.Context, tenantID, serviceID uuid.UUID, input ServiceInput) (*domain.Service, error) {
+func (s *Service) UpdateService(ctx context.Context, tenantID, serviceID uuid.UUID, input Input) (*domain.Service, error) {
 	var service domain.Service
 	if err := s.dbWithContext(ctx).
 		Where("tenant_id = ? AND id = ?", tenantID, serviceID).
@@ -275,7 +275,7 @@ func (s *Service) ListAllServices(ctx context.Context) ([]domain.Service, error)
 }
 
 type AdminServiceInput struct {
-	ServiceInput
+	Input
 	TenantID uuid.UUID
 }
 
@@ -298,7 +298,7 @@ func (s *Service) AdminCreateService(ctx context.Context, input AdminServiceInpu
 	return service, nil
 }
 
-func (s *Service) AdminUpdateService(ctx context.Context, serviceID uuid.UUID, input ServiceInput) (*domain.Service, error) {
+func (s *Service) AdminUpdateService(ctx context.Context, serviceID uuid.UUID, input Input) (*domain.Service, error) {
 	var service domain.Service
 	if err := s.dbWithContext(ctx).
 		First(&service, "id = ?", serviceID).Error; err != nil {

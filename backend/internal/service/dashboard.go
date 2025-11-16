@@ -75,11 +75,7 @@ func (s *Service) DashboardDaily(ctx context.Context, tenantID uuid.UUID, date t
 
 	topServices := make([]TopService, len(top))
 	for i, item := range top {
-		topServices[i] = TopService{
-			ServiceID: item.ServiceID,
-			Name:      item.Name,
-			Quantity:  item.Quantity,
-		}
+		topServices[i] = TopService(item)
 	}
 
 	return &DashboardDailyDTO{

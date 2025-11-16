@@ -1,10 +1,11 @@
 package handler
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/kusmin/gestao_updev/backend/internal/service"
-	"net/http"
 )
 
 func (h *API) RegisterAdminServiceRoutes(router *gin.RouterGroup) {
@@ -24,8 +25,8 @@ func (h *API) ListAllServices(c *gin.Context) {
 }
 
 type AdminCreateServiceInput struct {
-	service.ServiceInput
-	TenantID string `json:"tenant_id" binding:"required"`
+	service.Input
+	TenantID string `json:"tenant_id"`
 }
 
 func (h *API) AdminCreateService(c *gin.Context) {
@@ -42,8 +43,10 @@ func (h *API) AdminCreateService(c *gin.Context) {
 	}
 
 	adminInput := service.AdminServiceInput{
-		ServiceInput: input.ServiceInput,
-		TenantID:     tenantID,
+
+		Input: input.Input,
+
+		TenantID: tenantID,
 	}
 
 	service, err := h.svc.AdminCreateService(c.Request.Context(), adminInput)
@@ -62,7 +65,7 @@ func (h *API) AdminUpdateService(c *gin.Context) {
 		return
 	}
 
-	var input service.ServiceInput
+	var input service.Input
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

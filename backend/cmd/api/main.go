@@ -47,7 +47,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("init logger: %v", err)
 	}
-	defer zapLogger.Sync()
+	defer func() {
+		if err := zapLogger.Sync(); err != nil {
+			log.Printf("failed to sync zap logger: %v", err)
+		}
+	}()
 
 	if sentryDSN := os.Getenv("SENTRY_DSN_BACKEND"); sentryDSN != "" {
 		if err := sentry.Init(sentry.ClientOptions{

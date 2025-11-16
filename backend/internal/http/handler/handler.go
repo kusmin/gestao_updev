@@ -36,15 +36,6 @@ func (api *API) tenantID(c *gin.Context) (uuid.UUID, bool) {
 	return tenantID, true
 }
 
-func (api *API) parseUUIDParam(c *gin.Context, key string) (uuid.UUID, bool) {
-	id, err := uuid.Parse(c.Param(key))
-	if err != nil {
-		response.Error(c, http.StatusBadRequest, "INVALID_ID", "Identificador inválido", nil)
-		return uuid.Nil, false
-	}
-	return id, true
-}
-
 func (api *API) handleError(c *gin.Context, err error) {
 	if errors.Is(err, service.ErrInvalidCredentials) {
 		response.Error(c, http.StatusUnauthorized, "INVALID_CREDENTIALS", "Credenciais inválidas", nil)

@@ -93,7 +93,7 @@ func (m *JWTManager) ValidateRefreshToken(token string) (*Claims, error) {
 }
 
 func (m *JWTManager) parseClaims(token string, secret []byte) (*Claims, error) {
-	parsed, err := jwt.ParseWithClaims(token, &Claims{}, func(t *jwt.Token) (interface{}, error) {
+	parsed, err := jwt.ParseWithClaims(token, &Claims{}, func(_ *jwt.Token) (interface{}, error) {
 		return secret, nil
 	})
 	if err != nil {

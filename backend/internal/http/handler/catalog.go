@@ -75,8 +75,7 @@ func (api *API) CreateService(c *gin.Context) {
 		return
 	}
 
-	serviceObj, err := api.svc.CreateService(c.Request.Context(), tenantID, service.ServiceInput{
-		Name:            req.Name,
+	serviceObj, err := api.svc.CreateService(c.Request.Context(), tenantID, service.Input{Name: req.Name,
 		Category:        req.Category,
 		Description:     req.Description,
 		DurationMinutes: req.DurationMinutes,
@@ -121,8 +120,7 @@ func (api *API) UpdateService(c *gin.Context) {
 		return
 	}
 
-	serviceObj, err := api.svc.UpdateService(c.Request.Context(), tenantID, serviceID, service.ServiceInput{
-		Name:            req.Name,
+	serviceObj, err := api.svc.UpdateService(c.Request.Context(), tenantID, serviceID, service.Input{Name: req.Name,
 		Category:        req.Category,
 		Description:     req.Description,
 		DurationMinutes: req.DurationMinutes,

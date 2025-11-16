@@ -1,10 +1,11 @@
 package middleware
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/kusmin/gestao_updev/backend/internal/auth"
 	"github.com/kusmin/gestao_updev/backend/internal/http/response"
-	"net/http"
 )
 
 func Admin() gin.HandlerFunc {

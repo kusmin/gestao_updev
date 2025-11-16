@@ -1,7 +1,8 @@
 .PHONY: test
 test:
+	export DATABASE_URL="${DATABASE_URL:-postgres://testuser:testpassword@localhost:5433/testdb?sslmode=disable}"; \
+	go run ./cmd/migrate; \
 	go test -p 1 -coverprofile=coverage.out -coverpkg ./... ./...
-	go tool cover -func=coverage.out | tail -n 1
 
 .PHONY: coverage
 coverage:
@@ -41,7 +42,7 @@ swagger:
 
 .PHONY: migrate
 migrate:
-	go run ./cmd/migrate
+	env DATABASE_URL="${DATABASE_URL}" go run ./cmd/migrate
 
 .PHONY: seed
 seed:

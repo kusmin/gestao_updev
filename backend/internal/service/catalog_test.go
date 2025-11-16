@@ -273,8 +273,7 @@ func TestCreateService(t *testing.T) {
 	tenant, err := createTestTenant()
 	require.NoError(t, err)
 
-	input := ServiceInput{
-		Name:            "Created Service",
+	input := Input{Name: "Created Service",
 		Category:        "Wellness",
 		Description:     "A relaxing service",
 		DurationMinutes: 90,
@@ -301,8 +300,7 @@ func TestUpdateService(t *testing.T) {
 	clearAllData()
 	tenant, err := createTestTenant()
 	require.NoError(t, err)
-	created, err := testSvc.CreateService(context.Background(), tenant.ID, ServiceInput{
-		Name:            "Initial Service",
+	created, err := testSvc.CreateService(context.Background(), tenant.ID, Input{Name: "Initial Service",
 		Category:        "Initial",
 		Description:     "Initial desc",
 		DurationMinutes: 45,
@@ -312,8 +310,7 @@ func TestUpdateService(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	updated, err := testSvc.UpdateService(context.Background(), tenant.ID, created.ID, ServiceInput{
-		Name:            "Updated Service",
+	updated, err := testSvc.UpdateService(context.Background(), tenant.ID, created.ID, Input{Name: "Updated Service",
 		Category:        "Updated",
 		Description:     "Updated desc",
 		DurationMinutes: 60,
@@ -337,8 +334,7 @@ func TestDeleteService(t *testing.T) {
 	clearAllData()
 	tenant, err := createTestTenant()
 	require.NoError(t, err)
-	created, err := testSvc.CreateService(context.Background(), tenant.ID, ServiceInput{
-		Name:            "Disposable Service",
+	created, err := testSvc.CreateService(context.Background(), tenant.ID, Input{Name: "Disposable Service",
 		DurationMinutes: 30,
 		Price:           50,
 	})
@@ -355,8 +351,8 @@ func TestDeleteService(t *testing.T) {
 func TestListAllServicesAndProducts(t *testing.T) {
 	clearAllData()
 	tenant, _ := createTestTenant()
-	_, _ = testSvc.CreateService(context.Background(), tenant.ID, ServiceInput{Name: "Service B"})
-	_, _ = testSvc.CreateService(context.Background(), tenant.ID, ServiceInput{Name: "Service A"})
+	_, _ = testSvc.CreateService(context.Background(), tenant.ID, Input{Name: "Service B"})
+	_, _ = testSvc.CreateService(context.Background(), tenant.ID, Input{Name: "Service A"})
 	_, _ = testSvc.CreateProduct(context.Background(), tenant.ID, ProductInput{Name: "Product B", SKU: "B"})
 	_, _ = testSvc.CreateProduct(context.Background(), tenant.ID, ProductInput{Name: "Product A", SKU: "A"})
 
@@ -407,8 +403,7 @@ func TestAdminServiceLifecycle(t *testing.T) {
 	tenant, _ := createTestTenant()
 
 	service, err := testSvc.AdminCreateService(context.Background(), AdminServiceInput{
-		ServiceInput: ServiceInput{
-			Name:            "Admin Service",
+		Input: Input{Name: "Admin Service",
 			DurationMinutes: 30,
 			Price:           70,
 		},
@@ -417,8 +412,7 @@ func TestAdminServiceLifecycle(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, tenant.ID, service.TenantID)
 
-	updated, err := testSvc.AdminUpdateService(context.Background(), service.ID, ServiceInput{
-		Name:            "Admin Service Updated",
+	updated, err := testSvc.AdminUpdateService(context.Background(), service.ID, Input{Name: "Admin Service Updated",
 		DurationMinutes: 45,
 		Price:           90,
 	})

@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+
 	"github.com/google/uuid"
 	"github.com/kusmin/gestao_updev/backend/internal/domain"
 	"gorm.io/gorm"

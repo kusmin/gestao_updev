@@ -25,28 +25,28 @@ type fakeCompanyRepo struct {
 	deletedID     uuid.UUID
 }
 
-func (f *fakeCompanyRepo) ListAll(ctx context.Context) ([]domain.Company, error) {
+func (f *fakeCompanyRepo) ListAll(_ context.Context) ([]domain.Company, error) {
 	return f.listResp, f.listErr
 }
 
-func (f *fakeCompanyRepo) FindByID(ctx context.Context, id uuid.UUID) (*domain.Company, error) {
+func (f *fakeCompanyRepo) FindByID(_ context.Context, _ uuid.UUID) (*domain.Company, error) {
 	if f.findResp != nil {
 		return f.findResp, f.findErr
 	}
 	return nil, f.findErr
 }
 
-func (f *fakeCompanyRepo) Create(ctx context.Context, company *domain.Company) error {
+func (f *fakeCompanyRepo) Create(_ context.Context, company *domain.Company) error {
 	f.createdRecord = company
 	return f.createErr
 }
 
-func (f *fakeCompanyRepo) Update(ctx context.Context, company *domain.Company) error {
+func (f *fakeCompanyRepo) Update(_ context.Context, company *domain.Company) error {
 	f.updatedRecord = company
 	return f.updateErr
 }
 
-func (f *fakeCompanyRepo) Delete(ctx context.Context, id uuid.UUID) error {
+func (f *fakeCompanyRepo) Delete(_ context.Context, id uuid.UUID) error {
 	f.deletedID = id
 	return f.deleteErr
 }

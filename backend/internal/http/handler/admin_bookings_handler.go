@@ -1,11 +1,12 @@
 package handler
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/kusmin/gestao_updev/backend/internal/service"
-	"net/http"
-	"time"
 )
 
 func (h *API) RegisterAdminBookingRoutes(router *gin.RouterGroup) {

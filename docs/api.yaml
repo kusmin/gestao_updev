@@ -1,4 +1,31 @@
 basePath: /v1
+schemes:
+- https
+tags:
+- name: Auth
+  description: Operações de autenticação, login e cadastro inicial.
+- name: Bookings
+  description: Gerenciamento de agendamentos e horários.
+- name: Clients
+  description: Gestão de clientes, contatos e filtros de listagem.
+- name: Company
+  description: Informações e configurações da companhia do tenant.
+- name: Dashboard
+  description: Dados agregados e indicadores exibidos no dashboard.
+- name: Inventory
+  description: Controle de estoque e movimentações de produtos.
+- name: Payments
+  description: Registro e consulta de pagamentos.
+- name: Products
+  description: Cadastro e atualização de produtos e SKUs.
+- name: Professionals
+  description: Profissionais disponíveis para os serviços.
+- name: Sales
+  description: Operações de pedidos e vendas.
+- name: Services
+  description: Serviços que o tenant oferece.
+- name: Users
+  description: Gestão de usuários e permissões.
 definitions:
   handler.BookingCancelRequest:
     properties:
@@ -319,6 +346,8 @@ paths:
           schema:
             $ref: '#/definitions/response.APIResponse'
       summary: Autentica usuário
+      description: Autentica um usuário existente com e-mail e senha.
+      operationId: loginUser
       tags:
       - Auth
   /auth/refresh:
@@ -348,6 +377,8 @@ paths:
           schema:
             $ref: '#/definitions/response.APIResponse'
       summary: Atualiza tokens de acesso
+      description: Renova tokens baseando-se no refresh token válido.
+      operationId: refreshAuthTokens
       tags:
       - Auth
   /auth/signup:
@@ -375,6 +406,7 @@ paths:
           schema:
             $ref: '#/definitions/response.APIResponse'
       summary: Cria empresa e usuário administrador
+      operationId: signupCompanyAndUser
       tags:
       - Auth
   /bookings:
@@ -403,6 +435,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Lista agendamentos
+      description: Lista agendamentos com filtros de data, status ou profissional.
+      operationId: listBookings
       tags:
       - Bookings
     post:
@@ -426,6 +460,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Cria agendamento
+      description: Cria um novo agendamento com profissional, serviço e data.
+      operationId: createBooking
       tags:
       - Bookings
   /bookings/{id}:
@@ -434,7 +470,6 @@ paths:
       - application/json
       parameters:
       - description: Booking ID
-        example: book_123456
         in: path
         name: id
         required: true
@@ -456,6 +491,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Atualiza agendamento
+      description: Atualiza os campos editáveis de um agendamento existente.
+      operationId: updateBooking
       tags:
       - Bookings
   /bookings/{id}/cancel:
@@ -464,7 +501,6 @@ paths:
       - application/json
       parameters:
       - description: Booking ID
-        example: book_123456
         in: path
         name: id
         required: true
@@ -486,6 +522,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Cancela agendamento
+      description: Cancela um agendamento existente e registra o motivo.
+      operationId: cancelBooking
       tags:
       - Bookings
   /clients:
@@ -520,6 +558,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Lista clientes
+      description: Lista clientes com filtros de busca e paginação.
+      operationId: listClients
       tags:
       - Clients
     post:
@@ -547,13 +587,14 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Cria cliente
+      description: Cria um cliente novo para o tenant com os dados fornecidos.
+      operationId: createClient
       tags:
       - Clients
   /clients/{id}:
     delete:
       parameters:
       - description: Client ID
-        example: client_123456
         in: path
         name: id
         required: true
@@ -565,12 +606,13 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Remove cliente
+      description: Remove (soft delete) o cliente especificado.
+      operationId: deleteClient
       tags:
       - Clients
     get:
       parameters:
       - description: Client ID
-        example: client_123456
         in: path
         name: id
         required: true
@@ -586,6 +628,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Busca cliente
+      description: Retorna os dados do cliente informado pelo ID.
+      operationId: getClient
       tags:
       - Clients
     put:
@@ -593,7 +637,6 @@ paths:
       - application/json
       parameters:
       - description: Client ID
-        example: client_123456
         in: path
         name: id
         required: true
@@ -615,6 +658,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Atualiza cliente
+      description: Atualiza completamente o cliente informado pelo ID.
+      operationId: updateClient
       tags:
       - Clients
   /companies/me:
@@ -634,6 +679,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Retorna dados da empresa atual
+      description: Retorna as informações da empresa associada ao tenant autenticado.
+      operationId: getCurrentCompany
       tags:
       - Company
     put:
@@ -661,6 +708,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Atualiza dados da empresa atual
+      description: Atualiza os campos configuráveis da empresa do tenant atual.
+      operationId: updateCurrentCompany
       tags:
       - Company
   /dashboard/daily:
@@ -685,6 +734,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: KPIs diários
+      description: Retorna indicadores diários filtrados por data e profissional.
+      operationId: getDailyDashboard
       tags:
       - Dashboard
   /inventory/movements:
@@ -717,6 +768,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Lista movimentações de estoque
+      description: Lista movimentações de estoque com filtros por produto, tipo e datas.
+      operationId: listInventoryMovements
       tags:
       - Inventory
     post:
@@ -740,6 +793,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Registra movimento de estoque
+      description: Registra uma movimentação de estoque (entrada, saída ou ajuste).
+      operationId: createInventoryMovement
       tags:
       - Inventory
   /payments:
@@ -768,6 +823,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Lista pagamentos
+      description: Lista pagamentos processados com filtros por método e datas.
+      operationId: listPayments
       tags:
       - Payments
   /products:
@@ -783,6 +840,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Lista produtos
+      description: Lista produtos cadastrados com paginação padrão.
+      operationId: listProducts
       tags:
       - Products
     post:
@@ -806,13 +865,14 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Cria produto
+      description: Cria um produto novo com preço, estoque e metadata.
+      operationId: createProduct
       tags:
       - Products
   /products/{id}:
     delete:
       parameters:
       - description: Product ID
-        example: product_123456
         in: path
         name: id
         required: true
@@ -824,12 +884,13 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Remove produto
+      description: Remove o produto indicado pelo ID.
+      operationId: deleteProduct
       tags:
       - Products
     get:
       parameters:
       - description: Product ID
-        example: product_123456
         in: path
         name: id
         required: true
@@ -845,6 +906,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Busca produto por ID
+      description: Retorna o produto completo identificado pelo ID.
+      operationId: getProduct
       tags:
       - Products
     put:
@@ -852,7 +915,6 @@ paths:
       - application/json
       parameters:
       - description: Product ID
-        example: product_123456
         in: path
         name: id
         required: true
@@ -874,6 +936,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Atualiza produto
+      description: Atualiza os dados do produto informado.
+      operationId: updateProduct
       tags:
       - Products
   /professionals:
@@ -889,6 +953,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Lista profissionais ativos
+      description: Lista os profissionais ativos associados ao tenant.
+      operationId: listProfessionals
       tags:
       - Professionals
   /sales/orders:
@@ -917,6 +983,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Lista pedidos/vendas
+      description: Lista pedidos e vendas filtrando por status, cliente ou data.
+      operationId: listSalesOrders
       tags:
       - Sales
     post:
@@ -940,6 +1008,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Cria pedido/venda
+      description: Cria um pedido ou venda com itens e consumidor vinculados.
+      operationId: createSalesOrder
       tags:
       - Sales
   /sales/orders/{id}:
@@ -969,6 +1039,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Atualiza pedido
+      description: Atualiza campos editáveis de um pedido existente.
+      operationId: updateSalesOrder
       tags:
       - Sales
   /sales/orders/{id}/payments:
@@ -998,6 +1070,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Registra pagamento
+      description: Registra um pagamento para o pedido informado.
+      operationId: createSalesOrderPayment
       tags:
       - Payments
   /services:
@@ -1013,6 +1087,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Lista serviços
+      description: Retorna a lista completa de serviços configurados para o tenant.
+      operationId: listServices
       tags:
       - Services
     post:
@@ -1036,6 +1112,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Cria serviço
+      description: Cria um novo serviço associado ao tenant.
+      operationId: createService
       tags:
       - Services
   /services/{id}:
@@ -1053,6 +1131,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Remove serviço
+      description: Remove (soft delete) o serviço informado pelo ID.
+      operationId: deleteService
       tags:
       - Services
     get:
@@ -1073,6 +1153,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Busca serviço por ID
+      description: Busca os dados completos do serviço informado.
+      operationId: getService
       tags:
       - Services
     put:
@@ -1101,6 +1183,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Atualiza serviço
+      description: Substitui os dados do serviço informado pelo payload.
+      operationId: updateService
       tags:
       - Services
   /users:
@@ -1131,6 +1215,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Lista usuários do tenant
+      description: Lista usuários do tenant com filtros e paginação.
+      operationId: listUsers
       tags:
       - Users
     post:
@@ -1158,6 +1244,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Cria um usuário
+      description: Cria um novo usuário associado ao tenant.
+      operationId: createUser
       tags:
       - Users
   /users/{id}:
@@ -1175,6 +1263,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Remove (soft delete) um usuário
+      description: Desativa o usuário informado sem apagar seu histórico.
+      operationId: deleteUser
       tags:
       - Users
     get:
@@ -1195,6 +1285,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Busca usuário por ID
+      description: Retorna os dados completos do usuário selecionado.
+      operationId: getUser
       tags:
       - Users
     patch:
@@ -1223,6 +1315,8 @@ paths:
       - BearerAuth: []
       - TenantHeader: []
       summary: Atualiza parcialmente um usuário
+      description: Atualiza somente os campos informados para o usuário.
+      operationId: updateUser
       tags:
       - Users
 securityDefinitions:

@@ -89,8 +89,8 @@ func New(cfg *config.Config, logger *zap.Logger, db *gorm.DB, telem *telemetry.T
 // Run inicia o servidor HTTP e bloqueia até receber sinal de desligamento.
 func (s *Server) Run(ctx context.Context) error {
 	httpSrv := &http.Server{
-		Addr:    s.cfg.Address(),
-		Handler: s.engine,
+		Addr:              s.cfg.Address(),
+		Handler:           s.engine,
 		ReadHeaderTimeout: 5 * time.Second, // Mitigação contra ataques Slowloris
 	}
 
