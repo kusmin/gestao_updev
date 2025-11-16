@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { getDesignTokens, resolveInitialMode } from './utils';
-import { ColorModeContext, ColorModeContextValue } from './ColorModeContextDefinition';
+import { ColorModeContext } from './ColorModeContextDefinition';
 
 export const ColorModeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [mode, setMode] = useState<PaletteMode>(resolveInitialMode);
@@ -37,12 +37,4 @@ export const ColorModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       </MuiThemeProvider>
     </ColorModeContext.Provider>
   );
-};
-
-export const useColorMode = (): ColorModeContextValue => {
-  const ctx = useContext(ColorModeContext);
-  if (!ctx) {
-    throw new Error('useColorMode must be used within ColorModeProvider');
-  }
-  return ctx;
 };
