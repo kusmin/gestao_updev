@@ -43,7 +43,12 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSave, client }
     try {
       let savedClient;
       if (client) {
-        savedClient = await updateClient({ tenantId, clientId: client.id, input: clientData, accessToken });
+        savedClient = await updateClient({
+          tenantId,
+          clientId: client.id,
+          input: clientData,
+          accessToken,
+        });
       } else {
         savedClient = await createClient({ tenantId, input: clientData, accessToken });
       }

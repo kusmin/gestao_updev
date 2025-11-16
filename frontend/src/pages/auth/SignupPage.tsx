@@ -119,7 +119,13 @@ const SignupPage: React.FC = () => {
             onChange={(event) => setPassword(event.target.value)}
             required
           />
-          <Button variant="contained" color="primary" size="large" type="submit" disabled={submitting}>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            type="submit"
+            disabled={submitting}
+          >
             {submitting ? 'Processando...' : 'Criar conta'}
           </Button>
           <Typography variant="body2" color="text.secondary" align="center">

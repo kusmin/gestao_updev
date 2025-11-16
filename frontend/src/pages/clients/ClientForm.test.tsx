@@ -21,8 +21,7 @@ const authState = {
   tokens: { accessToken: ACCESS_TOKEN, refreshToken: 'refresh', expiresAt: Date.now() + 100000 },
 };
 
-const renderWithProviders = (ui: React.ReactElement) =>
-  render(<AuthProvider>{ui}</AuthProvider>);
+const renderWithProviders = (ui: React.ReactElement) => render(<AuthProvider>{ui}</AuthProvider>);
 
 describe('ClientForm', () => {
   const baseProps = {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -22,7 +22,7 @@ const ClientListPage: React.FC = () => {
   const [editingClient, setEditingClient] = useState<Client | null>(null);
   const { tenantId, accessToken } = useAuth();
 
-  const getClients = async () => {
+  const getClients = useCallback(async () => {
     if (!tenantId || !accessToken) {
       setClients([]);
       return;
@@ -35,13 +35,13 @@ const ClientListPage: React.FC = () => {
     } catch (error) {
       console.error('Error fetching clients:', error);
     }
-  };
+  }, [tenantId, accessToken, setClients]);
 
   useEffect(() => {
     if (tenantId && accessToken) {
       getClients();
     }
-  }, [tenantId, accessToken]);
+  }, [tenantId, accessToken, getClients]);
 
   const handleOpenForm = (client: Client | null = null) => {
     setEditingClient(client);
