@@ -1,6 +1,6 @@
 import { Box, CircularProgress } from '@mui/material';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/useAuth';
 
 const ProtectedRoute: React.FC = () => {
   const { isAuthenticated, initializing } = useAuth();

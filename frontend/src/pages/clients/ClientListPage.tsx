@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { deleteClient, fetchClients, type Client } from '../../lib/apiClient';
 import ClientForm from './ClientForm';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/useAuth';
 
 const ClientListPage: React.FC = () => {
   const [clients, setClients] = useState<Client[]>([]);

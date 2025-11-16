@@ -8,7 +8,7 @@ import {
   TextField,
 } from '@mui/material';
 import { createClient, updateClient, type Client, type ClientRequest } from '../../lib/apiClient';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/useAuth';
 
 interface ClientFormProps {
   open: boolean;
