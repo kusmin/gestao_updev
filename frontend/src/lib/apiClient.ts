@@ -18,7 +18,10 @@ export interface Client {
 export type ClientRequest = components['schemas']['handler.ClientRequest'];
 export type LoginRequest = components['schemas']['handler.LoginRequest'];
 export type SignupRequest = components['schemas']['handler.SignupRequest'];
-export type SignupResponse = components['schemas']['handler.SignupResponse'];
+export type SignupResponse = AuthTokensResponse & {
+  tenant_id: string;
+  user_id: string;
+};
 
 export type AuthTokensResponse = {
   access_token: string;

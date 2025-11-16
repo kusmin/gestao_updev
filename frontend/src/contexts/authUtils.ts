@@ -22,12 +22,25 @@ export const DEFAULT_STATE: AuthState = {
   tokens: null,
 };
 
+type BufferLike = {
+  from: (value: string, encoding: 'base64') => {
+    toString: (encoding?: 'utf-8') => string;
+  };
+};
+
+const getNodeBuffer = (): BufferLike | undefined =>
+  (globalThis as typeof globalThis & { Buffer?: BufferLike }).Buffer;
+
 export const safeAtob = (value: string) => {
   try {
     if (typeof atob === 'function') {
       return atob(value);
     }
-    return Buffer.from(value, 'base64').toString('utf-8');
+    const buffer = getNodeBuffer();
+    if (buffer) {
+      return buffer.from(value, 'base64').toString('utf-8');
+    }
+    return '';
   } catch {
     return '';
   }

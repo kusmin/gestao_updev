@@ -261,26 +261,6 @@ definitions:
     - company
     - user
     type: object
-  handler.SignupResponse:
-    properties:
-      tenant_id:
-        type: string
-      user_id:
-        type: string
-      access_token:
-        type: string
-      refresh_token:
-        type: string
-      expires_in:
-        type: integer
-        format: int64
-    required:
-    - tenant_id
-    - user_id
-    - access_token
-    - refresh_token
-    - expires_in
-    type: object
   handler.UpdateUserRequest:
     properties:
       active:
@@ -297,13 +277,6 @@ definitions:
   response.APIResponse:
     properties:
       data: {}
-      error: {}
-      meta: {}
-    type: object
-  response.AuthSignup:
-    properties:
-      data:
-        $ref: '#/definitions/handler.SignupResponse'
       error: {}
       meta: {}
     type: object
@@ -396,7 +369,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/response.AuthSignup'
+            $ref: '#/definitions/response.APIResponse'
         "400":
           description: Bad Request
           schema:
@@ -975,7 +948,6 @@ paths:
       - application/json
       parameters:
       - description: Order ID
-        example: order_123456
         in: path
         name: id
         required: true
@@ -1005,7 +977,6 @@ paths:
       - application/json
       parameters:
       - description: Order ID
-        example: order_123456
         in: path
         name: id
         required: true
@@ -1071,7 +1042,6 @@ paths:
     delete:
       parameters:
       - description: Service ID
-        example: service_123456
         in: path
         name: id
         required: true
@@ -1088,7 +1058,6 @@ paths:
     get:
       parameters:
       - description: Service ID
-        example: service_123456
         in: path
         name: id
         required: true
@@ -1111,7 +1080,6 @@ paths:
       - application/json
       parameters:
       - description: Service ID
-        example: service_123456
         in: path
         name: id
         required: true
@@ -1196,7 +1164,6 @@ paths:
     delete:
       parameters:
       - description: User ID
-        example: user_123456
         in: path
         name: id
         required: true
@@ -1213,7 +1180,6 @@ paths:
     get:
       parameters:
       - description: User ID
-        example: user_123456
         in: path
         name: id
         required: true
@@ -1236,7 +1202,6 @@ paths:
       - application/json
       parameters:
       - description: User ID
-        example: user_123456
         in: path
         name: id
         required: true

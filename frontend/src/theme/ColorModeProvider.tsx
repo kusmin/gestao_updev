@@ -2,8 +2,8 @@ import {
   CssBaseline,
   ThemeProvider as MuiThemeProvider,
   createTheme,
-  PaletteMode,
 } from '@mui/material';
+import type { PaletteMode } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { getDesignTokens, resolveInitialMode, STORAGE_KEY } from './utils';
 import { ColorModeContext } from './ColorModeContextDefinition';

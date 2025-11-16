@@ -1,6 +1,5 @@
-import { AuthContext, AuthContextValue, AuthState, AuthTokens } from './AuthContextDefinition';
-export { AuthContext } from './AuthContextDefinition';
-export type { AuthContextValue } from './AuthContextDefinition';
+import { AuthContext } from './AuthContextDefinition';
+import type { AuthContextValue, AuthState, AuthTokens } from './AuthContextDefinition';
 import {
   DEFAULT_STATE,
   loadStoredAuth,
@@ -12,9 +11,8 @@ import {
   login as loginRequest,
   signup as signupRequest,
   refreshTokens as refreshTokensRequest,
-  LoginRequest,
-  SignupRequest,
 } from '../lib/apiClient';
+import type { LoginRequest, SignupRequest } from '../lib/apiClient';
 import {
   useCallback,
   useEffect,
@@ -110,5 +108,3 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-
-
