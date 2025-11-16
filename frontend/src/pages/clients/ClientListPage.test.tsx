@@ -3,23 +3,42 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import ClientListPage from './ClientListPage';
 import * as apiClient from '../../lib/apiClient';
 import { type Client } from '../../lib/apiClient';
+import { AUTH_STORAGE_KEY } from '../../contexts/AuthContext';
+import { AuthProvider } from '../../contexts/AuthContext';
 
 // Mock the apiClient module
 vi.mock('../../lib/apiClient');
 
 const mockedApiClient = vi.mocked(apiClient);
+const authState = {
+  tenantId: 'tenant-1',
+  userId: 'user-1',
+  tokens: { accessToken: 'token', refreshToken: 'refresh', expiresAt: Date.now() + 100000 },
+};
+
+const renderWithAuth = () =>
+  render(
+    <AuthProvider>
+      <ClientListPage />
+    </AuthProvider>,
+  );
 
 describe('ClientListPage', () => {
   beforeEach(() => {
     // Reseta os mocks antes de cada teste
     vi.resetAllMocks();
+    window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(authState));
+  });
+
+  afterEach(() => {
+    window.localStorage.clear();
   });
 
   it('should display a loading state initially', () => {
     // Para este teste, fazemos a API nunca resolver
     mockedApiClient.fetchClients.mockReturnValue(new Promise(() => {}));
 
-    render(<ClientListPage />);
+    renderWithAuth();
 
     // O componente não tem um estado de loading explícito,
     // então vamos verificar se a tabela está vazia inicialmente.
@@ -34,19 +53,23 @@ describe('ClientListPage', () => {
     ];
     mockedApiClient.fetchClients.mockResolvedValue(mockClients);
 
-    render(<ClientListPage />);
+    renderWithAuth();
 
     // Espera que os clientes apareçam na tela
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
       expect(screen.getByText('Jane Smith')).toBeInTheDocument();
     });
+    expect(mockedApiClient.fetchClients).toHaveBeenCalledWith({
+      tenantId: authState.tenantId,
+      accessToken: authState.tokens.accessToken,
+    });
   });
 
   it('should display an empty state message when no clients are found', async () => {
     mockedApiClient.fetchClients.mockResolvedValue([]);
 
-    render(<ClientListPage />);
+    renderWithAuth();
 
     // O componente não tem uma mensagem de estado vazio explícita.
     // Vamos verificar se a tabela está presente, mas sem linhas de dados.
@@ -64,7 +87,7 @@ describe('ClientListPage', () => {
     // Mock console.error para evitar poluir a saída do teste
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-    render(<ClientListPage />);
+    renderWithAuth();
 
     // Espera que o erro seja logado
     await waitFor(() => {

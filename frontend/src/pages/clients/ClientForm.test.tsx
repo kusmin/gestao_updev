@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import ClientForm from './ClientForm';
 import { createClient, updateClient } from '../../lib/apiClient';
+import { AuthProvider, AUTH_STORAGE_KEY } from '../../contexts/AuthContext';
 
 vi.mock('../../lib/apiClient', () => ({
   createClient: vi.fn(),
@@ -12,7 +13,16 @@ vi.mock('../../lib/apiClient', () => ({
 
 const mockCreate = vi.mocked(createClient);
 const mockUpdate = vi.mocked(updateClient);
-const TENANT_ID = 'a4b2b2b2-b2b2-4b2b-b2b2-b2b2b2b2b2b2';
+const TENANT_ID = 'tenant-ctx';
+const ACCESS_TOKEN = 'token-ctx';
+const authState = {
+  tenantId: TENANT_ID,
+  userId: 'user-ctx',
+  tokens: { accessToken: ACCESS_TOKEN, refreshToken: 'refresh', expiresAt: Date.now() + 100000 },
+};
+
+const renderWithProviders = (ui: React.ReactElement) =>
+  render(<AuthProvider>{ui}</AuthProvider>);
 
 describe('ClientForm', () => {
   const baseProps = {
@@ -25,6 +35,11 @@ describe('ClientForm', () => {
     vi.clearAllMocks();
     baseProps.onClose.mockReset();
     baseProps.onSave.mockReset();
+    window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(authState));
+  });
+
+  afterEach(() => {
+    window.localStorage.clear();
   });
 
   it('cria um novo cliente quando client é nulo', async () => {
@@ -35,7 +50,7 @@ describe('ClientForm', () => {
       phone: '123',
     });
 
-    render(<ClientForm {...baseProps} client={null} />);
+    renderWithProviders(<ClientForm {...baseProps} client={null} />);
 
     await userEvent.type(screen.getByLabelText(/Nome/i), 'Alice');
     await userEvent.type(screen.getByLabelText(/Email/i), 'alice@example.com');
@@ -43,10 +58,14 @@ describe('ClientForm', () => {
     await userEvent.click(screen.getByRole('button', { name: /Salvar/i }));
 
     await waitFor(() =>
-      expect(mockCreate).toHaveBeenCalledWith(TENANT_ID, {
-        name: 'Alice',
-        email: 'alice@example.com',
-        phone: '123',
+      expect(mockCreate).toHaveBeenCalledWith({
+        tenantId: TENANT_ID,
+        accessToken: ACCESS_TOKEN,
+        input: {
+          name: 'Alice',
+          email: 'alice@example.com',
+          phone: '123',
+        },
       }),
     );
     expect(baseProps.onSave).toHaveBeenCalledWith(
@@ -63,7 +82,7 @@ describe('ClientForm', () => {
       email: 'bob@new.com',
     });
 
-    render(<ClientForm {...baseProps} client={existing} />);
+    renderWithProviders(<ClientForm {...baseProps} client={existing} />);
 
     expect(screen.getByDisplayValue('Bob')).toBeInTheDocument();
     await userEvent.clear(screen.getByLabelText(/Nome/i));
@@ -73,10 +92,15 @@ describe('ClientForm', () => {
     await userEvent.click(screen.getByRole('button', { name: /Salvar/i }));
 
     await waitFor(() =>
-      expect(mockUpdate).toHaveBeenCalledWith(TENANT_ID, '42', {
-        name: 'Bob Atualizado',
-        email: 'bob@new.com',
-        phone: '000',
+      expect(mockUpdate).toHaveBeenCalledWith({
+        tenantId: TENANT_ID,
+        clientId: '42',
+        accessToken: ACCESS_TOKEN,
+        input: {
+          name: 'Bob Atualizado',
+          email: 'bob@new.com',
+          phone: '000',
+        },
       }),
     );
     expect(baseProps.onSave).toHaveBeenCalledWith(

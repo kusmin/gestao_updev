@@ -8,6 +8,7 @@ import {
   TextField,
 } from '@mui/material';
 import { createClient, updateClient, type Client, type ClientRequest } from '../../lib/apiClient';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface ClientFormProps {
   open: boolean;
@@ -20,6 +21,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSave, client }
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const { tenantId, accessToken } = useAuth();
 
   useEffect(() => {
     if (client) {
@@ -34,15 +36,16 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSave, client }
   }, [client]);
 
   const handleSave = async () => {
+    if (!tenantId || !accessToken) {
+      return;
+    }
     const clientData: ClientRequest = { name, email, phone };
     try {
       let savedClient;
-      // TODO: Replace with actual tenant ID
-      const tenantId = 'a4b2b2b2-b2b2-4b2b-b2b2-b2b2b2b2b2b2';
       if (client) {
-        savedClient = await updateClient(tenantId, client.id, clientData);
+        savedClient = await updateClient({ tenantId, clientId: client.id, input: clientData, accessToken });
       } else {
-        savedClient = await createClient(tenantId, clientData);
+        savedClient = await createClient({ tenantId, input: clientData, accessToken });
       }
       onSave(savedClient);
       onClose();

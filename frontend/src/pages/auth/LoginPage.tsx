@@ -1,7 +1,39 @@
-import { Box, Button, Link, Paper, Stack, TextField, Typography } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import { Box, Button, Link, Paper, Stack, TextField, Typography, Alert } from '@mui/material';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { useEffect, useState } from 'react';
 
 const LoginPage: React.FC = () => {
+  const { login, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const redirectTo = (location.state as { from?: string })?.from ?? '/';
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSubmitting(true);
+    setError(null);
+    try {
+      await login({ email, password });
+      navigate(redirectTo, { replace: true });
+    } catch (err) {
+      console.error(err);
+      setError('Credenciais inválidas, tente novamente.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -14,7 +46,7 @@ const LoginPage: React.FC = () => {
       }}
     >
       <Paper elevation={3} sx={{ maxWidth: 420, width: '100%', p: 4 }}>
-        <Stack spacing={3}>
+        <Stack spacing={3} component="form" onSubmit={handleSubmit}>
           <div>
             <Typography variant="h5" component="h1" gutterBottom>
               Entrar
@@ -23,10 +55,25 @@ const LoginPage: React.FC = () => {
               Acesse o painel para gerenciar sua operação.
             </Typography>
           </div>
-          <TextField type="email" label="E-mail" fullWidth />
-          <TextField type="password" label="Senha" fullWidth />
-          <Button variant="contained" color="primary" size="large">
-            Entrar
+          {error && <Alert severity="error">{error}</Alert>}
+          <TextField
+            type="email"
+            label="E-mail"
+            fullWidth
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            required
+          />
+          <TextField
+            type="password"
+            label="Senha"
+            fullWidth
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+          />
+          <Button variant="contained" color="primary" size="large" type="submit" disabled={submitting}>
+            {submitting ? 'Entrando...' : 'Entrar'}
           </Button>
           <Typography variant="body2" color="text.secondary" align="center">
             Ainda não tem conta?{' '}

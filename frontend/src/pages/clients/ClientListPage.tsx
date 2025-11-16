@@ -14,16 +14,21 @@ import {
 } from '@mui/material';
 import { deleteClient, fetchClients, type Client } from '../../lib/apiClient';
 import ClientForm from './ClientForm';
+import { useAuth } from '../../contexts/AuthContext';
 
 const ClientListPage: React.FC = () => {
   const [clients, setClients] = useState<Client[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingClient, setEditingClient] = useState<Client | null>(null);
+  const { tenantId, accessToken } = useAuth();
 
   const getClients = async () => {
+    if (!tenantId || !accessToken) {
+      setClients([]);
+      return;
+    }
     try {
-      // TODO: Replace with actual tenant ID
-      const data = await fetchClients('a4b2b2b2-b2b2-4b2b-b2b2-b2b2b2b2b2b2');
+      const data = await fetchClients({ tenantId, accessToken });
       if (data && Array.isArray(data)) {
         setClients(data);
       }
@@ -33,8 +38,10 @@ const ClientListPage: React.FC = () => {
   };
 
   useEffect(() => {
-    getClients();
-  }, []);
+    if (tenantId && accessToken) {
+      getClients();
+    }
+  }, [tenantId, accessToken]);
 
   const handleOpenForm = (client: Client | null = null) => {
     setEditingClient(client);
@@ -55,10 +62,12 @@ const ClientListPage: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
+    if (!tenantId || !accessToken) {
+      return;
+    }
     try {
-      // TODO: Replace with actual tenant ID
-      await deleteClient('a4b2b2b2-b2b2-4b2b-b2b2-b2b2b2b2b2b2', id);
-      setClients(clients.filter((client) => client.id !== id));
+      await deleteClient({ tenantId, clientId: id, accessToken });
+      setClients((prev) => prev.filter((client) => client.id !== id));
     } catch (error) {
       console.error('Error deleting client:', error);
     }

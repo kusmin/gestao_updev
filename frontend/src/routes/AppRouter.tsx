@@ -4,15 +4,18 @@ import ClientListPage from '../pages/clients/ClientListPage';
 import DashboardPage from '../pages/dashboard/DashboardPage';
 import LoginPage from '../pages/auth/LoginPage';
 import SignupPage from '../pages/auth/SignupPage';
+import ProtectedRoute from '../components/routing/ProtectedRoute';
 
 const AppRouter: React.FC = () => (
   <BrowserRouter>
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
-      <Route path="/" element={<AppLayout />}>
-        <Route index element={<DashboardPage />} />
-        <Route path="clients" element={<ClientListPage />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="/" element={<AppLayout />}>
+          <Route index element={<DashboardPage />} />
+          <Route path="clients" element={<ClientListPage />} />
+        </Route>
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

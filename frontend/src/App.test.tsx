@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
-import { beforeAll, describe, it, expect, vi } from 'vitest';
+import { beforeAll, beforeEach, afterEach, describe, it, expect, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AUTH_STORAGE_KEY } from './contexts/AuthContext';
 
 // Mock the apiClient used in ClientListPage
 vi.mock('./lib/apiClient', () => ({
@@ -10,6 +11,15 @@ vi.mock('./lib/apiClient', () => ({
 }));
 
 const queryClient = new QueryClient();
+const MOCK_AUTH_STATE = {
+  tenantId: 'tenant-1',
+  userId: 'user-1',
+  tokens: {
+    accessToken: 'fake-token',
+    refreshToken: 'refresh-token',
+    expiresAt: Date.now() + 60 * 60 * 1000,
+  },
+};
 
 beforeAll(() => {
   vi.stubGlobal('matchMedia', (query: string) => ({
@@ -22,6 +32,14 @@ beforeAll(() => {
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
   }));
+});
+
+beforeEach(() => {
+  window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(MOCK_AUTH_STATE));
+});
+
+afterEach(() => {
+  window.localStorage.clear();
 });
 
 describe('App', () => {
