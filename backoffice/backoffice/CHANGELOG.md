@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.0](https://github.com/kusmin/gestao_updev/compare/backoffice-v1.4.1...backoffice-v1.5.0) (2025-11-17)
+
+
+### Features
+
+* **core:** implement snackbar notification system ([a02409e](https://github.com/kusmin/gestao_updev/commit/a02409ebf8c95014c12b19db95638b5b77c4ac2e))
+* **frontend:** expand frontend with new pages and assets ([f866710](https://github.com/kusmin/gestao_updev/commit/f866710156aa593dc194b892d5c0460e67256322))
+
 ## [1.4.1](https://github.com/kusmin/gestao_updev/compare/backoffice-v1.4.0...backoffice-v1.4.1) (2025-11-15)
 
 
