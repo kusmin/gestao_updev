@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -11,37 +11,38 @@ import {
   TableHead,
   TableRow,
   Typography,
+  CircularProgress,
+  Alert,
 } from '@mui/material';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteClient, fetchClients, type Client } from '../../lib/apiClient';
 import ClientForm from './ClientForm';
 import { useAuth } from '../../contexts/useAuth';
+import { useSnackbar } from '../../hooks/useSnackbar';
 
 const ClientListPage: React.FC = () => {
-  const [clients, setClients] = useState<Client[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingClient, setEditingClient] = useState<Client | null>(null);
   const { tenantId, accessToken } = useAuth();
+  const { showSnackbar } = useSnackbar();
+  const queryClient = useQueryClient();
 
-  const getClients = useCallback(async () => {
-    if (!tenantId || !accessToken) {
-      setClients([]);
-      return;
-    }
-    try {
-      const data = await fetchClients({ tenantId, accessToken });
-      if (data && Array.isArray(data)) {
-        setClients(data);
-      }
-    } catch (error) {
-      console.error('Error fetching clients:', error);
-    }
-  }, [tenantId, accessToken, setClients]);
+  const { data: clients, isLoading, isError } = useQuery({
+    queryKey: ['clients', tenantId],
+    queryFn: () => fetchClients({ tenantId: tenantId!, accessToken: accessToken! }),
+    enabled: !!tenantId && !!accessToken,
+  });
 
-  useEffect(() => {
-    if (tenantId && accessToken) {
-      getClients();
-    }
-  }, [tenantId, accessToken, getClients]);
+  const deleteMutation = useMutation({
+    mutationFn: (clientId: string) => deleteClient({ tenantId: tenantId!, clientId, accessToken: accessToken! }),
+    onSuccess: () => {
+      showSnackbar('Cliente excluído com sucesso!', 'success');
+      queryClient.invalidateQueries({ queryKey: ['clients', tenantId] });
+    },
+    onError: () => {
+      showSnackbar('Erro ao excluir cliente.', 'error');
+    },
+  });
 
   const handleOpenForm = (client: Client | null = null) => {
     setEditingClient(client);
@@ -53,24 +54,12 @@ const ClientListPage: React.FC = () => {
     setIsFormOpen(false);
   };
 
-  const handleSaveClient = (client: Client) => {
-    if (editingClient) {
-      setClients(clients.map((c) => (c.id === client.id ? client : c)));
-    } else {
-      setClients([...clients, client]);
-    }
+  const handleSaveSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['clients', tenantId] });
   };
 
-  const handleDelete = async (id: string) => {
-    if (!tenantId || !accessToken) {
-      return;
-    }
-    try {
-      await deleteClient({ tenantId, clientId: id, accessToken });
-      setClients((prev) => prev.filter((client) => client.id !== id));
-    } catch (error) {
-      console.error('Error deleting client:', error);
-    }
+  const handleDelete = (id: string) => {
+    deleteMutation.mutate(id);
   };
 
   return (
@@ -83,37 +72,44 @@ const ClientListPage: React.FC = () => {
           Adicionar Cliente
         </Button>
       </Box>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Nome</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Telefone</TableCell>
-              <TableCell>Ações</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {clients.map((client) => (
-              <TableRow key={client.id}>
-                <TableCell>{client.name}</TableCell>
-                <TableCell>{client.email}</TableCell>
-                <TableCell>{client.phone}</TableCell>
-                <TableCell>
-                  <Button onClick={() => handleOpenForm(client)}>Editar</Button>
-                  <Button color="error" onClick={() => handleDelete(client.id)}>
-                    Excluir
-                  </Button>
-                </TableCell>
+
+      {isLoading && <CircularProgress />}
+      {isError && <Alert severity="error">Erro ao carregar clientes.</Alert>}
+
+      {!isLoading && !isError && (
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Nome</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Telefone</TableCell>
+                <TableCell>Ações</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {clients?.map((client) => (
+                <TableRow key={client.id}>
+                  <TableCell>{client.name}</TableCell>
+                  <TableCell>{client.email}</TableCell>
+                  <TableCell>{client.phone}</TableCell>
+                  <TableCell>
+                    <Button onClick={() => handleOpenForm(client)}>Editar</Button>
+                    <Button color="error" onClick={() => handleDelete(client.id)} disabled={deleteMutation.isPending}>
+                      Excluir
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+
       <ClientForm
         open={isFormOpen}
         onClose={handleCloseForm}
-        onSave={handleSaveClient}
+        onSave={handleSaveSuccess}
         client={editingClient}
       />
     </Container>

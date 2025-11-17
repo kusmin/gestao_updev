@@ -7,6 +7,7 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
 import { createClient, updateClient, type Client, type ClientRequest } from '../../lib/apiClient';
 import { useAuth } from '../../contexts/useAuth';
 import { useSnackbar } from '../../hooks/useSnackbar';
@@ -14,7 +15,7 @@ import { useSnackbar } from '../../hooks/useSnackbar';
 interface ClientFormProps {
   open: boolean;
   onClose: () => void;
-  onSave: (client: Client) => void;
+  onSave: () => void;
   client: Client | null;
 }
 
@@ -24,6 +25,30 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSave, client }
   const [phone, setPhone] = useState('');
   const { tenantId, accessToken } = useAuth();
   const { showSnackbar } = useSnackbar();
+
+  const createMutation = useMutation({
+    mutationFn: (newClient: ClientRequest) => createClient({ tenantId: tenantId!, input: newClient, accessToken: accessToken! }),
+    onSuccess: () => {
+      onSave();
+      onClose();
+      showSnackbar('Cliente criado com sucesso!', 'success');
+    },
+    onError: () => {
+      showSnackbar('Erro ao criar cliente.', 'error');
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: (updatedClient: { clientId: string; input: ClientRequest }) => updateClient({ tenantId: tenantId!, ...updatedClient, accessToken: accessToken! }),
+    onSuccess: () => {
+      onSave();
+      onClose();
+      showSnackbar('Cliente atualizado com sucesso!', 'success');
+    },
+    onError: () => {
+      showSnackbar('Erro ao atualizar cliente.', 'error');
+    },
+  });
 
   useEffect(() => {
     if (client) {
@@ -35,33 +60,21 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSave, client }
       setEmail('');
       setPhone('');
     }
-  }, [client]);
+  }, [client, open]);
 
-  const handleSave = async () => {
+  const handleSave = () => {
     if (!tenantId || !accessToken) {
       return;
     }
     const clientData: ClientRequest = { name, email, phone };
-    try {
-      let savedClient;
-      if (client) {
-        savedClient = await updateClient({
-          tenantId,
-          clientId: client.id,
-          input: clientData,
-          accessToken,
-        });
-      } else {
-        savedClient = await createClient({ tenantId, input: clientData, accessToken });
-      }
-      onSave(savedClient);
-      onClose();
-      showSnackbar(`Cliente ${client ? 'atualizado' : 'criado'} com sucesso!`, 'success');
-    } catch (error) {
-      console.error('Error saving client:', error);
-      showSnackbar('Erro ao salvar cliente.', 'error');
+    if (client) {
+      updateMutation.mutate({ clientId: client.id, input: clientData });
+    } else {
+      createMutation.mutate(clientData);
     }
   };
+
+  const isLoading = createMutation.isPending || updateMutation.isPending;
 
   return (
     <Dialog open={open} onClose={onClose}>
@@ -100,8 +113,10 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSave, client }
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancelar</Button>
-        <Button onClick={handleSave}>Salvar</Button>
+        <Button onClick={onClose} disabled={isLoading}>Cancelar</Button>
+        <Button onClick={handleSave} disabled={isLoading}>
+          {isLoading ? 'Salvando...' : 'Salvar'}
+        </Button>
       </DialogActions>
     </Dialog>
   );
