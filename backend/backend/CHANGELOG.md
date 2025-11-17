@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.3](https://github.com/kusmin/gestao_updev/compare/backend-v0.6.2...backend-v0.6.3) (2025-11-17)
+
+
+### Bug Fixes
+
+* **ci:** update golangci-lint configuration and version ([5dcadee](https://github.com/kusmin/gestao_updev/commit/5dcadeef703b2dae3a994e8d7ab5153dce2281db))
+
 ## [0.6.2](https://github.com/kusmin/gestao_updev/compare/backend-v0.6.1...backend-v0.6.2) (2025-11-15)
 
 
