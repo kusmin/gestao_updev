@@ -16,6 +16,9 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
+import EventIcon from '@mui/icons-material/Event';
+import StoreIcon from '@mui/icons-material/Store';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useState } from 'react';
@@ -27,6 +30,9 @@ const drawerWidth = 240;
 const navItems = [
   { label: 'Dashboard', icon: <DashboardIcon />, to: '/' },
   { label: 'Clientes', icon: <PeopleIcon />, to: '/clients' },
+  { label: 'Agendamentos', icon: <EventIcon />, to: '/appointments' },
+  { label: 'Produtos', icon: <StoreIcon />, to: '/products' },
+  { label: 'Vendas', icon: <ShoppingCartIcon />, to: '/sales' },
 ];
 
 const AppLayout: React.FC = () => {
