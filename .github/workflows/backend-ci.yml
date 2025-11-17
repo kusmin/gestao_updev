@@ -24,7 +24,7 @@ jobs:
       - name: Check Go version
         run: go version
       - name: Run linter
-        uses: golangci/golangci-lint-action@v7
+        uses: golangci/golangci-lint-action@v9
         with:
           working-directory: backend
 
