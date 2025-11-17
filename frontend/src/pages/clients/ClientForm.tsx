@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { createClient, updateClient, type Client, type ClientRequest } from '../../lib/apiClient';
 import { useAuth } from '../../contexts/useAuth';
+import { useSnackbar } from '../../hooks/useSnackbar';
 
 interface ClientFormProps {
   open: boolean;
@@ -22,6 +23,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSave, client }
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const { tenantId, accessToken } = useAuth();
+  const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (client) {
@@ -54,8 +56,10 @@ const ClientForm: React.FC<ClientFormProps> = ({ open, onClose, onSave, client }
       }
       onSave(savedClient);
       onClose();
+      showSnackbar(`Cliente ${client ? 'atualizado' : 'criado'} com sucesso!`, 'success');
     } catch (error) {
       console.error('Error saving client:', error);
+      showSnackbar('Erro ao salvar cliente.', 'error');
     }
   };
 

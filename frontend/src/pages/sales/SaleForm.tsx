@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAuth } from '../../contexts/useAuth';
+import { useSnackbar } from '../../hooks/useSnackbar';
 
 // TODO: Substituir pelos tipos reais e pelas funções da API
 interface Product {
@@ -109,6 +110,7 @@ const SaleForm: React.FC<SaleFormProps> = ({ open, onClose, onSave, sale }) => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
   const { tenantId, accessToken } = useAuth();
+  const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
     fetchProducts().then(setProducts);
@@ -169,8 +171,10 @@ const SaleForm: React.FC<SaleFormProps> = ({ open, onClose, onSave, sale }) => {
       }
       onSave(savedSale);
       onClose();
+      showSnackbar(`Venda ${sale ? 'atualizada' : 'registrada'} com sucesso!`, 'success');
     } catch (error) {
       console.error('Error saving sale:', error);
+      showSnackbar('Erro ao salvar venda.', 'error');
     }
   };
 
@@ -250,4 +254,3 @@ const SaleForm: React.FC<SaleFormProps> = ({ open, onClose, onSave, sale }) => {
 };
 
 export default SaleForm;
-

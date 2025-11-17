@@ -8,6 +8,7 @@ import {
   TextField,
 } from '@mui/material';
 import { useAuth } from '../../contexts/useAuth';
+import { useSnackbar } from '../../hooks/useSnackbar';
 
 // TODO: Substituir pelo tipo Appointment real e pelas funções da API
 interface Appointment {
@@ -46,6 +47,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ open, onClose, onSave
   const [date, setDate] = useState('');
   const [service, setService] = useState('');
   const { tenantId, accessToken } = useAuth();
+  const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (appointment) {
@@ -78,8 +80,10 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ open, onClose, onSave
       }
       onSave(savedAppointment);
       onClose();
+      showSnackbar(`Agendamento ${appointment ? 'atualizado' : 'criado'} com sucesso!`, 'success');
     } catch (error) {
       console.error('Error saving appointment:', error);
+      showSnackbar('Erro ao salvar agendamento.', 'error');
     }
   };
 
@@ -119,7 +123,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ open, onClose, onSave
           fullWidth
           variant="standard"
           value={service}
-          onChange={(e) => setService(e.g.target.value)}
+          onChange={(e) => setService(e.target.value)}
         />
       </DialogContent>
       <DialogActions>

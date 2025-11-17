@@ -8,6 +8,7 @@ import {
   TextField,
 } from '@mui/material';
 import { useAuth } from '../../contexts/useAuth';
+import { useSnackbar } from '../../hooks/useSnackbar';
 
 // TODO: Substituir pelo tipo Product real e pelas funções da API
 interface Product {
@@ -45,6 +46,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ open, onClose, onSave, produc
   const [price, setPrice] = useState(0);
   const [stock, setStock] = useState(0);
   const { tenantId, accessToken } = useAuth();
+  const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (product) {
@@ -77,8 +79,10 @@ const ProductForm: React.FC<ProductFormProps> = ({ open, onClose, onSave, produc
       }
       onSave(savedProduct);
       onClose();
+      showSnackbar(`Produto ${product ? 'atualizado' : 'criado'} com sucesso!`, 'success');
     } catch (error) {
       console.error('Error saving product:', error);
+      showSnackbar('Erro ao salvar produto.', 'error');
     }
   };
 
