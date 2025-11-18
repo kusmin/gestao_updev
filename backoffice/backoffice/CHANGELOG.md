@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.7.0](https://github.com/kusmin/gestao_updev/compare/backoffice-v1.6.2...backoffice-v1.7.0) (2025-11-18)
+
+
+### Features
+
+* **all:** Implementar sugestões de ferramentas (exceto i18n e Storybook) ([e5284d8](https://github.com/kusmin/gestao_updev/commit/e5284d8721a250672d4505d5af19f7ba30175e1c))
+* **all:** Implementar Zod e Zustand ([bedc1a1](https://github.com/kusmin/gestao_updev/commit/bedc1a1aa76b9c2e49cb7ac6ee9345b42aec8765))
+* **backoffice:** Refatorar SnackbarContext para Fast Refresh ([d00dd09](https://github.com/kusmin/gestao_updev/commit/d00dd0994b972f7896c591e4cd96bff85d4cb3b2))
+
 ## [1.6.2](https://github.com/kusmin/gestao_updev/compare/backoffice-v1.6.1...backoffice-v1.6.2) (2025-11-18)
 
 

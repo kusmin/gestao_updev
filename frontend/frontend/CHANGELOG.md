@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.9.0](https://github.com/kusmin/gestao_updev/compare/frontend-v0.8.2...frontend-v0.9.0) (2025-11-18)
+
+
+### Features
+
+* **all:** Implementar sugestões de ferramentas (exceto i18n e Storybook) ([e5284d8](https://github.com/kusmin/gestao_updev/commit/e5284d8721a250672d4505d5af19f7ba30175e1c))
+* **all:** Implementar Zod e Zustand ([bedc1a1](https://github.com/kusmin/gestao_updev/commit/bedc1a1aa76b9c2e49cb7ac6ee9345b42aec8765))
+* **frontend:** Refatorar SnackbarContext para Fast Refresh ([7a7b5f3](https://github.com/kusmin/gestao_updev/commit/7a7b5f361d98aa36827bb36b8073aae28a6b4e23))
+
 ## [0.8.2](https://github.com/kusmin/gestao_updev/compare/frontend-v0.8.1...frontend-v0.8.2) (2025-11-18)
 
 
