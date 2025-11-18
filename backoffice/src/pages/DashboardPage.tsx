@@ -36,7 +36,7 @@ const DashboardPage: React.FC = () => {
 
       {metrics ? (
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid xs={12} sm={6} md={4}>
             <Card>
               <CardContent>
                 <Typography variant="h6" color="text.secondary" gutterBottom>
@@ -46,7 +46,7 @@ const DashboardPage: React.FC = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid xs={12} sm={6} md={4}>
             <Card>
               <CardContent>
                 <Typography variant="h6" color="text.secondary" gutterBottom>
@@ -56,7 +56,7 @@ const DashboardPage: React.FC = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid xs={12} sm={6} md={4}>
             <Card>
               <CardContent>
                 <Typography variant="h6" color="text.secondary" gutterBottom>
@@ -66,7 +66,7 @@ const DashboardPage: React.FC = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid xs={12} sm={6} md={4}>
             <Card>
               <CardContent>
                 <Typography variant="h6" color="text.secondary" gutterBottom>
@@ -76,7 +76,7 @@ const DashboardPage: React.FC = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid xs={12} sm={6} md={4}>
             <Card>
               <CardContent>
                 <Typography variant="h6" color="text.secondary" gutterBottom>
@@ -86,7 +86,7 @@ const DashboardPage: React.FC = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid xs={12} sm={6} md={4}>
             <Card>
               <CardContent>
                 <Typography variant="h6" color="text.secondary" gutterBottom>
@@ -96,7 +96,7 @@ const DashboardPage: React.FC = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid xs={12} sm={6} md={4}>
             <Card>
               <CardContent>
                 <Typography variant="h6" color="text.secondary" gutterBottom>

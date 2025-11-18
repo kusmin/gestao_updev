@@ -57,7 +57,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ open, onClose, onSave
     }
   }, [appointment, open]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
+  const handleChange = (event: any) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name as string]: value }));
   };

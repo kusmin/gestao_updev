@@ -3,19 +3,19 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 import DashboardPage from './pages/DashboardPage';
 import TenantListPage from './pages/tenants/TenantListPage';
-import TenantForm from './pages/tenants/TenantForm';
+import TenantFormWrapper from './pages/tenants/TenantFormWrapper';
 import UserListPage from './pages/users/UserListPage';
-import UserForm from './pages/users/UserForm';
+import UserFormWrapper from './pages/users/UserFormWrapper';
 import ClientListPage from './pages/clients/ClientListPage';
-import ClientForm from './pages/clients/ClientForm';
+import ClientFormWrapper from './pages/clients/ClientFormWrapper';
 import ProductListPage from './pages/products/ProductListPage';
-import ProductForm from './pages/products/ProductForm';
+import ProductFormWrapper from './pages/products/ProductFormWrapper';
 import ServiceListPage from './pages/services/ServiceListPage';
-import ServiceForm from './pages/services/ServiceForm';
+import ServiceFormWrapper from './pages/services/ServiceFormWrapper';
 import AppointmentListPage from './pages/appointments/AppointmentListPage';
-import AppointmentForm from './pages/appointments/AppointmentForm';
+import AppointmentFormWrapper from './pages/appointments/AppointmentFormWrapper';
 import SaleListPage from './pages/sales/SaleListPage';
-import SaleForm from './pages/sales/SaleForm';
+import SaleFormWrapper from './pages/sales/SaleFormWrapper';
 import LoginPage from './pages/LoginPage';
 
 const router = createBrowserRouter([
@@ -37,11 +37,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/tenants/new',
-        element: <TenantForm />,
+        element: <TenantFormWrapper />,
       },
       {
         path: '/tenants/edit/:id',
-        element: <TenantForm />,
+        element: <TenantFormWrapper />,
       },
       {
         path: '/users',
@@ -49,11 +49,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/users/new',
-        element: <UserForm />,
+        element: <UserFormWrapper />,
       },
       {
         path: '/users/edit/:id',
-        element: <UserForm />,
+        element: <UserFormWrapper />,
       },
       {
         path: '/clients',
@@ -61,11 +61,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/clients/new',
-        element: <ClientForm />,
+        element: <ClientFormWrapper />,
       },
       {
         path: '/clients/edit/:id',
-        element: <ClientForm />,
+        element: <ClientFormWrapper />,
       },
       {
         path: '/products',
@@ -73,11 +73,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/products/new',
-        element: <ProductForm />,
+        element: <ProductFormWrapper />,
       },
       {
         path: '/products/edit/:id',
-        element: <ProductForm />,
+        element: <ProductFormWrapper />,
       },
       {
         path: '/services',
@@ -85,11 +85,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/services/new',
-        element: <ServiceForm />,
+        element: <ServiceFormWrapper />,
       },
       {
         path: '/services/edit/:id',
-        element: <ServiceForm />,
+        element: <ServiceFormWrapper />,
       },
       {
         path: '/appointments',
@@ -97,11 +97,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/appointments/new',
-        element: <AppointmentForm />,
+        element: <AppointmentFormWrapper />,
       },
       {
         path: '/appointments/edit/:id',
-        element: <AppointmentForm />,
+        element: <AppointmentFormWrapper />,
       },
       {
         path: '/sales',
@@ -109,11 +109,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/sales/new',
-        element: <SaleForm />,
+        element: <SaleFormWrapper />,
       },
       {
         path: '/sales/edit/:id',
-        element: <SaleForm />,
+        element: <SaleFormWrapper />,
       },
     ],
   },
