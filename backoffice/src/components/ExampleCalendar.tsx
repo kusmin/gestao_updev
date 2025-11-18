@@ -2,9 +2,10 @@ import React from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import { DateClickArg } from '@fullcalendar/interaction';
 
 function ExampleCalendar() {
-  const handleDateClick = (arg: any) => {
+  const handleDateClick = (arg: DateClickArg) => {
     // bind with an arrow function
     alert(arg.dateStr);
   };
