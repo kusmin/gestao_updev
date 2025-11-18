@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.1](https://github.com/kusmin/gestao_updev/compare/frontend-v0.8.0...frontend-v0.8.1) (2025-11-18)
+
+
+### Bug Fixes
+
+* Fix TypeScript errors in DashboardPage and form components ([f5a1b9b](https://github.com/kusmin/gestao_updev/commit/f5a1b9b79c88ecdee1b2e5d7a4086bd860476ceb))
+
 ## [0.8.0](https://github.com/kusmin/gestao_updev/compare/frontend-v0.7.0...frontend-v0.8.0) (2025-11-18)
 
 
