@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.8.2](https://github.com/kusmin/gestao_updev/compare/frontend-v0.8.1...frontend-v0.8.2) (2025-11-18)
+
+
+### Bug Fixes
+
+* **frontend:** Correct Grid component usage in DashboardPage ([12db7ae](https://github.com/kusmin/gestao_updev/commit/12db7aef70e8694f968b49a84a9e5c7d13cbae1b))
+* **frontend:** Fix linting errors in product and sales pages ([bb8e5b5](https://github.com/kusmin/gestao_updev/commit/bb8e5b5ea9639c685da3182a1e90329ee1c450bb))
+
 ## [0.8.1](https://github.com/kusmin/gestao_updev/compare/frontend-v0.8.0...frontend-v0.8.1) (2025-11-18)
 
 
