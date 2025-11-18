@@ -12,8 +12,8 @@ interface Tenant {
   id: string;
   name: string;
   document: string;
-  phone: string;
   email: string;
+  phone: string;
 }
 
 interface TenantFormProps {
@@ -27,8 +27,8 @@ const TenantForm: React.FC<TenantFormProps> = ({ open, onClose, onSave, tenant }
   const [formData, setFormData] = useState<Partial<Tenant>>({
     name: '',
     document: '',
-    phone: '',
     email: '',
+    phone: '',
   });
 
   useEffect(() => {
@@ -38,8 +38,8 @@ const TenantForm: React.FC<TenantFormProps> = ({ open, onClose, onSave, tenant }
       setFormData({
         name: '',
         document: '',
-        phone: '',
         email: '',
+        phone: '',
       });
     }
   }, [tenant, open]);
@@ -82,22 +82,22 @@ const TenantForm: React.FC<TenantFormProps> = ({ open, onClose, onSave, tenant }
         />
         <TextField
           margin="dense"
-          name="phone"
-          label="Telefone"
-          type="text"
-          fullWidth
-          variant="standard"
-          value={formData.phone}
-          onChange={handleChange}
-        />
-        <TextField
-          margin="dense"
           name="email"
           label="Email"
           type="email"
           fullWidth
           variant="standard"
           value={formData.email}
+          onChange={handleChange}
+        />
+        <TextField
+          margin="dense"
+          name="phone"
+          label="Telefone"
+          type="tel"
+          fullWidth
+          variant="standard"
+          value={formData.phone}
           onChange={handleChange}
         />
       </DialogContent>

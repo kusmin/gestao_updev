@@ -11,7 +11,6 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Switch,
 } from '@mui/material';
 import UserForm from './UserForm';
 import apiClient from '../../lib/apiClient';
@@ -20,9 +19,7 @@ interface User {
   id: string;
   name: string;
   email: string;
-  phone: string;
   role: string;
-  active: boolean;
   tenant_id: string;
 }
 
@@ -52,7 +49,7 @@ const UserListPage: React.FC = () => {
   const handleCloseForm = () => {
     setEditingUser(null);
     setIsFormOpen(false);
-    fetchUsers(); // Refetch users after closing form
+    fetchUsers();
   };
 
   const handleSaveUser = async (user: Partial<User>) => {
@@ -76,21 +73,9 @@ const UserListPage: React.FC = () => {
   const handleDelete = async (id: string) => {
     try {
       await apiClient(`/admin/users/${id}`, { method: 'DELETE' });
-      fetchUsers(); // Refetch users after deleting
-    } catch (error) {
-      console.error('Error deleting user:', error);
-    }
-  };
-
-  const handleToggleActive = async (user: User) => {
-    try {
-      await apiClient(`/admin/users/${user.id}`, {
-        method: 'PUT',
-        body: JSON.stringify({ active: !user.active }),
-      });
       fetchUsers();
     } catch (error) {
-      console.error('Error updating user:', error);
+      console.error('Error deleting user:', error);
     }
   };
 
@@ -98,7 +83,7 @@ const UserListPage: React.FC = () => {
     <Container>
       <Box sx={{ my: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
-          Users
+          Usuários
         </Typography>
         <Button variant="contained" color="primary" onClick={() => handleOpenForm()}>
           Adicionar Usuário
@@ -110,9 +95,8 @@ const UserListPage: React.FC = () => {
             <TableRow>
               <TableCell>Nome</TableCell>
               <TableCell>Email</TableCell>
-              <TableCell>Telefone</TableCell>
               <TableCell>Role</TableCell>
-              <TableCell>Ativo</TableCell>
+              <TableCell>Tenant ID</TableCell>
               <TableCell>Ações</TableCell>
             </TableRow>
           </TableHead>
@@ -121,11 +105,8 @@ const UserListPage: React.FC = () => {
               <TableRow key={user.id}>
                 <TableCell>{user.name}</TableCell>
                 <TableCell>{user.email}</TableCell>
-                <TableCell>{user.phone}</TableCell>
                 <TableCell>{user.role}</TableCell>
-                <TableCell>
-                  <Switch checked={user.active} onChange={() => handleToggleActive(user)} />
-                </TableCell>
+                <TableCell>{user.tenant_id}</TableCell>
                 <TableCell>
                   <Button onClick={() => handleOpenForm(user)}>Editar</Button>
                   <Button color="error" onClick={() => handleDelete(user.id)}>

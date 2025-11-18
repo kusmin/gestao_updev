@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -11,133 +11,67 @@ import {
   TableHead,
   TableRow,
   Typography,
+  CircularProgress,
+  Alert,
 } from '@mui/material';
-import { useAuth } from '../../contexts/useAuth';
-import ProductForm from './ProductForm';
+import { Link } from 'react-router-dom';
 
-// TODO: Substituir pelo tipo Product real e pelas funções da API
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  stock: number;
-}
-
-const fetchProducts = async (params: { tenantId: string; accessToken: string }): Promise<Product[]> => {
-  console.log('Fetching products with params:', params);
-  // Placeholder data
-  return [
-    { id: '1', name: 'Pomada Modeladora', price: 25.0, stock: 50 },
-    { id: '2', name: 'Óleo para Barba', price: 35.0, stock: 30 },
-  ];
-};
-
-const deleteProduct = async (params: { tenantId: string; productId: string; accessToken: string }): Promise<void> => {
-  console.log('Deleting product with params:', params);
-  return Promise.resolve();
-};
+// Mock data for products
+const mockProducts = [
+  { id: '1', name: 'Produto 1', price: 10.0, stock_qty: 100 },
+  { id: '2', name: 'Produto 2', price: 20.0, stock_qty: 200 },
+  { id: '3', name: 'Produto 3', price: 30.0, stock_qty: 300 },
+];
 
 const ProductListPage: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const { tenantId, accessToken } = useAuth();
-
-  const getProducts = useCallback(async () => {
-    if (!tenantId || !accessToken) {
-      setProducts([]);
-      return;
-    }
-    try {
-      const data = await fetchProducts({ tenantId, accessToken });
-      if (data && Array.isArray(data)) {
-        setProducts(data);
-      }
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    }
-  }, [tenantId, accessToken, setProducts]);
-
-  useEffect(() => {
-    if (tenantId && accessToken) {
-      getProducts();
-    }
-  }, [tenantId, accessToken, getProducts]);
-
-  const handleOpenForm = (product: Product | null = null) => {
-    setEditingProduct(product);
-    setIsFormOpen(true);
-  };
-
-  const handleCloseForm = () => {
-    setEditingProduct(null);
-    setIsFormOpen(false);
-  };
-
-  const handleSaveProduct = (product: Product) => {
-    if (editingProduct) {
-      setProducts(products.map((p) => (p.id === product.id ? product : p)));
-    } else {
-      setProducts([...products, product]);
-    }
-    handleCloseForm();
-  };
-
-  const handleDelete = async (id: string) => {
-    if (!tenantId || !accessToken) {
-      return;
-    }
-    try {
-      await deleteProduct({ tenantId, productId: id, accessToken });
-      setProducts((prev) => prev.filter((product) => product.id !== id));
-    } catch (error) {
-      console.error('Error deleting product:', error);
-    }
-  };
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   return (
     <Container>
-      <Box sx={{ my: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
+      <Box sx={{ my: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Typography variant="h4" component="h1">
           Produtos
         </Typography>
-        <Button variant="contained" color="primary" onClick={() => handleOpenForm()}>
+        <Button variant="contained" color="primary" component={Link} to="/products/new">
           Adicionar Produto
         </Button>
       </Box>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Nome</TableCell>
-              <TableCell>Preço</TableCell>
-              <TableCell>Estoque</TableCell>
-              <TableCell>Ações</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {products.map((product) => (
-              <TableRow key={product.id}>
-                <TableCell>{product.name}</TableCell>
-                <TableCell>R$ {product.price.toFixed(2)}</TableCell>
-                <TableCell>{product.stock}</TableCell>
-                <TableCell>
-                  <Button onClick={() => handleOpenForm(product)}>Editar</Button>
-                  <Button color="error" onClick={() => handleDelete(product.id)}>
-                    Excluir
-                  </Button>
-                </TableCell>
+
+      {isLoading && <CircularProgress />}
+      {isError && <Alert severity="error">Erro ao carregar produtos.</Alert>}
+
+      {!isLoading && !isError && (
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Nome</TableCell>
+                <TableCell>Preço</TableCell>
+                <TableCell>Estoque</TableCell>
+                <TableCell>Ações</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <ProductForm
-        open={isFormOpen}
-        onClose={handleCloseForm}
-        onSave={handleSaveProduct}
-        product={editingProduct}
-      />
+            </TableHead>
+            <TableBody>
+              {mockProducts.map((product) => (
+                <TableRow key={product.id}>
+                  <TableCell>{product.name}</TableCell>
+                  <TableCell>{product.price.toFixed(2)}</TableCell>
+                  <TableCell>{product.stock_qty}</TableCell>
+                  <TableCell>
+                    <Button component={Link} to={`/products/edit/${product.id}`}>
+                      Editar
+                    </Button>
+                    <Button color="error" onClick={() => alert('Excluir ' + product.name)}>
+                      Excluir
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
     </Container>
   );
 };

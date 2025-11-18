@@ -19,8 +19,8 @@ interface Tenant {
   id: string;
   name: string;
   document: string;
-  phone: string;
   email: string;
+  phone: string;
 }
 
 const TenantListPage: React.FC = () => {
@@ -49,7 +49,7 @@ const TenantListPage: React.FC = () => {
   const handleCloseForm = () => {
     setEditingTenant(null);
     setIsFormOpen(false);
-    fetchTenants(); // Refetch tenants after closing form
+    fetchTenants();
   };
 
   const handleSaveTenant = async (tenant: Partial<Tenant>) => {
@@ -73,7 +73,7 @@ const TenantListPage: React.FC = () => {
   const handleDelete = async (id: string) => {
     try {
       await apiClient(`/admin/tenants/${id}`, { method: 'DELETE' });
-      fetchTenants(); // Refetch tenants after deleting
+      fetchTenants();
     } catch (error) {
       console.error('Error deleting tenant:', error);
     }
@@ -95,8 +95,8 @@ const TenantListPage: React.FC = () => {
             <TableRow>
               <TableCell>Nome</TableCell>
               <TableCell>Documento</TableCell>
-              <TableCell>Telefone</TableCell>
               <TableCell>Email</TableCell>
+              <TableCell>Telefone</TableCell>
               <TableCell>Ações</TableCell>
             </TableRow>
           </TableHead>
@@ -105,8 +105,8 @@ const TenantListPage: React.FC = () => {
               <TableRow key={tenant.id}>
                 <TableCell>{tenant.name}</TableCell>
                 <TableCell>{tenant.document}</TableCell>
-                <TableCell>{tenant.phone}</TableCell>
                 <TableCell>{tenant.email}</TableCell>
+                <TableCell>{tenant.phone}</TableCell>
                 <TableCell>
                   <Button onClick={() => handleOpenForm(tenant)}>Editar</Button>
                   <Button color="error" onClick={() => handleDelete(tenant.id)}>

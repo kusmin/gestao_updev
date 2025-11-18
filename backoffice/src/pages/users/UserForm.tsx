@@ -6,15 +6,17 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
 } from '@mui/material';
 
 interface User {
   id: string;
   name: string;
   email: string;
-  phone: string;
   role: string;
-  active: boolean;
   tenant_id: string;
 }
 
@@ -29,8 +31,7 @@ const UserForm: React.FC<UserFormProps> = ({ open, onClose, onSave, user }) => {
   const [formData, setFormData] = useState<Partial<User>>({
     name: '',
     email: '',
-    phone: '',
-    role: 'professional',
+    role: '',
     tenant_id: '',
   });
 
@@ -41,16 +42,15 @@ const UserForm: React.FC<UserFormProps> = ({ open, onClose, onSave, user }) => {
       setFormData({
         name: '',
         email: '',
-        phone: '',
-        role: 'professional',
+        role: '',
         tenant_id: '',
       });
     }
   }, [user, open]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
     const { name, value } = event.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name as string]: value }));
   };
 
   const handleSave = async () => {
@@ -84,35 +84,21 @@ const UserForm: React.FC<UserFormProps> = ({ open, onClose, onSave, user }) => {
           value={formData.email}
           onChange={handleChange}
         />
-        <TextField
-          margin="dense"
-          name="phone"
-          label="Telefone"
-          type="text"
-          fullWidth
-          variant="standard"
-          value={formData.phone}
-          onChange={handleChange}
-        />
-        <TextField
-          margin="dense"
-          name="role"
-          label="Role"
-          type="text"
-          fullWidth
-          variant="standard"
-          value={formData.role}
-          onChange={handleChange}
-        />
-        <TextField
-          margin="dense"
-          name="password"
-          label="Senha"
-          type="password"
-          fullWidth
-          variant="standard"
-          onChange={handleChange}
-        />
+        <FormControl fullWidth margin="dense" variant="standard">
+          <InputLabel id="role-label">Role</InputLabel>
+          <Select
+            labelId="role-label"
+            id="role"
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+            label="Role"
+          >
+            <MenuItem value="admin">Admin</MenuItem>
+            <MenuItem value="user">User</MenuItem>
+            <MenuItem value="professional">Professional</MenuItem>
+          </Select>
+        </FormControl>
         <TextField
           margin="dense"
           name="tenant_id"

@@ -593,23 +593,8 @@ paths:
       tags:
       - Clients
   /clients/{id}:
-      - description: Client ID
-        in: path
-        name: id
-        required: true
-        type: string
-        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
-      responses:
-        "204":
-          description: No Content
-      security:
-      - BearerAuth: []
-      - TenantHeader: []
-      summary: Remove cliente
-      description: Remove (soft delete) o cliente especificado.
-      operationId: deleteClient
-      tags:
-      - Clients
+    get:
+      parameters:
       - description: Client ID
         in: path
         name: id
@@ -632,6 +617,7 @@ paths:
       tags:
       - Clients
     put:
+      parameters:
       - description: Client ID
         in: path
         name: id
@@ -657,6 +643,25 @@ paths:
       summary: Atualiza cliente
       description: Atualiza completamente o cliente informado pelo ID.
       operationId: updateClient
+      tags:
+      - Clients
+    delete:
+      parameters:
+      - description: Client ID
+        in: path
+        name: id
+        required: true
+        type: string
+        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
+      responses:
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Remove cliente
+      description: Remove (soft delete) o cliente especificado.
+      operationId: deleteClient
       tags:
       - Clients
   /companies/me:
@@ -867,23 +872,6 @@ paths:
       tags:
       - Products
   /products/{id}:
-      - description: Product ID
-        in: path
-        name: id
-        required: true
-        type: string
-        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
-      responses:
-        "204":
-          description: No Content
-      security:
-      - BearerAuth: []
-      - TenantHeader: []
-      summary: Remove produto
-      description: Remove o produto indicado pelo ID.
-      operationId: deleteProduct
-      tags:
-      - Products
     get:
       parameters:
       - description: Product ID
@@ -936,6 +924,25 @@ paths:
       summary: Atualiza produto
       description: Atualiza os dados do produto informado.
       operationId: updateProduct
+      tags:
+      - Products
+    delete:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
+      responses:
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      - TenantHeader: []
+      summary: Remove produto
+      description: Remove o produto indicado pelo ID.
+      operationId: deleteProduct
       tags:
       - Products
   /professionals:

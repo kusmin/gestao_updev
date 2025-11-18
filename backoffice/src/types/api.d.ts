@@ -13,50 +13,11 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Autentica usuário */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description Credenciais */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.LoginRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Autentica usuário
+         * @description Autentica um usuário existente com e-mail e senha.
+         */
+        post: operations["loginUser"];
         delete?: never;
         options?: never;
         head?: never;
@@ -72,50 +33,11 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Atualiza tokens de acesso */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description Refresh token */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.RefreshRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Atualiza tokens de acesso
+         * @description Renova tokens baseando-se no refresh token válido.
+         */
+        post: operations["refreshAuthTokens"];
         delete?: never;
         options?: never;
         head?: never;
@@ -135,40 +57,7 @@ export interface paths {
          * Cria empresa e usuário administrador
          * @description Fluxo inicial da plataforma: cria empresa, usuário admin e retorna tokens.
          */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description Dados do signup */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.SignupRequest"];
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.AuthSignup"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        post: operations["signupCompanyAndUser"];
         delete?: never;
         options?: never;
         head?: never;
@@ -182,61 +71,17 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Lista agendamentos */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description Data (YYYY-MM-DD) */
-                    date?: string;
-                    /** @description Profissional */
-                    professional_id?: string;
-                    /** @description Status */
-                    status?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Lista agendamentos
+         * @description Lista agendamentos com filtros de data, status ou profissional.
+         */
+        get: operations["listBookings"];
         put?: never;
-        /** Cria agendamento */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description Agendamento */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.BookingRequest"];
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Cria agendamento
+         * @description Cria um novo agendamento com profissional, serviço e data.
+         */
+        post: operations["createBooking"];
         delete?: never;
         options?: never;
         head?: never;
@@ -256,38 +101,11 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Atualiza agendamento */
-        patch: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /**
-                     * @description Booking ID
-                     * @example book_123456
-                     */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            /** @description Campos editáveis */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.BookingUpdateRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Atualiza agendamento
+         * @description Atualiza os campos editáveis de um agendamento existente.
+         */
+        patch: operations["updateBooking"];
         trace?: never;
     };
     "/bookings/{id}/cancel": {
@@ -299,38 +117,11 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Cancela agendamento */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /**
-                     * @description Booking ID
-                     * @example book_123456
-                     */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            /** @description Motivo */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.BookingCancelRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Cancela agendamento
+         * @description Cancela um agendamento existente e registra o motivo.
+         */
+        post: operations["cancelBooking"];
         delete?: never;
         options?: never;
         head?: never;
@@ -344,67 +135,17 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Lista clientes */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description Filtro por nome/email/telefone */
-                    search?: string;
-                    /** @description Lista de tags separadas por vírgula */
-                    tags?: string;
-                    /** @description Página */
-                    page?: number;
-                    /** @description Itens por página */
-                    per_page?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Lista clientes
+         * @description Lista clientes com filtros de busca e paginação.
+         */
+        get: operations["listClients"];
         put?: never;
-        /** Cria cliente */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: components["requestBodies"]["handler.ClientRequest"];
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Cria cliente
+         * @description Cria um cliente novo para o tenant com os dados fornecidos.
+         */
+        post: operations["createClient"];
         delete?: never;
         options?: never;
         head?: never;
@@ -418,86 +159,22 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Busca cliente */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /**
-                     * @description Client ID
-                     * @example client_123456
-                     */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        /** Atualiza cliente */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /**
-                     * @description Client ID
-                     * @example client_123456
-                     */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody: components["requestBodies"]["handler.ClientRequest"];
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Busca cliente
+         * @description Retorna os dados do cliente informado pelo ID.
+         */
+        get: operations["getClient"];
+        /**
+         * Atualiza cliente
+         * @description Atualiza completamente o cliente informado pelo ID.
+         */
+        put: operations["updateClient"];
         post?: never;
-        /** Remove cliente */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /**
-                     * @description Client ID
-                     * @example client_123456
-                     */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description No Content */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
+        /**
+         * Remove cliente
+         * @description Remove (soft delete) o cliente especificado.
+         */
+        delete: operations["deleteClient"];
         options?: never;
         head?: never;
         patch?: never;
@@ -510,71 +187,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Retorna dados da empresa atual */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        /** Atualiza dados da empresa atual */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description Campos editáveis */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.CompanyUpdateRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Retorna dados da empresa atual
+         * @description Retorna as informações da empresa associada ao tenant autenticado.
+         */
+        get: operations["getCurrentCompany"];
+        /**
+         * Atualiza dados da empresa atual
+         * @description Atualiza os campos configuráveis da empresa do tenant atual.
+         */
+        put: operations["updateCurrentCompany"];
         post?: never;
         delete?: never;
         options?: never;
@@ -589,32 +211,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** KPIs diários */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description Data (YYYY-MM-DD) */
-                    date?: string;
-                    /** @description Profissional */
-                    professional_id?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * KPIs diários
+         * @description Retorna indicadores diários filtrados por data e profissional.
+         */
+        get: operations["getDailyDashboard"];
         put?: never;
         post?: never;
         delete?: never;
@@ -630,63 +231,17 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Lista movimentações de estoque */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description Filtro por produto */
-                    product_id?: string;
-                    /** @description Tipo (in|out|adjustment) */
-                    type?: string;
-                    /** @description Data inicial (RFC3339) */
-                    start_date?: string;
-                    /** @description Data final (RFC3339) */
-                    end_date?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Lista movimentações de estoque
+         * @description Lista movimentações de estoque com filtros por produto, tipo e datas.
+         */
+        get: operations["listInventoryMovements"];
         put?: never;
-        /** Registra movimento de estoque */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description Movimentação */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.InventoryRequest"];
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Registra movimento de estoque
+         * @description Registra uma movimentação de estoque (entrada, saída ou ajuste).
+         */
+        post: operations["createInventoryMovement"];
         delete?: never;
         options?: never;
         head?: never;
@@ -700,34 +255,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Lista pagamentos */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description Método */
-                    method?: string;
-                    /** @description Data inicial RFC3339 */
-                    start_date?: string;
-                    /** @description Data final RFC3339 */
-                    end_date?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Lista pagamentos
+         * @description Lista pagamentos processados com filtros por método e datas.
+         */
+        get: operations["listPayments"];
         put?: never;
         post?: never;
         delete?: never;
@@ -743,49 +275,17 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Lista produtos */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Lista produtos
+         * @description Lista produtos cadastrados com paginação padrão.
+         */
+        get: operations["listProducts"];
         put?: never;
-        /** Cria produto */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: components["requestBodies"]["handler.ProductRequest"];
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Cria produto
+         * @description Cria um produto novo com preço, estoque e metadata.
+         */
+        post: operations["createProduct"];
         delete?: never;
         options?: never;
         head?: never;
@@ -799,86 +299,22 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Busca produto por ID */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /**
-                     * @description Product ID
-                     * @example product_123456
-                     */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        /** Atualiza produto */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /**
-                     * @description Product ID
-                     * @example product_123456
-                     */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody: components["requestBodies"]["handler.ProductRequest"];
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Busca produto por ID
+         * @description Retorna o produto completo identificado pelo ID.
+         */
+        get: operations["getProduct"];
+        /**
+         * Atualiza produto
+         * @description Atualiza os dados do produto informado.
+         */
+        put: operations["updateProduct"];
         post?: never;
-        /** Remove produto */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /**
-                     * @description Product ID
-                     * @example product_123456
-                     */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description No Content */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
+        /**
+         * Remove produto
+         * @description Remove o produto indicado pelo ID.
+         */
+        delete: operations["deleteProduct"];
         options?: never;
         head?: never;
         patch?: never;
@@ -891,27 +327,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Lista profissionais ativos */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Lista profissionais ativos
+         * @description Lista os profissionais ativos associados ao tenant.
+         */
+        get: operations["listProfessionals"];
         put?: never;
         post?: never;
         delete?: never;
@@ -927,61 +347,17 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Lista pedidos/vendas */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description Status */
-                    status?: string;
-                    /** @description Cliente */
-                    client_id?: string;
-                    /** @description Data (YYYY-MM-DD) */
-                    date?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Lista pedidos/vendas
+         * @description Lista pedidos e vendas filtrando por status, cliente ou data.
+         */
+        get: operations["listSalesOrders"];
         put?: never;
-        /** Cria pedido/venda */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description Pedido */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.SalesOrderRequest"];
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Cria pedido/venda
+         * @description Cria um pedido ou venda com itens e consumidor vinculados.
+         */
+        post: operations["createSalesOrder"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1001,38 +377,11 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Atualiza pedido */
-        patch: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /**
-                     * @description Order ID
-                     * @example order_123456
-                     */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            /** @description Campos editáveis */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.SalesOrderUpdateRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Atualiza pedido
+         * @description Atualiza campos editáveis de um pedido existente.
+         */
+        patch: operations["updateSalesOrder"];
         trace?: never;
     };
     "/sales/orders/{id}/payments": {
@@ -1044,38 +393,11 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Registra pagamento */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /**
-                     * @description Order ID
-                     * @example order_123456
-                     */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            /** @description Pagamento */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.PaymentRequest"];
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Registra pagamento
+         * @description Registra um pagamento para o pedido informado.
+         */
+        post: operations["createSalesOrderPayment"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1089,49 +411,17 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Lista serviços */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Lista serviços
+         * @description Retorna a lista completa de serviços configurados para o tenant.
+         */
+        get: operations["listServices"];
         put?: never;
-        /** Cria serviço */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: components["requestBodies"]["handler.ServiceRequest"];
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Cria serviço
+         * @description Cria um novo serviço associado ao tenant.
+         */
+        post: operations["createService"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1145,86 +435,22 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Busca serviço por ID */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /**
-                     * @description Service ID
-                     * @example service_123456
-                     */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
-        /** Atualiza serviço */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /**
-                     * @description Service ID
-                     * @example service_123456
-                     */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody: components["requestBodies"]["handler.ServiceRequest"];
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Busca serviço por ID
+         * @description Busca os dados completos do serviço informado.
+         */
+        get: operations["getService"];
+        /**
+         * Atualiza serviço
+         * @description Substitui os dados do serviço informado pelo payload.
+         */
+        put: operations["updateService"];
         post?: never;
-        /** Remove serviço */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /**
-                     * @description Service ID
-                     * @example service_123456
-                     */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description No Content */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
+        /**
+         * Remove serviço
+         * @description Remove (soft delete) o serviço informado pelo ID.
+         */
+        delete: operations["deleteService"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1237,70 +463,17 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Lista usuários do tenant */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description Filtro por role */
-                    role?: string;
-                    /** @description Página */
-                    page?: number;
-                    /** @description Itens por página */
-                    per_page?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Lista usuários do tenant
+         * @description Lista usuários do tenant com filtros e paginação.
+         */
+        get: operations["listUsers"];
         put?: never;
-        /** Cria um usuário */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description Novo usuário */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.CreateUserRequest"];
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Cria um usuário
+         * @description Cria um novo usuário associado ao tenant.
+         */
+        post: operations["createUser"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1314,94 +487,25 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Busca usuário por ID */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /**
-                     * @description User ID
-                     * @example user_123456
-                     */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Busca usuário por ID
+         * @description Retorna os dados completos do usuário selecionado.
+         */
+        get: operations["getUser"];
         put?: never;
         post?: never;
-        /** Remove (soft delete) um usuário */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /**
-                     * @description User ID
-                     * @example user_123456
-                     */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description No Content */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
+        /**
+         * Remove (soft delete) um usuário
+         * @description Desativa o usuário informado sem apagar seu histórico.
+         */
+        delete: operations["deleteUser"];
         options?: never;
         head?: never;
-        /** Atualiza parcialmente um usuário */
-        patch: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /**
-                     * @description User ID
-                     * @example user_123456
-                     */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            /** @description Campos editáveis */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["handler.UpdateUserRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["response.APIResponse"];
-                    };
-                };
-            };
-        };
+        /**
+         * Atualiza parcialmente um usuário
+         * @description Atualiza somente os campos informados para o usuário.
+         */
+        patch: operations["updateUser"];
         trace?: never;
     };
 }
@@ -1527,14 +631,6 @@ export interface components {
                 phone?: string;
             };
         };
-        "handler.SignupResponse": {
-            tenant_id: string;
-            user_id: string;
-            access_token: string;
-            refresh_token: string;
-            /** Format: int64 */
-            expires_in: number;
-        };
         "handler.UpdateUserRequest": {
             active?: boolean;
             name?: string;
@@ -1544,11 +640,6 @@ export interface components {
         };
         "response.APIResponse": {
             data?: unknown;
-            error?: unknown;
-            meta?: unknown;
-        };
-        "response.AuthSignup": {
-            data?: components["schemas"]["handler.SignupResponse"];
             error?: unknown;
             meta?: unknown;
         };
@@ -1579,4 +670,1047 @@ export interface components {
     pathItems: never;
 }
 export type $defs = Record<string, never>;
-export type operations = Record<string, never>;
+export interface operations {
+    loginUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Credenciais */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["handler.LoginRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    refreshAuthTokens: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Refresh token */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["handler.RefreshRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    signupCompanyAndUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Dados do signup */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["handler.SignupRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    listBookings: {
+        parameters: {
+            query?: {
+                /** @description Data (YYYY-MM-DD) */
+                date?: string;
+                /** @description Profissional */
+                professional_id?: string;
+                /** @description Status */
+                status?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    createBooking: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Agendamento */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["handler.BookingRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    updateBooking: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Booking ID */
+                id: string;
+            };
+            cookie?: never;
+        };
+        /** @description Campos editáveis */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["handler.BookingUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    cancelBooking: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Booking ID
+                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        /** @description Motivo */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["handler.BookingCancelRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    listClients: {
+        parameters: {
+            query?: {
+                /** @description Filtro por nome/email/telefone */
+                search?: string;
+                /** @description Lista de tags separadas por vírgula */
+                tags?: string;
+                /** @description Página */
+                page?: number;
+                /** @description Itens por página */
+                per_page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    createClient: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: components["requestBodies"]["handler.ClientRequest"];
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    getClient: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Client ID
+                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    updateClient: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Client ID
+                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: components["requestBodies"]["handler.ClientRequest"];
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    deleteClient: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Client ID
+                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getCurrentCompany: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    updateCurrentCompany: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Campos editáveis */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["handler.CompanyUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    getDailyDashboard: {
+        parameters: {
+            query?: {
+                /** @description Data (YYYY-MM-DD) */
+                date?: string;
+                /** @description Profissional */
+                professional_id?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    listInventoryMovements: {
+        parameters: {
+            query?: {
+                /** @description Filtro por produto */
+                product_id?: string;
+                /** @description Tipo (in|out|adjustment) */
+                type?: string;
+                /** @description Data inicial (RFC3339) */
+                start_date?: string;
+                /** @description Data final (RFC3339) */
+                end_date?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    createInventoryMovement: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Movimentação */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["handler.InventoryRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    listPayments: {
+        parameters: {
+            query?: {
+                /** @description Método */
+                method?: string;
+                /** @description Data inicial RFC3339 */
+                start_date?: string;
+                /** @description Data final RFC3339 */
+                end_date?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    listProducts: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    createProduct: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: components["requestBodies"]["handler.ProductRequest"];
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    getProduct: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Product ID
+                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    updateProduct: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Product ID
+                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: components["requestBodies"]["handler.ProductRequest"];
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    deleteProduct: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Product ID
+                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    listProfessionals: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    listSalesOrders: {
+        parameters: {
+            query?: {
+                /** @description Status */
+                status?: string;
+                /** @description Cliente */
+                client_id?: string;
+                /** @description Data (YYYY-MM-DD) */
+                date?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    createSalesOrder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Pedido */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["handler.SalesOrderRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    updateSalesOrder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Order ID
+                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        /** @description Campos editáveis */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["handler.SalesOrderUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    createSalesOrderPayment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Order ID
+                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        /** @description Pagamento */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["handler.PaymentRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    listServices: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    createService: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: components["requestBodies"]["handler.ServiceRequest"];
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    getService: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Service ID
+                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    updateService: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Service ID
+                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: components["requestBodies"]["handler.ServiceRequest"];
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    deleteService: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Service ID
+                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    listUsers: {
+        parameters: {
+            query?: {
+                /** @description Filtro por role */
+                role?: string;
+                /** @description Página */
+                page?: number;
+                /** @description Itens por página */
+                per_page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    createUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Novo usuário */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["handler.CreateUserRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    getUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description User ID
+                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+    deleteUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description User ID
+                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    updateUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description User ID
+                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        /** @description Campos editáveis */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["handler.UpdateUserRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["response.APIResponse"];
+                };
+            };
+        };
+    };
+}

@@ -8,6 +8,8 @@ import ProtectedRoute from '../components/routing/ProtectedRoute';
 import AppointmentListPage from '../pages/appointments/AppointmentListPage';
 import ProductListPage from '../pages/products/ProductListPage';
 import SaleListPage from '../pages/sales/SaleListPage';
+import ProductForm from '../pages/products/ProductForm';
+import SaleForm from '../pages/sales/SaleForm';
 
 const AppRouter: React.FC = () => (
   <BrowserRouter>
@@ -20,7 +22,11 @@ const AppRouter: React.FC = () => (
           <Route path="clients" element={<ClientListPage />} />
           <Route path="appointments" element={<AppointmentListPage />} />
           <Route path="products" element={<ProductListPage />} />
+          <Route path="products/new" element={<ProductForm />} />
+          <Route path="products/edit/:id" element={<ProductForm />} />
           <Route path="sales" element={<SaleListPage />} />
+          <Route path="sales/new" element={<SaleForm />} />
+          <Route path="sales/edit/:id" element={<SaleForm />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
