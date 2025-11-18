@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.6.0](https://github.com/kusmin/gestao_updev/compare/backoffice-v1.5.0...backoffice-v1.6.0) (2025-11-18)
+
+
+### Features
+
+* Implement backoffice CRUD for products, services, sales and appointments ([2dffab4](https://github.com/kusmin/gestao_updev/commit/2dffab4b4ca685d508c2342ff1fad6459f6a3b06))
+* Implement frontend product and sales pages, and backoffice CRUD for tenants and users ([5ed5995](https://github.com/kusmin/gestao_updev/commit/5ed599525bcfe50df18ed2e2c18f91c03a1677e5))
+
 ## [1.5.0](https://github.com/kusmin/gestao_updev/compare/backoffice-v1.4.1...backoffice-v1.5.0) (2025-11-17)
 
 
