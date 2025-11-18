@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.6.2](https://github.com/kusmin/gestao_updev/compare/backoffice-v1.6.1...backoffice-v1.6.2) (2025-11-18)
+
+
+### Bug Fixes
+
+* **backoffice:** Correct Grid component usage in DashboardPage ([569ceff](https://github.com/kusmin/gestao_updev/commit/569ceff9393450f321083ea028b0bdab53dc6735))
+* **backoffice:** Fix linting errors in form components and wrappers ([e8b90a8](https://github.com/kusmin/gestao_updev/commit/e8b90a8efd6ee6482da5af9f32e550de949804b3))
+
 ## [1.6.1](https://github.com/kusmin/gestao_updev/compare/backoffice-v1.6.0...backoffice-v1.6.1) (2025-11-18)
 
 
