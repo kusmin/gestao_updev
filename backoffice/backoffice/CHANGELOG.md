@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/kusmin/gestao_updev/compare/backoffice-v1.6.0...backoffice-v1.6.1) (2025-11-18)
+
+
+### Bug Fixes
+
+* Fix TypeScript errors in DashboardPage and form components ([f5a1b9b](https://github.com/kusmin/gestao_updev/commit/f5a1b9b79c88ecdee1b2e5d7a4086bd860476ceb))
+
 ## [1.6.0](https://github.com/kusmin/gestao_updev/compare/backoffice-v1.5.0...backoffice-v1.6.0) (2025-11-18)
 
 
