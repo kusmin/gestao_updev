@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
@@ -22,6 +23,7 @@ var (
 		&domain.Company{},
 		&domain.User{},
 		&domain.Client{},
+		&domain.Professional{},
 		&domain.Service{},
 		&domain.Product{},
 		&domain.AvailabilityRule{},
@@ -64,6 +66,16 @@ func TestMain(m *testing.M) {
 
 func setupTest(t *testing.T) {
 	clearAllData()
+	// Create a default company and user for tests that require them
+	defaultCompany, err := createTestTenant()
+	if err != nil {
+		log.Fatalf("failed to create default test company: %v", err)
+	}
+	_, err = seedUserRecord(t, defaultCompany.ID, "testuser", "test@example.com", "password", domain.UserRoleAdmin)
+	if err != nil {
+		log.Fatalf("failed to create default test user: %v", err)
+	}
+
 	repo := repository.New(testDB)
 	testSvc = New(&config.Config{}, repo, nil, nil) // Adjust as needed
 	t.Cleanup(clearAllData)                         // Ensure cleanup after each test
@@ -82,6 +94,26 @@ func setupTestDatabase() (*gorm.DB, error) {
 	}
 
 	return db, nil
+}
+
+func seedUserRecord(t *testing.T, tenantID uuid.UUID, name, email, password, role string) (*domain.User, error) {
+	t.Helper()
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, err
+	}
+	user := &domain.User{
+		TenantModel: domain.TenantModel{TenantID: tenantID},
+		Name:        name,
+		Email:       email,
+		PasswordHash: string(hashedPassword),
+		Role:        role,
+		Active:      true,
+	}
+	if err := testDB.Create(user).Error; err != nil {
+		return nil, err
+	}
+	return user, nil
 }
 
 // Helper function to create a tenant for tests
@@ -140,18 +172,7 @@ func ensureCompanyDocumentConstraint(db *gorm.DB) error {
 	const stmt = `
 DO $$
 BEGIN
-	IF to_regclass('public.companies') IS NULL THEN
-		RETURN;
-	END IF;
-
-	IF EXISTS (
-		SELECT 1 FROM pg_constraint
-		WHERE conname = 'companies_document_key'
-		  AND conrelid = 'public.companies'::regclass
-	) THEN
-		ALTER TABLE companies RENAME CONSTRAINT companies_document_key TO uni_companies_document;
-	END IF;
-
+	-- Check if the constraint exists, if not, create it
 	IF NOT EXISTS (
 		SELECT 1 FROM pg_constraint
 		WHERE conname = 'uni_companies_document'

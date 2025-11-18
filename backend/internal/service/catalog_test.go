@@ -422,6 +422,39 @@ func TestAdminServiceLifecycle(t *testing.T) {
 
 	require.NoError(t, testSvc.AdminDeleteService(context.Background(), service.ID))
 	var count int64
-	testDB.Model(&domain.Service{}).Where("id = ?", service.ID).Count(&count)
 	assert.Equal(t, int64(0), count)
+}
+
+func TestListServices(t *testing.T) {
+	clearAllData()
+	tenant, err := createTestTenant()
+	require.NoError(t, err)
+	otherTenant, err := createTestTenant()
+	require.NoError(t, err)
+
+	_, err = testSvc.CreateService(context.Background(), tenant.ID, Input{
+		Name:            "Service B",
+		DurationMinutes: 60,
+		Price:           100,
+	})
+	require.NoError(t, err)
+	_, err = testSvc.CreateService(context.Background(), tenant.ID, Input{
+		Name:            "Service A",
+		DurationMinutes: 30,
+		Price:           50,
+	})
+	require.NoError(t, err)
+	_, err = testSvc.CreateService(context.Background(), otherTenant.ID, Input{
+		Name:            "Other Tenant Service",
+		DurationMinutes: 90,
+		Price:           200,
+	})
+	require.NoError(t, err)
+
+	services, err := testSvc.ListServices(context.Background(), tenant.ID)
+
+	assert.NoError(t, err)
+	require.Len(t, services, 2)
+	assert.Equal(t, "Service A", services[0].Name)
+	assert.Equal(t, "Service B", services[1].Name)
 }

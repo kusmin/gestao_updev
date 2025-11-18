@@ -11,7 +11,7 @@ import (
 
 const (
 	defaultDatabaseURL             = "postgres://postgres:postgres@localhost:5432/gestao_updev?sslmode=disable"
-	defaultJWTAccessSecretEncoded  = "ZGV2LWFjY2VzczpzZWNyZXQ="
+	defaultJWTAccessSecretEncoded  = "ZGV2LWFjY2Vzcy1zZWNyZXQ="
 	defaultJWTRefreshSecretEncoded = "ZGV2LXJlZnJlc2gtc2VjcmV0"
 )
 

@@ -169,3 +169,70 @@ func TestAdminBookingLifecycle(t *testing.T) {
 	testDB.Model(&domain.Booking{}).Where("id = ?", adminBooking.ID).Count(&count)
 	assert.Equal(t, int64(0), count)
 }
+
+func TestListAllBookings(t *testing.T) {
+	setupTest(t)
+	clearAllData()
+	tenant1, _ := createTestTenant()
+	tenant2, _ := createTestTenant()
+
+	client1 := seedClientRecord(t, tenant1.ID, "Client 1", "client1@example.com", nil)
+	pro1 := seedProfessionalRecord(t, tenant1.ID, "Pro 1")
+	service1 := seedServiceRecord(t, tenant1.ID, "Service 1", 30)
+
+	client2 := seedClientRecord(t, tenant2.ID, "Client 2", "client2@example.com", nil)
+	pro2 := seedProfessionalRecord(t, tenant2.ID, "Pro 2")
+	service2 := seedServiceRecord(t, tenant2.ID, "Service 2", 60)
+
+	date1 := time.Now().UTC().Truncate(24 * time.Hour)
+	date2 := date1.Add(24 * time.Hour)
+
+	// Bookings for tenant 1
+	_, _ = testSvc.CreateBooking(context.Background(), tenant1.ID, BookingInput{
+		ClientID:       client1.ID,
+		ProfessionalID: pro1.ID,
+		ServiceID:      service1.ID,
+		StartAt:        date1.Add(9 * time.Hour),
+		Status:         domain.BookingStatusConfirmed,
+	})
+	_, _ = testSvc.CreateBooking(context.Background(), tenant1.ID, BookingInput{
+		ClientID:       client1.ID,
+		ProfessionalID: pro1.ID,
+		ServiceID:      service1.ID,
+		StartAt:        date1.Add(10 * time.Hour),
+		Status:         domain.BookingStatusPending,
+	})
+
+	// Booking for tenant 2
+	_, _ = testSvc.CreateBooking(context.Background(), tenant2.ID, BookingInput{
+		ClientID:       client2.ID,
+		ProfessionalID: pro2.ID,
+		ServiceID:      service2.ID,
+		StartAt:        date2.Add(11 * time.Hour),
+		Status:         domain.BookingStatusConfirmed,
+	})
+
+	// Test ListAllBookings without filters
+	bookings, err := testSvc.ListAllBookings(context.Background(), BookingFilter{})
+	require.NoError(t, err)
+	assert.Len(t, bookings, 3)
+
+	// Test ListAllBookings with status filter
+	filter := BookingFilter{Status: domain.BookingStatusConfirmed}
+	bookings, err = testSvc.ListAllBookings(context.Background(), filter)
+	require.NoError(t, err)
+	assert.Len(t, bookings, 2)
+
+	// Test ListAllBookings with professional ID filter
+	pro1ID := pro1.ID
+	filter = BookingFilter{ProfessionalID: &pro1ID}
+	bookings, err = testSvc.ListAllBookings(context.Background(), filter)
+	require.NoError(t, err)
+	assert.Len(t, bookings, 2)
+
+	// Test ListAllBookings with date filter
+	filter = BookingFilter{Date: &date1}
+	bookings, err = testSvc.ListAllBookings(context.Background(), filter)
+	require.NoError(t, err)
+	assert.Len(t, bookings, 2)
+}

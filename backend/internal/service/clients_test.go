@@ -146,6 +146,78 @@ func TestDeleteClientSoftDelete(t *testing.T) {
 	assert.NotNil(t, deleted.DeletedAt)
 }
 
+func TestListAllClients(t *testing.T) {
+	clearAllData()
+	tenant1, _ := createTestTenant()
+	tenant2, _ := createTestTenant()
+
+	client1Record := seedClientRecord(t, tenant1.ID, "Client 1", "client1@example.com", []string{"vip"})
+	_ = seedClientRecord(t, tenant2.ID, "Client 2", "client2@example.com", []string{"normal"})
+	_ = seedClientRecord(t, tenant1.ID, "Client 3", "client3@example.com", []string{"vip", "new"})
+
+	// Test ListAllClients without filters
+	clients, total, err := testSvc.ListAllClients(context.Background(), ClientsFilter{})
+	require.NoError(t, err)
+	assert.Equal(t, int64(3), total)
+	require.Len(t, clients, 3)
+
+	// Test ListAllClients with search filter
+	filter := ClientsFilter{Search: "client 1"}
+	clients, total, err = testSvc.ListAllClients(context.Background(), filter)
+	require.NoError(t, err)
+	assert.Equal(t, int64(1), total)
+	require.Len(t, clients, 1)
+	assert.Equal(t, client1Record.ID, clients[0].ID)
+
+	// Test ListAllClients with tags filter
+	filter = ClientsFilter{Tags: []string{"vip"}}
+	clients, total, err = testSvc.ListAllClients(context.Background(), filter)
+	require.NoError(t, err)
+	assert.Equal(t, int64(2), total)
+	require.Len(t, clients, 2)
+
+	// Test ListAllClients with pagination
+	filter = ClientsFilter{Page: 1, PerPage: 2}
+	clients, total, err = testSvc.ListAllClients(context.Background(), filter)
+	require.NoError(t, err)
+	assert.Equal(t, int64(3), total)
+	require.Len(t, clients, 2)
+
+	filter = ClientsFilter{Page: 2, PerPage: 2}
+	clients, total, err = testSvc.ListAllClients(context.Background(), filter)
+	require.NoError(t, err)
+	assert.Equal(t, int64(3), total)
+	require.Len(t, clients, 1)
+}
+
+func TestAdminCreateClient(t *testing.T) {
+	clearAllData()
+	tenant, _ := createTestTenant()
+
+	input := AdminClientInput{
+		ClientInput: ClientInput{
+			Name:    "Admin Client",
+			Email:   "admin@example.com",
+			Phone:   "1111-2222",
+			Notes:   "Admin created client",
+			Tags:    []string{"admin"},
+			Contact: map[string]interface{}{"source": "internal"},
+		},
+		TenantID: tenant.ID,
+	}
+
+	created, err := testSvc.AdminCreateClient(context.Background(), input)
+	require.NoError(t, err)
+	require.NotNil(t, created)
+	assert.Equal(t, tenant.ID, created.TenantID)
+	assert.Equal(t, input.Name, created.Name)
+	assert.Equal(t, input.Email, created.Email)
+	assert.Equal(t, input.Phone, created.Phone)
+	assert.Equal(t, input.Notes, created.Notes)
+	assert.JSONEq(t, `["admin"]`, string(created.Tags))
+	assert.Equal(t, "internal", created.Contact["source"])
+}
+
 func seedClientRecord(t *testing.T, tenantID uuid.UUID, name, email string, tags []string) *domain.Client {
 	t.Helper()
 	client := &domain.Client{
