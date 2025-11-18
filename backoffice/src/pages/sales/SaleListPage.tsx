@@ -15,7 +15,7 @@ import {
 import SaleForm from './SaleForm';
 import apiClient from '../../lib/apiClient';
 
-interface Sale {
+export interface Sale {
   id: string;
   client_id: string;
   total: number;

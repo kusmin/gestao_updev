@@ -15,7 +15,7 @@ import {
 import TenantForm from './TenantForm';
 import apiClient from '../../lib/apiClient';
 
-interface Tenant {
+export interface Tenant {
   id: string;
   name: string;
   document: string;

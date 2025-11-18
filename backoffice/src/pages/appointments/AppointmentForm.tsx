@@ -58,7 +58,12 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ open, onClose, onSave
     }
   }, [appointment, open]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement> | SelectChangeEvent<string>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelectChange = (event: SelectChangeEvent<string>) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name as string]: value }));
   };
@@ -82,7 +87,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ open, onClose, onSave
           fullWidth
           variant="standard"
           value={formData.client_id}
-          onChange={handleChange}
+          onChange={handleInputChange}
         />
         <TextField
           margin="dense"
@@ -92,7 +97,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ open, onClose, onSave
           fullWidth
           variant="standard"
           value={formData.professional_id}
-          onChange={handleChange}
+          onChange={handleInputChange}
         />
         <TextField
           margin="dense"
@@ -102,7 +107,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ open, onClose, onSave
           fullWidth
           variant="standard"
           value={formData.service_id}
-          onChange={handleChange}
+          onChange={handleInputChange}
         />
         <TextField
           margin="dense"
@@ -112,7 +117,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ open, onClose, onSave
           fullWidth
           variant="standard"
           value={formData.start_at}
-          onChange={handleChange}
+          onChange={handleInputChange}
           InputLabelProps={{
             shrink: true,
           }}
@@ -125,7 +130,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ open, onClose, onSave
           fullWidth
           variant="standard"
           value={formData.end_at}
-          onChange={handleChange}
+          onChange={handleInputChange}
           InputLabelProps={{
             shrink: true,
           }}
@@ -137,7 +142,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ open, onClose, onSave
             id="status"
             name="status"
             value={formData.status}
-            onChange={handleChange}
+            onChange={handleSelectChange}
             label="Status"
           >
             <MenuItem value="pending">Pending</MenuItem>
@@ -154,7 +159,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ open, onClose, onSave
           fullWidth
           variant="standard"
           value={formData.tenant_id}
-          onChange={handleChange}
+          onChange={handleInputChange}
         />
       </DialogContent>
       <DialogActions>

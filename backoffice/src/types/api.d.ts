@@ -876,10 +876,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description Booking ID
-                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
-                 */
+                /** @description Booking ID */
                 id: string;
             };
             cookie?: never;
@@ -965,10 +962,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description Client ID
-                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
-                 */
+                /** @description Client ID */
                 id: string;
             };
             cookie?: never;
@@ -991,10 +985,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description Client ID
-                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
-                 */
+                /** @description Client ID */
                 id: string;
             };
             cookie?: never;
@@ -1017,10 +1008,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description Client ID
-                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
-                 */
+                /** @description Client ID */
                 id: string;
             };
             cookie?: never;
@@ -1250,10 +1238,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description Product ID
-                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
-                 */
+                /** @description Product ID */
                 id: string;
             };
             cookie?: never;
@@ -1276,10 +1261,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description Product ID
-                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
-                 */
+                /** @description Product ID */
                 id: string;
             };
             cookie?: never;
@@ -1302,10 +1284,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description Product ID
-                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
-                 */
+                /** @description Product ID */
                 id: string;
             };
             cookie?: never;
@@ -1398,10 +1377,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description Order ID
-                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
-                 */
+                /** @description Order ID */
                 id: string;
             };
             cookie?: never;
@@ -1429,10 +1405,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description Order ID
-                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
-                 */
+                /** @description Order ID */
                 id: string;
             };
             cookie?: never;
@@ -1500,10 +1473,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description Service ID
-                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
-                 */
+                /** @description Service ID */
                 id: string;
             };
             cookie?: never;
@@ -1526,10 +1496,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description Service ID
-                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
-                 */
+                /** @description Service ID */
                 id: string;
             };
             cookie?: never;
@@ -1552,10 +1519,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description Service ID
-                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
-                 */
+                /** @description Service ID */
                 id: string;
             };
             cookie?: never;
@@ -1637,10 +1601,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description User ID
-                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
-                 */
+                /** @description User ID */
                 id: string;
             };
             cookie?: never;
@@ -1663,10 +1624,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description User ID
-                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
-                 */
+                /** @description User ID */
                 id: string;
             };
             cookie?: never;
@@ -1687,10 +1645,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /**
-                 * @description User ID
-                 * @example f47ac10b-58cc-4372-a567-0e02b2c3d479
-                 */
+                /** @description User ID */
                 id: string;
             };
             cookie?: never;

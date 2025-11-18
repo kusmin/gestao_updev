@@ -15,7 +15,7 @@ import {
 import ServiceForm from './ServiceForm';
 import apiClient from '../../lib/apiClient';
 
-interface Service {
+export interface Service {
   id: string;
   name: string;
   price: number;

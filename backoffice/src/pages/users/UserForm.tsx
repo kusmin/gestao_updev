@@ -49,7 +49,12 @@ const UserForm: React.FC<UserFormProps> = ({ open, onClose, onSave, user }) => {
     }
   }, [user, open]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement> | SelectChangeEvent<string>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelectChange = (event: SelectChangeEvent<string>) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name as string]: value }));
   };
@@ -73,7 +78,7 @@ const UserForm: React.FC<UserFormProps> = ({ open, onClose, onSave, user }) => {
           fullWidth
           variant="standard"
           value={formData.name}
-          onChange={handleChange}
+          onChange={handleInputChange}
         />
         <TextField
           margin="dense"
@@ -83,7 +88,7 @@ const UserForm: React.FC<UserFormProps> = ({ open, onClose, onSave, user }) => {
           fullWidth
           variant="standard"
           value={formData.email}
-          onChange={handleChange}
+          onChange={handleInputChange}
         />
         <FormControl fullWidth margin="dense" variant="standard">
           <InputLabel id="role-label">Role</InputLabel>
@@ -92,7 +97,7 @@ const UserForm: React.FC<UserFormProps> = ({ open, onClose, onSave, user }) => {
             id="role"
             name="role"
             value={formData.role}
-            onChange={handleChange}
+            onChange={handleSelectChange}
             label="Role"
           >
             <MenuItem value="admin">Admin</MenuItem>
@@ -108,7 +113,7 @@ const UserForm: React.FC<UserFormProps> = ({ open, onClose, onSave, user }) => {
           fullWidth
           variant="standard"
           value={formData.tenant_id}
-          onChange={handleChange}
+          onChange={handleInputChange}
         />
       </DialogContent>
       <DialogActions>

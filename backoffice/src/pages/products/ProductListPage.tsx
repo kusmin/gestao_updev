@@ -15,7 +15,7 @@ import {
 import ProductForm from './ProductForm';
 import apiClient from '../../lib/apiClient';
 
-interface Product {
+export interface Product {
   id: string;
   name: string;
   sku: string;

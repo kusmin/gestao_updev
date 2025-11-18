@@ -15,7 +15,7 @@ import {
 import ClientForm from './ClientForm';
 import apiClient from '../../lib/apiClient';
 
-interface Client {
+export interface Client {
   id: string;
   name: string;
   email: string;

@@ -1,7 +1,7 @@
 import AppRouter from './routes/AppRouter';
 import { ColorModeProvider } from './theme/ColorModeProvider';
 import { AuthProvider } from './contexts/AuthContext';
-import { SnackbarProvider } from './contexts/SnackbarContext';
+import { SnackbarProvider } from './contexts/SnackbarProvider';
 
 const App: React.FC = () => {
   return (

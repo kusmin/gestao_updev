@@ -15,7 +15,7 @@ import {
 import AppointmentForm from './AppointmentForm';
 import apiClient from '../../lib/apiClient';
 
-interface Appointment {
+export interface Appointment {
   id: string;
   client_id: string;
   professional_id: string;
