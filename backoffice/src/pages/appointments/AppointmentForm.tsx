@@ -10,6 +10,7 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  SelectChangeEvent,
 } from '@mui/material';
 
 interface Appointment {
@@ -57,7 +58,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ open, onClose, onSave
     }
   }, [appointment, open]);
 
-  const handleChange = (event: any) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement> | SelectChangeEvent<string>) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name as string]: value }));
   };

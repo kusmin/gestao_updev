@@ -1,18 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ProductForm from './ProductForm';
 import { useNavigate, useParams } from 'react-router-dom';
 import apiClient from '../../lib/apiClient';
+import { Product } from './ProductListPage';
 
 const ProductFormWrapper: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const [product, setProduct] = useState(null); // In a real app, fetch product by id
+  const [product, setProduct] = useState<Product | null>(null);
+
+  useEffect(() => {
+    if (id) {
+      const fetchProduct = async () => {
+        try {
+          const response = await apiClient<{ data: Product }>(`/admin/products/${id}`);
+          setProduct(response.data);
+        } catch (error) {
+          console.error('Error fetching product:', error);
+        }
+      };
+      fetchProduct();
+    }
+  }, [id]);
 
   const handleClose = () => {
     navigate('/products');
   };
 
-  const handleSave = async (formData: any) => {
+  const handleSave = async (formData: Partial<Product>) => {
     // In a real app, handle save logic here
     console.log('Saving product:', formData);
     if (id) {

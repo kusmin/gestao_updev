@@ -10,6 +10,7 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  SelectChangeEvent,
 } from '@mui/material';
 
 interface User {
@@ -48,7 +49,7 @@ const UserForm: React.FC<UserFormProps> = ({ open, onClose, onSave, user }) => {
     }
   }, [user, open]);
 
-  const handleChange = (event: any) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement> | SelectChangeEvent<string>) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name as string]: value }));
   };
