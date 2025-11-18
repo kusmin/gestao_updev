@@ -1,4 +1,4 @@
-.PHONY: test
+PHONY: test
 test:
 	DATABASE_URL="${DATABASE_URL:-postgres://testuser:testpassword@localhost:5433/testdb?sslmode=disable}" make migrate
 	DATABASE_URL="${DATABASE_URL:-postgres://testuser:testpassword@localhost:5433/testdb?sslmode=disable}" go test -p 1 -coverprofile=coverage.out -coverpkg ./... ./...
@@ -9,9 +9,7 @@ test-docker:
 
 .PHONY: coverage
 coverage:
-	go test -p 1 ./... -covermode=atomic -coverpkg=./... -coverprofile=coverage.out
-	go tool cover -func=coverage.out | tail -n 1
-	go tool cover -html=coverage.out -o coverage.html
+	docker compose -f ../docker-compose.coverage.yml run --rm backend-coverage
 
 .PHONY: lint
 lint:

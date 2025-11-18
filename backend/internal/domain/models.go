@@ -23,6 +23,11 @@ const (
 )
 
 const (
+	UserRoleAdmin = "admin"
+	UserRoleUser  = "user"
+)
+
+const (
 	InventoryMovementIn         = "in"
 	InventoryMovementOut        = "out"
 	InventoryMovementAdjustment = "adjustment"

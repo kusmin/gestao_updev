@@ -67,15 +67,16 @@ func TestMain(m *testing.M) {
 func setupTest(t *testing.T) {
 	clearAllData()
 	// Create a default company and user for tests that require them
-	defaultCompany, err := createTestTenant()
-	if err != nil {
-		log.Fatalf("failed to create default test company: %v", err)
-	}
-	_, err = seedUserRecord(t, defaultCompany.ID, "testuser", "test@example.com", "password", domain.UserRoleAdmin)
-	if err != nil {
-		log.Fatalf("failed to create default test user: %v", err)
-	}
-
+	/*
+		defaultCompany, err := createTestTenant()
+		if err != nil {
+			log.Fatalf("failed to create default test company: %v", err)
+		}
+		_, err = seedUserRecord(t, defaultCompany.ID, "testuser", "test@example.com", "password", domain.UserRoleAdmin)
+		if err != nil {
+			log.Fatalf("failed to create default test user: %v", err)
+		}
+	*/
 	repo := repository.New(testDB)
 	testSvc = New(&config.Config{}, repo, nil, nil) // Adjust as needed
 	t.Cleanup(clearAllData)                         // Ensure cleanup after each test
