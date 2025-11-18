@@ -505,7 +505,6 @@ paths:
         name: id
         required: true
         type: string
-        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
       - description: Motivo
         in: body
         name: request
@@ -600,7 +599,6 @@ paths:
         name: id
         required: true
         type: string
-        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
       produces:
       - application/json
       responses:
@@ -623,7 +621,6 @@ paths:
         name: id
         required: true
         type: string
-        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
       - description: Cliente
         in: body
         name: request
@@ -652,7 +649,6 @@ paths:
         name: id
         required: true
         type: string
-        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
       responses:
         "204":
           description: No Content
@@ -879,7 +875,6 @@ paths:
         name: id
         required: true
         type: string
-        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
       produces:
       - application/json
       responses:
@@ -904,7 +899,6 @@ paths:
         name: id
         required: true
         type: string
-        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
       - description: Produto
         in: body
         name: request
@@ -933,7 +927,6 @@ paths:
         name: id
         required: true
         type: string
-        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
       responses:
         "204":
           description: No Content
@@ -1027,7 +1020,6 @@ paths:
         name: id
         required: true
         type: string
-        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
       - description: Campos editáveis
         in: body
         name: request
@@ -1059,7 +1051,6 @@ paths:
         name: id
         required: true
         type: string
-        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
       - description: Pagamento
         in: body
         name: request
@@ -1131,7 +1122,6 @@ paths:
         name: id
         required: true
         type: string
-        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
       responses:
         "204":
           description: No Content
@@ -1150,7 +1140,6 @@ paths:
         name: id
         required: true
         type: string
-        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
       produces:
       - application/json
       responses:
@@ -1175,7 +1164,6 @@ paths:
         name: id
         required: true
         type: string
-        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
       - description: Serviço
         in: body
         name: request
@@ -1266,7 +1254,6 @@ paths:
         name: id
         required: true
         type: string
-        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
       responses:
         "204":
           description: No Content
@@ -1285,7 +1272,6 @@ paths:
         name: id
         required: true
         type: string
-        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
       produces:
       - application/json
       responses:
@@ -1310,7 +1296,6 @@ paths:
         name: id
         required: true
         type: string
-        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
       - description: Campos editáveis
         in: body
         name: request
