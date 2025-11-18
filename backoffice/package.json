@@ -16,17 +16,24 @@
     "format": "prettier --config ../.prettierrc.json --ignore-path ../.prettierignore --write \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\" \"*.{ts,tsx,js,jsx,json,css,scss,md}\"",
     "format:check": "prettier --config ../.prettierrc.json --ignore-path ../.prettierignore --check \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\" \"*.{ts,tsx,js,jsx,json,css,scss,md}\"",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "analyze:bundle": "NODE_ENV=production vite build --mode production"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@fullcalendar/daygrid": "^6.1.19",
+    "@fullcalendar/interaction": "^6.1.19",
+    "@fullcalendar/react": "^6.1.19",
     "@mui/icons-material": "^7.3.5",
     "@mui/material": "^7.3.5",
+    "@tanstack/react-table": "^8.21.3",
+    "@tanstack/react-virtual": "^3.13.12",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.66.0",
     "react-router-dom": "^7.9.6",
+    "recharts": "^3.4.1",
     "zod": "^4.1.12",
     "zustand": "^5.0.8"
   },
@@ -47,6 +54,7 @@
     "happy-dom": "^20.0.10",
     "openapi-typescript": "^7.10.1",
     "prettier": "^3.6.2",
+    "rollup-plugin-visualizer": "^6.0.5",
     "swagger2openapi": "^7.0.8",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",

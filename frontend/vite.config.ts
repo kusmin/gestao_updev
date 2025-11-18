@@ -2,6 +2,7 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
   plugins: [
@@ -40,7 +41,12 @@ export default defineConfig({
         enabled: true,
       },
     }),
-  ],
+    process.env.NODE_ENV === 'production' &&
+      visualizer({
+        filename: './dist/bundle-analyzer.html',
+        open: true,
+      }),
+  ].filter(Boolean),
   server: {
     port: 5173,
   },
