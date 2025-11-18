@@ -1,23 +1,133 @@
-import React from 'react';
-import ResourceListPage from '@/components/ResourceListPage';
+import React, { useEffect, useState } from 'react';
+import {
+  Box,
+  Button,
+  Container,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material';
 import ProductForm from './ProductForm';
-import { Product } from '@/types/product';
+import apiClient from '../../lib/apiClient';
 
-const columns = [
-  { header: 'Nome', accessor: 'name' as keyof Product },
-  { header: 'SKU', accessor: 'sku' as keyof Product },
-  { header: 'Preço', accessor: 'price' as keyof Product },
-  { header: 'Estoque', accessor: 'stock_qty' as keyof Product },
-];
+interface Product {
+  id: string;
+  name: string;
+  sku: string;
+  price: number;
+  stock_qty: number;
+  tenant_id: string;
+}
 
 const ProductListPage: React.FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await apiClient<{ data: Product[] }>('/admin/products');
+      setProducts(response.data);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const handleOpenForm = (product: Product | null = null) => {
+    setEditingProduct(product);
+    setIsFormOpen(true);
+  };
+
+  const handleCloseForm = () => {
+    setEditingProduct(null);
+    setIsFormOpen(false);
+    fetchProducts();
+  };
+
+  const handleSaveProduct = async (product: Partial<Product>) => {
+    try {
+      if (editingProduct) {
+        await apiClient(`/admin/products/${editingProduct.id}`, {
+          method: 'PUT',
+          body: JSON.stringify(product),
+        });
+      } else {
+        await apiClient('/admin/products', {
+          method: 'POST',
+          body: JSON.stringify(product),
+        });
+      }
+    } catch (error) {
+      console.error('Error saving product:', error);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await apiClient(`/admin/products/${id}`, { method: 'DELETE' });
+      fetchProducts();
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
+  };
+
   return (
-    <ResourceListPage<Product>
-      title="Products"
-      endpoint="/admin/products"
-      columns={columns}
-      renderForm={(props) => <ProductForm {...props} product={props.item} />}
-    />
+    <Container>
+      <Box sx={{ my: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Produtos
+        </Typography>
+        <Button variant="contained" color="primary" onClick={() => handleOpenForm()}>
+          Adicionar Produto
+        </Button>
+      </Box>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Nome</TableCell>
+              <TableCell>SKU</TableCell>
+              <TableCell>Preço</TableCell>
+              <TableCell>Estoque</TableCell>
+              <TableCell>Tenant ID</TableCell>
+              <TableCell>Ações</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {products.map((product) => (
+              <TableRow key={product.id}>
+                <TableCell>{product.name}</TableCell>
+                <TableCell>{product.sku}</TableCell>
+                <TableCell>{product.price}</TableCell>
+                <TableCell>{product.stock_qty}</TableCell>
+                <TableCell>{product.tenant_id}</TableCell>
+                <TableCell>
+                  <Button onClick={() => handleOpenForm(product)}>Editar</Button>
+                  <Button color="error" onClick={() => handleDelete(product.id)}>
+                    Excluir
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <ProductForm
+        open={isFormOpen}
+        onClose={handleCloseForm}
+        onSave={handleSaveProduct}
+        product={editingProduct}
+      />
+    </Container>
   );
 };
 

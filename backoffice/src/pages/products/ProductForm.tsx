@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { useForm, Controller, SubmitHandler } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Dialog,
@@ -9,7 +8,14 @@ import {
   TextField,
 } from '@mui/material';
 
-import { Product } from '@/types/product';
+interface Product {
+  id: string;
+  name: string;
+  sku: string;
+  price: number;
+  stock_qty: number;
+  tenant_id: string;
+}
 
 interface ProductFormProps {
   open: boolean;
@@ -19,168 +25,99 @@ interface ProductFormProps {
 }
 
 const ProductForm: React.FC<ProductFormProps> = ({ open, onClose, onSave, product }) => {
-  const { control, handleSubmit, reset } = useForm<Product>({
-    defaultValues: {
-      name: '',
-      sku: '',
-      price: 0,
-      cost: 0,
-      stock_qty: 0,
-      min_stock: 0,
-      description: '',
-      tenant_id: '',
-    },
+  const [formData, setFormData] = useState<Partial<Product>>({
+    name: '',
+    sku: '',
+    price: 0,
+    stock_qty: 0,
+    tenant_id: '',
   });
 
   useEffect(() => {
-    if (open) {
-      reset(
-        product || {
-          name: '',
-          sku: '',
-          price: 0,
-          cost: 0,
-          stock_qty: 0,
-          min_stock: 0,
-          description: '',
-          tenant_id: '',
-        },
-      );
+    if (product) {
+      setFormData(product);
+    } else {
+      setFormData({
+        name: '',
+        sku: '',
+        price: 0,
+        stock_qty: 0,
+        tenant_id: '',
+      });
     }
-  }, [product, open, reset]);
+  }, [product, open]);
 
-  const handleSave: SubmitHandler<Product> = (data) => {
-    onSave(data).then(() => {
-      onClose();
-    });
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSave = async () => {
+    // TODO: Add validation
+    await onSave(formData);
+    onClose();
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{product ? 'Editar Produto' : 'Adicionar Produto'}</DialogTitle>
-      <form onSubmit={handleSubmit(handleSave)}>
-        <DialogContent>
-          <Controller
-            name="name"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                autoFocus
-                margin="dense"
-                label="Nome"
-                type="text"
-                fullWidth
-                variant="standard"
-              />
-            )}
-          />
-          <Controller
-            name="sku"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                margin="dense"
-                label="SKU"
-                type="text"
-                fullWidth
-                variant="standard"
-              />
-            )}
-          />
-          <Controller
-            name="price"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                margin="dense"
-                label="Preço"
-                type="number"
-                fullWidth
-                variant="standard"
-              />
-            )}
-          />
-          <Controller
-            name="cost"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                margin="dense"
-                label="Custo"
-                type="number"
-                fullWidth
-                variant="standard"
-              />
-            )}
-          />
-          <Controller
-            name="stock_qty"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                margin="dense"
-                label="Estoque"
-                type="number"
-                fullWidth
-                variant="standard"
-              />
-            )}
-          />
-          <Controller
-            name="min_stock"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                margin="dense"
-                label="Estoque Mínimo"
-                type="number"
-                fullWidth
-                variant="standard"
-              />
-            )}
-          />
-          <Controller
-            name="description"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                margin="dense"
-                label="Descrição"
-                type="text"
-                fullWidth
-                multiline
-                rows={4}
-                variant="standard"
-              />
-            )}
-          />
-          <Controller
-            name="tenant_id"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                margin="dense"
-                label="Tenant ID"
-                type="text"
-                fullWidth
-                variant="standard"
-              />
-            )}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose}>Cancelar</Button>
-          <Button type="submit">Salvar</Button>
-        </DialogActions>
-      </form>
+      <DialogContent>
+        <TextField
+          autoFocus
+          margin="dense"
+          name="name"
+          label="Nome"
+          type="text"
+          fullWidth
+          variant="standard"
+          value={formData.name}
+          onChange={handleChange}
+        />
+        <TextField
+          margin="dense"
+          name="sku"
+          label="SKU"
+          type="text"
+          fullWidth
+          variant="standard"
+          value={formData.sku}
+          onChange={handleChange}
+        />
+        <TextField
+          margin="dense"
+          name="price"
+          label="Preço"
+          type="number"
+          fullWidth
+          variant="standard"
+          value={formData.price}
+          onChange={handleChange}
+        />
+        <TextField
+          margin="dense"
+          name="stock_qty"
+          label="Estoque"
+          type="number"
+          fullWidth
+          variant="standard"
+          value={formData.stock_qty}
+          onChange={handleChange}
+        />
+        <TextField
+          margin="dense"
+          name="tenant_id"
+          label="Tenant ID"
+          type="text"
+          fullWidth
+          variant="standard"
+          value={formData.tenant_id}
+          onChange={handleChange}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Cancelar</Button>
+        <Button onClick={handleSave}>Salvar</Button>
+      </DialogActions>
     </Dialog>
   );
 };

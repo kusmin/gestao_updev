@@ -15,70 +15,70 @@ import {
 import AppointmentForm from './AppointmentForm';
 import apiClient from '../../lib/apiClient';
 
-interface Booking {
+interface Appointment {
   id: string;
   client_id: string;
   professional_id: string;
   service_id: string;
-  status: string;
   start_at: string;
   end_at: string;
+  status: string;
   tenant_id: string;
 }
 
 const AppointmentListPage: React.FC = () => {
-  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingBooking, setEditingBooking] = useState<Booking | null>(null);
+  const [editingAppointment, setEditingAppointment] = useState<Appointment | null>(null);
 
-  const fetchBookings = async () => {
+  const fetchAppointments = async () => {
     try {
-      const response = await apiClient<{ data: Booking[] }>('/admin/bookings');
-      setBookings(response.data);
+      const response = await apiClient<{ data: Appointment[] }>('/admin/bookings');
+      setAppointments(response.data);
     } catch (error) {
-      console.error('Error fetching bookings:', error);
+      console.error('Error fetching appointments:', error);
     }
   };
 
   useEffect(() => {
-    fetchBookings();
+    fetchAppointments();
   }, []);
 
-  const handleOpenForm = (booking: Booking | null = null) => {
-    setEditingBooking(booking);
+  const handleOpenForm = (appointment: Appointment | null = null) => {
+    setEditingAppointment(appointment);
     setIsFormOpen(true);
   };
 
   const handleCloseForm = () => {
-    setEditingBooking(null);
+    setEditingAppointment(null);
     setIsFormOpen(false);
-    fetchBookings(); // Refetch bookings after closing form
+    fetchAppointments();
   };
 
-  const handleSaveBooking = async (booking: Partial<Booking>) => {
+  const handleSaveAppointment = async (appointment: Partial<Appointment>) => {
     try {
-      if (editingBooking) {
-        await apiClient(`/admin/bookings/${editingBooking.id}`, {
+      if (editingAppointment) {
+        await apiClient(`/admin/bookings/${editingAppointment.id}`, {
           method: 'PUT',
-          body: JSON.stringify(booking),
+          body: JSON.stringify(appointment),
         });
       } else {
         await apiClient('/admin/bookings', {
           method: 'POST',
-          body: JSON.stringify(booking),
+          body: JSON.stringify(appointment),
         });
       }
     } catch (error) {
-      console.error('Error saving booking:', error);
+      console.error('Error saving appointment:', error);
     }
   };
 
   const handleDelete = async (id: string) => {
     try {
       await apiClient(`/admin/bookings/${id}`, { method: 'DELETE' });
-      fetchBookings(); // Refetch bookings after deleting
+      fetchAppointments();
     } catch (error) {
-      console.error('Error deleting booking:', error);
+      console.error('Error deleting appointment:', error);
     }
   };
 
@@ -96,27 +96,29 @@ const AppointmentListPage: React.FC = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Cliente</TableCell>
-              <TableCell>Profissional</TableCell>
-              <TableCell>Serviço</TableCell>
+              <TableCell>Cliente ID</TableCell>
+              <TableCell>Profissional ID</TableCell>
+              <TableCell>Serviço ID</TableCell>
               <TableCell>Início</TableCell>
               <TableCell>Fim</TableCell>
               <TableCell>Status</TableCell>
+              <TableCell>Tenant ID</TableCell>
               <TableCell>Ações</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {bookings.map((booking) => (
-              <TableRow key={booking.id}>
-                <TableCell>{booking.client_id}</TableCell>
-                <TableCell>{booking.professional_id}</TableCell>
-                <TableCell>{booking.service_id}</TableCell>
-                <TableCell>{new Date(booking.start_at).toLocaleString()}</TableCell>
-                <TableCell>{new Date(booking.end_at).toLocaleString()}</TableCell>
-                <TableCell>{booking.status}</TableCell>
+            {appointments.map((appointment) => (
+              <TableRow key={appointment.id}>
+                <TableCell>{appointment.client_id}</TableCell>
+                <TableCell>{appointment.professional_id}</TableCell>
+                <TableCell>{appointment.service_id}</TableCell>
+                <TableCell>{new Date(appointment.start_at).toLocaleString()}</TableCell>
+                <TableCell>{new Date(appointment.end_at).toLocaleString()}</TableCell>
+                <TableCell>{appointment.status}</TableCell>
+                <TableCell>{appointment.tenant_id}</TableCell>
                 <TableCell>
-                  <Button onClick={() => handleOpenForm(booking)}>Editar</Button>
-                  <Button color="error" onClick={() => handleDelete(booking.id)}>
+                  <Button onClick={() => handleOpenForm(appointment)}>Editar</Button>
+                  <Button color="error" onClick={() => handleDelete(appointment.id)}>
                     Excluir
                   </Button>
                 </TableCell>
@@ -128,8 +130,8 @@ const AppointmentListPage: React.FC = () => {
       <AppointmentForm
         open={isFormOpen}
         onClose={handleCloseForm}
-        onSave={handleSaveBooking}
-        booking={editingBooking}
+        onSave={handleSaveAppointment}
+        appointment={editingAppointment}
       />
     </Container>
   );

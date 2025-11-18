@@ -6,56 +6,60 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
 } from '@mui/material';
 
-interface Booking {
+interface Appointment {
   id: string;
   client_id: string;
   professional_id: string;
   service_id: string;
-  status: string;
   start_at: string;
   end_at: string;
+  status: string;
   tenant_id: string;
 }
 
 interface AppointmentFormProps {
   open: boolean;
   onClose: () => void;
-  onSave: (booking: Partial<Booking>) => Promise<void>;
-  booking: Booking | null;
+  onSave: (appointment: Partial<Appointment>) => Promise<void>;
+  appointment: Appointment | null;
 }
 
-const AppointmentForm: React.FC<AppointmentFormProps> = ({ open, onClose, onSave, booking }) => {
-  const [formData, setFormData] = useState<Partial<Booking>>({
+const AppointmentForm: React.FC<AppointmentFormProps> = ({ open, onClose, onSave, appointment }) => {
+  const [formData, setFormData] = useState<Partial<Appointment>>({
     client_id: '',
     professional_id: '',
     service_id: '',
-    status: 'pending',
     start_at: '',
     end_at: '',
+    status: '',
     tenant_id: '',
   });
 
   useEffect(() => {
-    if (booking) {
-      setFormData(booking);
+    if (appointment) {
+      setFormData(appointment);
     } else {
       setFormData({
         client_id: '',
         professional_id: '',
         service_id: '',
-        status: 'pending',
         start_at: '',
         end_at: '',
+        status: '',
         tenant_id: '',
       });
     }
-  }, [booking, open]);
+  }, [appointment, open]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
     const { name, value } = event.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name as string]: value }));
   };
 
   const handleSave = async () => {
@@ -66,7 +70,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ open, onClose, onSave
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{booking ? 'Editar Agendamento' : 'Adicionar Agendamento'}</DialogTitle>
+      <DialogTitle>{appointment ? 'Editar Agendamento' : 'Adicionar Agendamento'}</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
@@ -102,7 +106,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ open, onClose, onSave
         <TextField
           margin="dense"
           name="start_at"
-          label="Início"
+          label="Start At"
           type="datetime-local"
           fullWidth
           variant="standard"
@@ -115,7 +119,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ open, onClose, onSave
         <TextField
           margin="dense"
           name="end_at"
-          label="Fim"
+          label="End At"
           type="datetime-local"
           fullWidth
           variant="standard"
@@ -125,16 +129,22 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ open, onClose, onSave
             shrink: true,
           }}
         />
-        <TextField
-          margin="dense"
-          name="status"
-          label="Status"
-          type="text"
-          fullWidth
-          variant="standard"
-          value={formData.status}
-          onChange={handleChange}
-        />
+        <FormControl fullWidth margin="dense" variant="standard">
+          <InputLabel id="status-label">Status</InputLabel>
+          <Select
+            labelId="status-label"
+            id="status"
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+            label="Status"
+          >
+            <MenuItem value="pending">Pending</MenuItem>
+            <MenuItem value="confirmed">Confirmed</MenuItem>
+            <MenuItem value="done">Done</MenuItem>
+            <MenuItem value="canceled">Canceled</MenuItem>
+          </Select>
+        </FormControl>
         <TextField
           margin="dense"
           name="tenant_id"
