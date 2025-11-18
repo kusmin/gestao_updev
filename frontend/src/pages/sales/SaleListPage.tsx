@@ -24,8 +24,8 @@ const mockSales = [
 ];
 
 const SaleListPage: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [isLoading] = useState(false);
+  const [isError] = useState(false);
 
   return (
     <Container>
