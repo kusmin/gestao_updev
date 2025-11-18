@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/kusmin/gestao_updev/compare/frontend-v0.7.0...frontend-v0.8.0) (2025-11-18)
+
+
+### Features
+
+* Implement frontend product and sales pages, and backoffice CRUD for tenants and users ([5ed5995](https://github.com/kusmin/gestao_updev/commit/5ed599525bcfe50df18ed2e2c18f91c03a1677e5))
+
 ## [0.7.0](https://github.com/kusmin/gestao_updev/compare/frontend-v0.6.1...frontend-v0.7.0) (2025-11-17)
 
 
