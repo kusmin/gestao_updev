@@ -14,7 +14,7 @@ const DashboardPage: React.FC = () => {
       </Typography>
       <Grid container spacing={3}>
         {stats.map((stat) => (
-          <Grid key={stat.label} xs={12} md={4}>
+          <Grid key={stat.label} item xs={12} md={4}>
             <Card>
               <CardContent>
                 <Typography color="text.secondary" gutterBottom>
