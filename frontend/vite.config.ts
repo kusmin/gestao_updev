@@ -52,10 +52,10 @@ export default defineConfig({
   },
   test: {
     environment: 'happy-dom',
-    globals: true,
-    setupFiles: './src/test/setup.ts',
-    css: true,
-    include: ['src/**/*.{test,spec}.{ts,tsx}'],
+        globals: true,
+        setupFiles: './src/test/setup.ts',
+        css: true,
+        include: ['src/**/*.{test,spec}.{ts,tsx}'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
