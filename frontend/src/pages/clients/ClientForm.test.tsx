@@ -4,16 +4,32 @@ import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import ClientForm from './ClientForm';
 import { createClient, updateClient } from '../../lib/apiClient';
-import { AuthProvider } from '../../contexts/AuthContext';
 import { AuthState } from '../../contexts/AuthContextDefinition';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AuthProvider } from '../../contexts/AuthContext';
+import { ColorModeProvider } from '../../theme/ColorModeProvider';
+import { SnackbarProvider } from '../../contexts/SnackbarProvider';
 
-vi.mock('../../lib/apiClient', () => ({
-  createClient: vi.fn(),
-  updateClient: vi.fn(),
-}));
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+});
 
-const mockCreate = vi.mocked(createClient);
-const mockUpdate = vi.mocked(updateClient);
+// Mock the apiClient module
+const mockCreate = vi.fn();
+const mockUpdate = vi.fn();
+vi.mock('../../lib/apiClient', async () => {
+  const actual = await vi.importActual('../../lib/apiClient');
+  return {
+    ...actual,
+    createClient: mockCreate,
+    updateClient: mockUpdate,
+  };
+});
+
 const TENANT_ID = 'tenant-ctx';
 const ACCESS_TOKEN = 'token-ctx';
 const MOCK_AUTH_STATE: AuthState = {
@@ -21,21 +37,6 @@ const MOCK_AUTH_STATE: AuthState = {
   userId: 'user-ctx',
   tokens: { accessToken: ACCESS_TOKEN, refreshToken: 'refresh', expiresAt: Date.now() + 100000 },
 };
-
-// Mock authUtils to control the initial state of AuthProvider
-vi.mock('../../contexts/authUtils', () => ({
-  loadStoredAuth: vi.fn(() => MOCK_AUTH_STATE),
-  persistState: vi.fn(),
-  DEFAULT_STATE: {
-    tenantId: null,
-    userId: null,
-    tokens: null,
-  },
-  mapSignupResult: vi.fn(),
-  mapTokens: vi.fn(),
-}));
-
-const renderWithProviders = (ui: React.ReactElement) => render(<AuthProvider>{ui}</AuthProvider>);
 
 describe('ClientForm', () => {
   const baseProps = {
@@ -55,14 +56,24 @@ describe('ClientForm', () => {
   });
 
   it('cria um novo cliente quando client é nulo', async () => {
-    mockCreate.mockResolvedValueOnce({
+    createClient.mockResolvedValueOnce({
       id: '1',
       name: 'Alice',
       email: 'alice@example.com',
       phone: '123',
     });
 
-    renderWithProviders(<ClientForm {...baseProps} client={null} />);
+    render(
+      <ColorModeProvider>
+        <AuthProvider>
+          <SnackbarProvider>
+            <QueryClientProvider client={queryClient}>
+              <ClientForm {...baseProps} client={null} />
+            </QueryClientProvider>
+          </SnackbarProvider>
+        </AuthProvider>
+      </ColorModeProvider>,
+    );
 
     await userEvent.type(screen.getByLabelText(/Nome/i), 'Alice');
     await userEvent.type(screen.getByLabelText(/Email/i), 'alice@example.com');
@@ -70,7 +81,7 @@ describe('ClientForm', () => {
     await userEvent.click(screen.getByRole('button', { name: /Salvar/i }));
 
     await waitFor(() =>
-      expect(mockCreate).toHaveBeenCalledWith({
+      expect(createClient).toHaveBeenCalledWith({
         tenantId: TENANT_ID,
         accessToken: ACCESS_TOKEN,
         input: {
@@ -88,13 +99,23 @@ describe('ClientForm', () => {
 
   it('atualiza um cliente existente quando client é fornecido', async () => {
     const existing = { id: '42', name: 'Bob', email: 'bob@old.com', phone: '000' };
-    mockUpdate.mockResolvedValueOnce({
+    updateClient.mockResolvedValueOnce({
       ...existing,
       name: 'Bob Atualizado',
       email: 'bob@new.com',
     });
 
-    renderWithProviders(<ClientForm {...baseProps} client={existing} />);
+    render(
+      <ColorModeProvider>
+        <AuthProvider>
+          <SnackbarProvider>
+            <QueryClientProvider client={queryClient}>
+              <ClientForm {...baseProps} client={existing} />
+            </QueryClientProvider>
+          </SnackbarProvider>
+        </AuthProvider>
+      </ColorModeProvider>,
+    );
 
     expect(screen.getByDisplayValue('Bob')).toBeInTheDocument();
     await userEvent.clear(screen.getByLabelText(/Nome/i));
@@ -104,7 +125,7 @@ describe('ClientForm', () => {
     await userEvent.click(screen.getByRole('button', { name: /Salvar/i }));
 
     await waitFor(() =>
-      expect(mockUpdate).toHaveBeenCalledWith({
+      expect(updateClient).toHaveBeenCalledWith({
         tenantId: TENANT_ID,
         clientId: '42',
         accessToken: ACCESS_TOKEN,

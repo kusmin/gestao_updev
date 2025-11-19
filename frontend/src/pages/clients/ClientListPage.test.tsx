@@ -3,38 +3,44 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import ClientListPage from './ClientListPage';
 import * as apiClient from '../../lib/apiClient';
 import { type Client } from '../../lib/apiClient';
-import { AuthProvider } from '../../contexts/AuthContext';
 import { AuthState } from '../../contexts/AuthContextDefinition';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AuthProvider } from '../../contexts/AuthContext';
+import { ColorModeProvider } from '../../theme/ColorModeProvider';
+import { SnackbarProvider } from '../../contexts/SnackbarProvider';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+});
 
 // Mock the apiClient module
-vi.mock('../../lib/apiClient');
+const mockFetchClients = vi.fn();
+const mockDeleteClient = vi.fn();
+vi.mock('../../lib/apiClient', async () => {
+  const actual = await vi.importActual('../../lib/apiClient');
+  return {
+    ...actual,
+    fetchClients: mockFetchClients,
+    deleteClient: mockDeleteClient,
+  };
+});
 
-const mockedApiClient = vi.mocked(apiClient);
+const MOCKED_API_CLIENT = {
+  fetchClients: vi.mocked(mockFetchClients),
+  deleteClient: vi.mocked(mockDeleteClient),
+};
+
 const MOCK_AUTH_STATE: AuthState = {
   tenantId: 'tenant-1',
   userId: 'user-1',
   tokens: { accessToken: 'token', refreshToken: 'refresh', expiresAt: Date.now() + 100000 },
 };
 
-// Mock authUtils to control the initial state of AuthProvider
-vi.mock('../../contexts/authUtils', () => ({
-  loadStoredAuth: vi.fn(() => MOCK_AUTH_STATE),
-  persistState: vi.fn(),
-  DEFAULT_STATE: {
-    tenantId: null,
-    userId: null,
-    tokens: null,
-  },
-  mapSignupResult: vi.fn(),
-  mapTokens: vi.fn(),
-}));
 
-const renderWithAuth = () =>
-  render(
-    <AuthProvider>
-      <ClientListPage />
-    </AuthProvider>,
-  );
 
 describe('ClientListPage', () => {
   beforeEach(() => {
@@ -48,9 +54,19 @@ describe('ClientListPage', () => {
 
   it('should display a loading state initially', () => {
     // Para este teste, fazemos a API nunca resolver
-    mockedApiClient.fetchClients.mockReturnValue(new Promise(() => {}));
+    MOCKED_API_CLIENT.fetchClients.mockReturnValue(new Promise(() => {}));
 
-    renderWithAuth();
+    render(
+      <ColorModeProvider>
+        <AuthProvider>
+          <SnackbarProvider>
+            <QueryClientProvider client={queryClient}>
+              <ClientListPage />
+            </QueryClientProvider>
+          </SnackbarProvider>
+        </AuthProvider>
+      </ColorModeProvider>,
+    );
 
     // O componente não tem um estado de loading explícito,
     // então vamos verificar se a tabela está vazia inicialmente.
@@ -63,25 +79,45 @@ describe('ClientListPage', () => {
       { id: '1', name: 'John Doe', email: 'john@example.com', phone: '12345' },
       { id: '2', name: 'Jane Smith', email: 'jane@example.com', phone: '67890' },
     ];
-    mockedApiClient.fetchClients.mockResolvedValue(mockClients);
+    MOCKED_API_CLIENT.fetchClients.mockResolvedValue(mockClients);
 
-    await renderWithAuth();
+    await render(
+      <ColorModeProvider>
+        <AuthProvider>
+          <SnackbarProvider>
+            <QueryClientProvider client={queryClient}>
+              <ClientListPage />
+            </QueryClientProvider>
+          </SnackbarProvider>
+        </AuthProvider>
+      </ColorModeProvider>,
+    );
 
     // Espera que os clientes apareçam na tela
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
       expect(screen.getByText('Jane Smith')).toBeInTheDocument();
     });
-    expect(mockedApiClient.fetchClients).toHaveBeenCalledWith({
+    expect(MOCKED_API_CLIENT.fetchClients).toHaveBeenCalledWith({
       tenantId: MOCK_AUTH_STATE.tenantId,
       accessToken: MOCK_AUTH_STATE.tokens?.accessToken,
     });
   });
 
   it('should display an empty state message when no clients are found', async () => {
-    mockedApiClient.fetchClients.mockResolvedValue([]);
+    MOCKED_API_CLIENT.fetchClients.mockResolvedValue([]);
 
-    await renderWithAuth();
+    await render(
+      <ColorModeProvider>
+        <AuthProvider>
+          <SnackbarProvider>
+            <QueryClientProvider client={queryClient}>
+              <ClientListPage />
+            </QueryClientProvider>
+          </SnackbarProvider>
+        </AuthProvider>
+      </ColorModeProvider>,
+    );
 
     // O componente não tem uma mensagem de estado vazio explícita.
     // Vamos verificar se a tabela está presente, mas sem linhas de dados.
@@ -94,12 +130,22 @@ describe('ClientListPage', () => {
 
   it('should handle API errors gracefully', async () => {
     const errorMessage = 'Failed to fetch clients';
-    mockedApiClient.fetchClients.mockRejectedValue(new Error(errorMessage));
+    MOCKED_API_CLIENT.fetchClients.mockRejectedValue(new Error(errorMessage));
 
     // Mock console.error para evitar poluir a saída do teste
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-    await renderWithAuth();
+    await render(
+      <ColorModeProvider>
+        <AuthProvider>
+          <SnackbarProvider>
+            <QueryClientProvider client={queryClient}>
+              <ClientListPage />
+            </QueryClientProvider>
+          </SnackbarProvider>
+        </AuthProvider>
+      </ColorModeProvider>,
+    );
 
     // Espera que o erro seja logado
     await waitFor(() => {
