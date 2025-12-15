@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
@@ -40,7 +40,7 @@ jobs:
         run: pnpm --package=@redocly/cli dlx redocly build-docs docs/api.yaml --output api-reference.html
 
       - name: Upload API artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: api-reference
           path: api-reference.html
