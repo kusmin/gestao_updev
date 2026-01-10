@@ -11,7 +11,7 @@ RUN go mod download
 COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -o /tmp/api ./cmd/api
 
-FROM alpine:3.20
+FROM alpine:3.23.2
 WORKDIR /app
 
 ENV APP_ENV=production \
